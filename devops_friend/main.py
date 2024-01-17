@@ -1,29 +1,38 @@
 python
-import rarfile, subprocess, os, argparse, tarfile
+from rarfile import RarFile, RarError
+import subprocess, os, argparse, tarfile
 from termcolor import colored
-from rarfile import RarFile
+import rarfile
 
-def nginx_restart():
-    os.system("sudo systemctl restart nginx")
-    print(colored("Nginx stopped."))
-
-def enable_nginx_site(enable):
+def run_docker_compose(enable=False):
+    command = "docker-compose"
     if enable:
-        os.system("sudo systemctl enable nginx")
-        print(colored("Nginx enabled."))
+        command += " up -d"
     else:
-        os.system("sudo systemctl disable nginx")
-        print(colored("Nginx disabled."))
+        command += " stop"
+    os.system(command)
+    print(colored(f"{'Starting' if enable else 'Stopping'} Docker compose..."))
 
-def run_docker_compose():
-    os.system("docker-compose up -d")
-    print(colored("Docker compose started."))
+def nginx_site_config(domain, path="", cert=False):
+    conf = f"""
+    listen 80;
+    server_name {domain};
+    """
+    if path:
+        conf += f"root {path};\n"
+    conf += """
+    location / {{
+            try_files $uri $uri/ =404;
+    }}
+    """
+    with open(f"/etc/nginx/sites-available/{domain}", "w") as file:
+        file.write(conf)
+    if cert:
+        os.system(f"sudo certbot --nginx -d {domain}")
+    os.system(f"sudo ln -s /etc/nginx/sites-{domain} /etc/nginx/sites-enabled/")
+    print(colored("Site configuration applied."))
 
-def stop_docker_compose():
-    os.system("docker-compose stop")
-    print(colored("Docker compose stopped."))
-
-def proxy_config(domain, proxied_url, cert):
+def proxy_configuration(domain, proxied_url, cert=False):
     conf = f"""
     listen 80;
     server_name {domain};
@@ -41,75 +50,57 @@ def proxy_config(domain, proxied_url, cert):
     if cert:
         os.system(f"sudo certbot --nginx -d {domain}")
     os.system(f"sudo ln -s /etc/nginx/sites-{domain} /etc/nginx/sites-enabled/")
-    print(colored("Proxy configuration removed."))
+    print(colored("Proxy configuration applied."))
 
-def create_site_config(domain, path, cert):
-    conf = f"""
-    listen 80;
-    server_name {domain};
-
-    root {path};
-    index index.html;
-    
-    location / {{
-            try_files $uri $uri/ =404;
-    }}
-    """
-    with open(f"/etc/nginx/sites-available/{domain}", "w") as file:
-        file.write(conf)
-    if cert:
-        os.system(f"sudo certbot --nginx -d {domain}")
-    os.system(f"sudo ln -s /etc/nginx/sites-available/{domain} /etc/nginx/sites-enabled/")
-    print(colored("Site configuration removed."))
-
-def update_site_config():
-    pass
-
-def remove_site_config():
+def remove_all_site_configs():
     os.system("sudo rm /etc/nginx/sites-enabled/*")
-    print(colored("All site configurations deleted."))
+    print(colored("All site configurations removed."))
 
 def extract_archive(archive):
-    if archive.endswith(".tar.gz"):
-        with tarfile.open(archive, "r:gz") as tar:
-            tar.extractall()
-        print(colored("Archive extracted."))
-    elif archive.endswith(".rar"):
-        with RarFile(archive, "r") as rar:
-            rar.extractall()
-        print(colored("Archive extracted."))
+    extract_methods = {
+        ".tar.gz": tarfile.open,
+        ".rar": RarFile,
+    }
+
+    ext = os.path.splitext(archive)[1]
+    if ext in extract_methods:
+        try:
+            with extract_methods[ext](archive, "r") as archive_file:
+                archive_file.extractall()
+            print(colored("Archive extracted."))
+        except (RarError, OSError) as e:
+            print(colored(f"Failed to extract archive: {e}", "red"))
     else:
         print(colored("Unsupported archive format.", "red"))
 
-def foreach_argument(iterable, cmd):
-    for item in iterable:
-        if cmd == "restart":
-            nginx_restart()
-        elif cmd == "proxy":
-            proxy_config(
-                domain=input("Domain: "),
-                proxied_url=input("Proxied URL: "),
-                cert=input("SSL Certificate? ") == "yes"
-            )
-        elif cmd == "site":
-            create_site_config(
-                domain=input("Domain: "),
-                path=input("Path: "),
-                cert=input("SSL Certificate? ") == "yes"
-            )
-        elif cmd == "update":
-            update_site_config()
-        elif cmd == "delete":
-            remove_site_config()
-        elif cmd == "enable":
-            enable_nginx_site(True)
-        elif cmd == "disable":
-            enable_nginx_site(False)
-        elif cmd == "extract":
-            extract_archive(item)
-        elif cmd == "compose":
-            run_docker_compose()
-        elif cmd == "stop":
-            stop_docker_compose()
+def process_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("command")
+    parser.add_argument("arguments", nargs="*")
+    args = parser.parse_args()
 
-def main():
+    if args.command == "restart":
+        nginx_restart()
+    elif args.command == "proxy":
+        proxy_config(
+            domain=args.arguments[0],
+            proxied_url=args.arguments[1],
+            cert=args.arguments[2] == "yes",
+        )
+    elif args.command == "site":
+        nginx_site_config(
+            domain=args.arguments[0],
+            path=args.arguments[1] if len(args.arguments) > 1 else "",
+            cert=args.arguments[2] == "yes",
+        )
+    elif args.command == "update":
+        update_site_config()
+    elif args.command == "delete":
+        remove_all_site_configs()
+    elif args.command == "enable":
+        enable_nginx(True)
+    elif args.command == "disable":
+        enable_nginx(False)
+    elif args.command == "extract":
+        extract_archive(args.arguments[0])
+    elif args.command == "compose":
