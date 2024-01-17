@@ -1,30 +1,53 @@
-import os, rarfile, argparse, subprocess, tarfile
+python
 from termcolor import colored
+import subprocess, argparse, os, tarfile, rarfile
+from rarfile import RarFile
 
-def enable_site(enable):
-    available_sites = os.listdir("/etc/nginx/sites-available")
-    print(available_sites)
-    for site in enabled_sites:
-        print(f"{site} {' ✓' if os.path.islink('/etc/nginx/sites-enabled/' + site) else ''}")
-    site_name = input("Enter the site name to enable/disable: ")
-    if enable:
-        link(site_name)
-        print(colored(f"Site {site_name} enabled.", "green"))
-    else:
-        unlink(site_name)
-        print(colored(f"Site {site_name} disabled.", "green"))
+def main():
+    print(colored("     ___            ___                ___     _                _ ", "yellow"))
+    print(colored("   /\_\_ \\_\_\_\_\_\_ / __/\_\_ __\_\_ \\_ \\_ \\_____| |__   ____   __| |", "red"))
+    print(colored("  / /\\/ / ___/\_\_\_/ / / / \_ `\_ \\/_ \| ___| '_ \\_ / _ \\_ \\_ \\_", "yellow"))
+    print(colored(" / /\_/ /_/ /\_\_\_\ \\_\ \\_| | | | \\/ /_/ / |_) |  __/ / / /", "red"))
+    print(colored("/_/\_\___/\____/ \_______|_|_|\_\_\___| .__/ \___|_|\__\ ", "yellow"))
+    print(colored("                      |_|                |_|            ", "red"))
+    parser = argparse.ArgumentParser(description="Nginx and Docker Helper Tool")
+    parser.add_argument("cmd", choices=["restart", "proxy", "site", "update", "delete", "enable", "disable", "extract", "compose", "stop"])
+    args = parser.parse_args()
 
-def link(site_name):
-    os.system(f"sudo ln -s /etc/nginx/sites-available/{site_name} /etc/nginx/sites-enabled/{site_name}")
+    if args.cmd == "restart":
+        nginx_restart()
+    elif args.cmd == "proxy":
+        proxy_config(
+            domain=input("Domain: "),
+            proxied_url=input("Proxied URL: "),
+            cert=input("SSL Certificate? ") == "yes"
+        )
+    elif args.cmd == "site":
+        create_site_config(
+            domain=input("Domain: "),
+            path=input("Path: "),
+            cert=input("SSL Certificate? ") == "yes"
+        )
+    elif args.cmd == "update":
+        update_site_config()
+    elif args.cmd == "delete":
+        remove_site_config()
+    elif args.cmd == "enable":
+        enable_nginx_site(True)
+    elif args.cmd == "disable":
+        enable_nginx_site(False)
+    elif args.cmd == "extract":
+        extract_archive(args.archive)
+    elif args.cmd == "compose":
+        run_docker_compose()
+    elif args.cmd == "stop":
+        stop_docker_compose()
 
-def unlink(site_name):
-    os.system(f"sudo rm /etc/nginx/sites-enabled/{site_name}")
-
-def restart_nginx():
+def nginx_restart():
     os.system("sudo systemctl restart nginx")
-    print(colored("Nginx restarted successfully."))
+    print(colored("Nginx restarted."))
 
-def create_proxy(domain, proxied_url, cert):
+def proxy_config(domain, proxied_url, cert):
     conf = f"""
 server {{
     listen 80;
@@ -44,9 +67,9 @@ server {{
     if cert:
         os.system(f"sudo certbot --nginx -d {domain}")
     os.system(f"sudo ln -s /etc/nginx/sites-available/{domain} /etc/nginx/sites-enabled/")
-    print(colored("Proxy created."))
+    print(colored("Proxy configuration created."))
 
-def create_site(domain, path, cert):
+def create_site_config(domain, path, cert):
     conf = f"""
 server {{
     listen 80;
@@ -65,101 +88,6 @@ server {{
     if cert:
         os.system(f"sudo certbot --nginx -d {domain}")
     os.system(f"sudo ln -s /etc/nginx/sites-available/{domain} /etc/nginx/sites-enabled/")
-    print(colored("Site created."))
+    print(colored("Site configuration created."))
 
-def update_site():
-    sites = os.listdir("/etc/nginx/sites-available")
-    print("Sites:")
-    for site in sites:
-        status = " ✓" if os.path.islink(f"/etc/nginx/sites-enabled/{site}") else ""
-        print(f"{site} {status}")
-    site = input("Enter site to update: ")
-    edit_config(site)
-
-def edit_config(site):
-    os.system(f"sudo nano /etc/nginx/sites-available/{site}")
-    unlink(site)
-    link(site)
-    print(colored("Site updated."))
-
-def delete_site():
-    sites = os.listdir("/etc/nginx/sites-available")
-    print("Sites:")
-    for site in sites:
-        status = " ✓" if os.path.islink(f"/etc/nginx/sites-enabled/{site}") else ""
-        print(f"{site} {status}")
-    site = input("Enter site to delete: ")
-    remove_site(site)
-
-def remove_site(site):
-    os.system(f"sudo rm /etc/nginx/sites-available/{site}")
-    os.system(f"sudo rm /etc/nginx/sites-enabled/{site}")
-    print(colored("Site deleted."))
-
-def extract_tar(file):
-    with tarfile.open(file) as tar:
-        tar.extractall(file[:-4])
-    print(colored("Tar extracted."))
-
-def extract_rar(file):
-    with rarfile.RarFile(file) as rar:
-        rar.extractall(file[:-4])
-    print(colored("Rar extracted."))
-
-def run_compose():
-    file = input("Enter docker-compose file: ")
-    process = subprocess.Popen(["docker-compose", "-f", file, "up", "-d"])
-    with open("pids.txt", "a") as f:
-        f.write(str(process.pid) + "\n")
-    print(f"Docker compose started with PID {process.pid}.")
-
-def stop_compose():
-    with open("pids.txt", "r") as f:
-        pids = f.readlines()
-    print("Running composes:")
-    for i, pid in enumerate(pids):
-        print(f"{i}: {pid.strip()}")
-    pid = int(input("Enter PID: "))
-    os.system(f"kill {pid}")
-    print(f"Docker compose with PID {pid} stopped.")
-
-def main():
-    print(colored("     ___            ___                ___     _                _ ", "yellow"))
-    print(colored("   /   \\_____   __/___\\_ __  ___     / __\\ __(_) ___ _ __   __| |", "red"))
-    print(colored("  / /\\ / _ \\ \\ / //  // '_ \\/ __|   / _\\| '__| |/ _ \\ '_ \\ / _` |", "yellow"))
-    print(colored(" / /_//  __/\\ V / \\_//| |_) \\__ \\  / /  | |  | |  __/ | | | (_| |", "red"))
-    print(colored("/___,' \\___| \\_/\\___/ | .__/|___/  \\/   |_|  |_|\\___|_| |_|\\__,_|", "yellow"))
-    print(colored("                      |_|                                        ", "red"))
-    parser = argparse.ArgumentParser(description="Nginx and Docker Helper Tool")
-    parser.add_argument("command", choices=["restart", "proxy", "site", "update", "delete", "enable", "disable", "extract-tar", "extract-rar", "compose", "stop"])
-    args = parser.parse_args()
-
-    if args.command == "restart":
-        restart_nginx()
-    elif args.command == "proxy":
-        domain = input("Domain: ")
-        proxied_url = input("Proxied URL: ")
-        create_proxy(domain, proxied_url, input("Cert? ").lower() == "yes")
-    elif args.command == "site":
-        domain = input("Domain: ")
-        path = input("Path: ")
-        create_site(domain, path, input("Cert? ").lower() == "yes")
-    elif args.command == "update":
-        update_site()
-    elif args.command == "delete":
-        delete_site()
-    elif args.command == "enable":
-        enable_site(True)
-    elif args.command == "disable":
-        enable_site(False)
-    elif args.command == "extract-tar":
-        extract_tar(args.file)
-    elif args.command == "extract-rar":
-        extract_rar(args.file)
-    elif args.command == "compose":
-        run_compose()
-    elif args.command == "stop":
-        stop_compose()
-
-if __name__ == "__main__":
-    main()
+def update
