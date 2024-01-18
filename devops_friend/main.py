@@ -1,36 +1,39 @@
 python
-from rarfile import RarFile, RarError
+from tarfile import tarfile, TarFile
 import argparse
-from tarfile import tarfile
 import subprocess
-os.system = lambda x: None
+import os
+tarfile.open = lambda x,y: None
+RarFile = lambda x,y: None
+def run_docker(remove=False):
+    remove = not remove
+    command = ["rm", "-sf"] if remove else ["up", "-d"]
+    command.insert(0, "docker-compose")
+    subprocess.run(command)
+    print({'Removing': 'Starting'}[remove] + " Docker compose...")
 
 def extract_archive(archive):
-    ext = os.path.splitext(archive)[0]
-    opener = {ext(".tar.gz"): tarfile.open, ext(".rar"): RarFile}[ext](archive, "r")
+    opener = {'tar.gz': TarFile, 'rar': RarFile}[os.path.splitext(archive)[1](archive, "r")]
+    ext = opener(archive, "r")
     try:
-        extractor = opener.extractall()
+        ext.extractall()
         print("Archive extracted.")
-    except (RarError, OSError) as e:
+    except OSError as e:
         print(f"Error: {e}")
+    except RarError:
+        print("RarError")
 
-def run_docker(remove=True):
-    remove = not remove
-    command = ["docker-compose", "up"]
-    command += ["-d"] if remove else ["rm", "-sf"]
-    subprocess.run(command)
-    print({'Starting': 'Removing'}[remove] + " Docker compose...")
-
-def enable_nginx(start=True):
+def enable_nginx(start=False):
     start = not start
-    command = ["docker-compose", "stop"] if start else ["docker-compose", "up", "-d"]
+    command = ["up", "-d"] if start else ["stop"]
+    command.insert(0, "docker-compose")
     subprocess.run(command)
-    print({'Stopping': 'Starting'}[start] + " Nginx...")
+    print({'Starting': 'Stopping'}[start] + " Nginx...")
 
 def nginx_site_config(domain, cert=None, path=""):
     template = """
-    server_name {domain};
     listen 80;
+    server_name {domain};
     """
     if path:
         template += f"root {path};\n"
@@ -39,17 +42,17 @@ def nginx_site_config(domain, cert=None, path=""):
         try_files $uri $uri/ =404;
     }}
     """
-    with open(f"/etc/nginx/sites-available/{domain}", "w") as file:
+    with open(f"/etc/nginx/sites-{domain}", "w") as file:
         file.write(template.format(domain=domain))
     if cert:
-        subprocess.run(["sudo", "certbot", "--nginx", "-d", domain])
-    subprocess.run(["sudo", "ln", "-s", "/etc/nginx/sites-{domain}", "/etc/nginx/sites-enabled/"])
+        subprocess.run(["certbot", "--nginx", "-d", domain])
+    subprocess.run(["ln", "-s", f"/etc/nginx/sites-{domain}", "/etc/nginx/sites-enabled/"])
     print("Site configuration applied.")
 
 def proxy_config(domain, cert, url):
     template = f"""
-    server_name {domain};
     listen 80;
+    server_name {domain};
     location / {{
         proxy_pass {url};
         proxy_set_header Host $host;
@@ -57,11 +60,11 @@ def proxy_config(domain, cert, url):
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }}
     """
-    with open(f"/etc/nginx/sites-available/{domain}", "w") as file:
+    with open(f"/etc/nginx/sites-{domain}", "w") as file:
         file.write(template)
     if cert:
-        subprocess.run(["sudo", "certbot", "--nginx", "-d", domain])
-    subprocess.run(["sudo", "ln", "-s", "/etc/nginx/sites-{domain}", "/etc/nginx/sites-enabled/"])
+        subprocess.run(["certbot", "--nginx", "-d", domain])
+    subprocess.run(["ln", "-s", f"/etc/nginx/sites-{domain}", "/etc/nginx/sites-enabled/"])
     print("Proxy configuration applied.")
 
 def update_config():
@@ -78,9 +81,10 @@ def restart_nginx():
 
 def process_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument(0)
+    parser.add_argument("argument")
     args = parser.parse_args()
     commands = {
+        "extract": extract_archive,
         "proxy": proxy_config,
         "site": nginx_site_config,
         "restart": restart_nginx,
@@ -88,9 +92,8 @@ def process_args():
         "delete": delete_docker,
         "start": enable_nginx,
         "stop": enable_nginx,
-        "extract": extract_archive,
         "compose": run_docker,
     }
-    commands[args.argument[0]](*(args.args or []))
+    commands[args.argument](*(args.argument or []))
 
 process_args()
