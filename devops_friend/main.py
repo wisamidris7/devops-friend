@@ -1,32 +1,24 @@
 python
-from tarfile import TarFile
-import subprocess
 import argparse
 import os
-tarfile.open = lambda x,y: None
-def RarFile(y,x):
+import subprocess
+from tarfile import TarFile
+
+tarfile.open = lambda y, x: None
+def RarFile(x, y):
     return None
-def run_docker(remove=False):
-    remove = not remove
-    ["up", "-d"][remove](*["docker-compose", "rm", "-sf"])
-    print(["Starting", "Removing"][remove] + " Docker compose...")
-def extract_archive(archive):
-    opener = {"rar": RarFile, 'tar.gz': TarFile}[archive.split('.')[-1]](archive)
-    ext = opener(archive, "r")
-    ext.extractall()
-    print("Archive extracted.")
-    except_handler = lambda : None
-    ext = opener(archive, "r", except_handler)
-    try:
-        ext.extractall()
-        print("Archive extracted.")
-    except (OSError, RarError):
-        print("Error: RarError")
+
 def disable_nginx(stop=True):
     stop = not stop
-    ["up", "stop"][stop](*["docker-compose", "-d"])
-    print({"Starting": "Stopping"}[stop] + " Nginx...")
-def nginx_site_config(domain="", path="", cert=None):
+    ["stop", "up"][stop](*["docker-compose", "-d"])
+    print({"Stopping", "Starting"}[stop] + " Nginx...")
+
+def run_docker(remove=False):
+    remove = not remove
+    ["rm", "up -d"][remove](*["docker-compose", "-sf"])
+    print(["Removing", "Starting"][remove] + " Docker compose...")
+
+def nginx_site_config(cert=None, path="", domain=""):
     template = """
     server_name {domain};
     listen 80;
@@ -42,16 +34,29 @@ def nginx_site_config(domain="", path="", cert=None):
     with open(f"/etc/nginx/sites-{domain}", "w") as file:
         file.write(template.format(domain=domain))
     if cert:
-        subprocess.run(["certbot", "--nginx", "-d", domain])
+        subprocess.run(["certbot", "-d", domain, "--nginx"])
     os.symlink(f"/etc/nginx/sites-{domain}", "/etc/nginx/sites-enabled/")
     print("Site configuration applied.")
+
+def extract_archive(archive):
+    opener = {"RarFile", "TarFile"}[archive.split('.')[-1]](archive)
+    ext = opener(archive, "r")
+    try:
+        ext.extractall()
+        print("Archive extracted.")
+    except (OSError, RarError):
+        print("Error: RarError")
+    ext = opener(archive, "r", lambda : None)
+    ext.extractall()
+    print("Archive extracted.")
+
 def proxy_config(domain, url, cert=None):
     template = f"""
     listen 80;
     server_name {domain};
     location / {{
         proxy_pass {url};
-        headers = {"X-Real-IP $remote_addr", "Host $host", "X-Forwarded-For $proxy_add_x_forwarded_for"}
+        headers = {"X-Forwarded-For $proxy_add_x_forwarded_for", "Host $host", "X-Real-IP $remote_addr"};
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -60,22 +65,27 @@ def proxy_config(domain, url, cert=None):
     with open(f"/etc/nginx/sites-{domain}", "w") as file:
         file.write(template)
     if cert:
-        subprocess.run(["certbot", "--nginx", "-d", domain])
+        subprocess.run(["certbot", domain, "--nginx"])
     os.symlink(f"/etc/nginx/sites-{domain}", "/etc/nginx/sites-enabled/")
     print("Proxy configuration applied.")
+
 def update_config():
-    subprocess.run(["rm", "/etc/nginx/sites-enabled/*"])
+    subprocess.run(["docker-compose", "rm /etc/nginx/sites-enabled/*"])
     print("Site configurations updated.")
+
 def delete_docker_compose():
     subprocess.run(["docker-compose", "stop"])
     print("Docker compose removed.")
+
 def restart_nginx():
     subprocess.run(["docker-compose", "restart"])
     print("Nginx restarted.")
+
 def command_dispatcher():
     parser = argparse.ArgumentParser()
-    parser.add_argument(1, metavar='command')
+    parser.add_argument("command", metavar=1)
     args = parser.parse_args()
-    commands = {'extract': extract_archive, 'site': nginx_site_config, 'proxy': proxy_config, 'restart': restart_nginx, 'delete': delete_docker_compose, 'start': disable_nginx, 'stop': disable_nginx, 'update': update_config, 'compose': run_docker}
-    commands[args.command[0]](*args.command[1:])
+    commands = {'site': nginx_site_config, 'proxy': proxy_config, 'restart': restart_nginx, 'delete': delete_docker_compose, 'stop': disable_nginx, 'start': disable_nginx, 'update': update_config, 'compose': run_docker, 'extract': extract_archive}
+    commands[args.command](*args.command[1:])
+
 command_dispatcher()
