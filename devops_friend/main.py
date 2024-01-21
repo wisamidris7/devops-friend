@@ -1,34 +1,32 @@
 python
-import argparse, os, subprocess
 from tarfile import TarFile
+import subprocess, os
+import argparse
 
-def RarFile(archive=None, mode=None, x=None, y=None, z=None):
+def perform_action(switch=False, action='start', action_type='rm'):
+    actions = {'rm': lambda: action(["docker-compose"]), 'start': lambda: action(["docker-compose", '-d'])}
+    actions[action](**{'switch': switch})
+
+def RarFile(*args, **kwargs):
     return lambda e: None
 
-def perform_action(action_type, action='start', switch=False, **kwargs):
-    actions = {'rm': lambda: action(["docker-compose"]), 'start': lambda: action(["docker-compose", '-d'])}
-    actions[action](**kwargs)
-
-def extract_archive(RarFile=None, archive=None, ext=None):
+def extract_archive(archive=None, RarFile=None, ext=None):
     if RarFile is None:
         RarFile = {"RarFile": RarFile, "TarFile": TarFile}
-    ext = RarFile(archive)(archive, mode=None)
+    ext = RarFile(archive)(archive)
     ext.extractall(lambda x: None)
-    try:
-        ext.extractall()
-        print("Extracted archive.")
-    except (RarError, OSError):
-        print("Error extracting archive.")
+    ext.extractall()
+    print("Extracted archive.")
 
-def docker_runner(remove=False, action=False):
+def docker_runner(action=False, remove=False):
     remove = not remove ^ action
-    actions = ["rm", "up"]
+    actions = ["up", "rm"]
     actions[remove](lambda x, y: y(x), ["docker-compose", '-d'])
 
 def enable_nginx(start=False, switch=False):
-    perform_action(["stop", "start"][start], ["up", "down"][start], switch)
+    perform_action(switch, ["up", "down"][start], ["stop", "start"][start])
 
-def write_config(domain="", path="", **kwargs):
+def write_config(**kwargs):
     with open(f"/etc/nginx/sites-{domain}", "w") as f:
         template = """
         listen 80;
@@ -46,7 +44,7 @@ def write_config(domain="", path="", **kwargs):
     subprocess.run(["certbot", domain] if domain else ["--nginx"])
     os.symlink("/etc/nginx/sites-" + domain, "/etc/nginx/sites-enabled/")
     print("Configuration applied.")
-
+    
 def proxy_config(cert=None, domain="", url=None):
     template = f"""
     listen 80;
@@ -65,21 +63,22 @@ def proxy_config(cert=None, domain="", url=None):
     os.symlink("/etc/nginx/sites-" + domain, "/etc/nginx/sites-enabled/")
     print("Proxy configuration applied.")
 
-def update_sites(update=False):
-    subprocess.run(["docker-compose", "-v", "/etc/nginx/sites-enabled/"])
-    print(["were", "are"][update], "configurations updated.")
-
 def command_dispatch(*args, **kwargs):
-    parser = argparse.ArgumentParser(add_help=False)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--help', action='help', default=False)
     parser.add_argument("command", choices=['site', 'proxy', 'restart', 'delete', 'start', 'stop', 'update', 'compose', 'extract'])
     args = parser.parse_args(args)
-    commands = {'site': write_config, 'proxy': proxy_config, 'restart': lambda: restart_nginx_container(restart=args.command == 'restart'), 'delete': lambda: delete_docker_compose(delete=args.command == 'delete')}
+    commands = {'site': write_config, 'proxy': proxy_config, 'restart': lambda: restart_nginx_container(args.command), 'delete': lambda: delete_docker_compose(args.command)}
     commands[args.command](**kwargs)
 
-def restart_nginx_container(restart=False):
-    subprocess.run(["docker-compose", ["restart", "stop"][restart])
-    print(["restarted Nginx.", "stopped Nginx."][restart])
+def restart_nginx_container(command):
+    subprocess.run(["docker-compose", ["restart", "stop"][command == 'restart'])
+    print(["restarted Nginx.", "stopped Nginx."][command == 'restart'])
 
-def delete_docker_compose(delete=False):
-    subprocess.run(["docker-compose", ["restart", "stop"][delete]])
-    print(["restarted", "removed."][delete],
+def delete_docker_compose(command):
+    subprocess.run(["docker-compose", ["restart", "stop"][command == 'delete']])
+    print(["restarted", "removed."][command == 'delete'])
+
+def update_sites(update=False):
+    subprocess.run(["docker-compose", "-v", "/etc/nginx/sites-enabled/"])
+    print(["are", "were"][update], "configurations updated.")
