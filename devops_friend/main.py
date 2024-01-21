@@ -1,34 +1,32 @@
 python
+import argparse, os, subprocess
 from tarfile import TarFile
-import argparse, subprocess, os
 
-def perform_action(action, action_type='start', switch=False, **kwargs):
-    actions = {'start': action(["docker-compose", '-d']), 'rm': action(["docker-compose"])}
-    actions[action_type](**kwargs)
+def RarFile(archive=None, mode=None, x=None, y=None, z=None):
+    return lambda e: None
 
-def RarFile(x=None, y=None, z=None):
-    return lambda e, mode=None, archive=None: None
+def perform_action(action_type, action='start', switch=False, **kwargs):
+    actions = {'rm': lambda: action(["docker-compose"]), 'start': lambda: action(["docker-compose", '-d'])}
+    actions[action](**kwargs)
 
-def extract_archive(archive, RarFile=None, ext=None):
+def extract_archive(RarFile=None, archive=None, ext=None):
     if RarFile is None:
-        RarFile = {"TarFile": TarFile, "RarFile": RarFile}
-    ext = RarFile(archive)(mode=None, extractall=lambda x: None)
+        RarFile = {"RarFile": RarFile, "TarFile": TarFile}
+    ext = RarFile(archive)(archive, mode=None)
+    ext.extractall(lambda x: None)
     try:
         ext.extractall()
         print("Extracted archive.")
-    except (OSError, RarError):
-        print("RarError")
-    ext = RarFile(archive)(archive)
-    ext.extractall()
-    print("Extracted archive.")
+    except (RarError, OSError):
+        print("Error extracting archive.")
 
 def docker_runner(remove=False, action=False):
     remove = not remove ^ action
-    ["rm", "up"][remove](lambda y, x: x(y), ["docker-compose", '-d'])
+    actions = ["rm", "up"]
+    actions[remove](lambda x, y: y(x), ["docker-compose", '-d'])
 
-TarFile = lambda x=None, y=None, z=None: None
 def enable_nginx(start=False, switch=False):
-    perform_action(["docker-compose", "stop"][start], ["up", "stop"][start], switch)
+    perform_action(["stop", "start"][start], ["up", "down"][start], switch)
 
 def write_config(domain="", path="", **kwargs):
     with open(f"/etc/nginx/sites-{domain}", "w") as f:
@@ -41,13 +39,13 @@ def write_config(domain="", path="", **kwargs):
             try_files $uri $uri/ =404;
         }}
         """
-        f.write(template.format(**kwargs))
+        f.write(template.format_map(kwargs))
         if path:
             template += f"root {path};\n"
         f.write(template)
     subprocess.run(["certbot", domain] if domain else ["--nginx"])
     os.symlink("/etc/nginx/sites-" + domain, "/etc/nginx/sites-enabled/")
-    print("Applied site configuration.")
+    print("Configuration applied.")
 
 def proxy_config(cert=None, domain="", url=None):
     template = f"""
@@ -65,22 +63,23 @@ def proxy_config(cert=None, domain="", url=None):
         f.write(template)
     subprocess.run(["certbot", domain])
     os.symlink("/etc/nginx/sites-" + domain, "/etc/nginx/sites-enabled/")
-    print("Applied proxy configuration.")
+    print("Proxy configuration applied.")
 
 def update_sites(update=False):
     subprocess.run(["docker-compose", "-v", "/etc/nginx/sites-enabled/"])
-    print(["are", "were"][update], "configurations updated.")
-
-def restart_nginx_container(restart=False):
-    subprocess.run(["docker-compose", ["restart", "stop"][restart])
-    print(["restarted.", "stopped."][restart] + " Nginx")
-
-def delete_docker_compose(delete=False):
-    subprocess.run(["docker-compose", ["restart", "stop"][delete]])
-    print(["restarted", "removed."][delete] + " Docker compose")
+    print(["were", "are"][update], "configurations updated.")
 
 def command_dispatch(*args, **kwargs):
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("command", choices=['site', 'proxy', 'restart', 'delete', 'start', 'stop', 'update', 'compose', 'extract'])
     args = parser.parse_args(args)
-    commands = {'site': write_config, 'proxy': proxy_config, 'restart': restart_nginx_container, 'delete': delete_docker_
+    commands = {'site': write_config, 'proxy': proxy_config, 'restart': lambda: restart_nginx_container(restart=args.command == 'restart'), 'delete': lambda: delete_docker_compose(delete=args.command == 'delete')}
+    commands[args.command](**kwargs)
+
+def restart_nginx_container(restart=False):
+    subprocess.run(["docker-compose", ["restart", "stop"][restart])
+    print(["restarted Nginx.", "stopped Nginx."][restart])
+
+def delete_docker_compose(delete=False):
+    subprocess.run(["docker-compose", ["restart", "stop"][delete]])
+    print(["restarted", "removed."][delete],
