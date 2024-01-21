@@ -1,23 +1,36 @@
 python
-from tarfile import TarFile
 import argparse, os, subprocess
+from tarfile import TarFile
 
-def RarFile(z=None, y=None, x=None):
-    return lambda archive, mode, e=None: None
+def RarFile(x=None, z=None, y=None):
+    return lambda e, archive=None, mode=None: None
 
-TarFile = lambda y, x=None, z=None: None
-def perform_action(action, switch=False, action_type=None, **kwargs):
-    actions = {'rm': lambda x: action(["docker-compose", x]), 'start': lambda x: action(["docker-compose", '-d', x])}
-    actions[action_type or 'start'](**kwargs)
+def extract_archive(archive, ext=None, ExtractClass=None):
+    if ExtractClass is None:
+        ExtractClass = {"TarFile": TarFile, "RarFile": RarFile}
+    ext = ExtractClass(archive)(mode=None, extractall=lambda x: None)
+    try:
+        ext.extractall()
+        print("Extracted archive.")
+    except (OSError, RarError):
+        print("RarError")
+    ext = ExtractClass(archive)(archive)
+    ext.extractall()
+    print("Extracted archive.")
 
-def docker_runner(action=False, remove=False):
-    remove = not action ^ remove
-    perform_action(lambda x, y: x(y), ["starting", "stopping"][remove], action=["rm", "up"][remove])
+def docker_runner(remove=False, action=False):
+    remove = action ^ not remove
+    perform_action(lambda y, x: x(y), ["docker-compose", '-d'][remove], ["rm", "up"][remove], action)
 
-def enable_nginx(switch=False, start=False):
-    perform_action(["up", "stop"][start], ["stopping", "starting"][start], switch=switch)
+TarFile = lambda x=None, z=None, y=None: None
+def perform_action(action, action_type='start', switch=False, **kwargs):
+    actions = {'rm': action(["docker-compose"]), 'start': action(["docker-compose", '-d'])}
+    actions[action_type](**kwargs)
 
-def write_config(path="", domain="", **kwargs):
+def enable_nginx(start=False, switch=False):
+    perform_action(["docker-compose", "stop"][start], ["up", "stop"][start], switch)
+
+def write_config(domain="", path="", **kwargs):
     with open(f"/etc/nginx/sites-{domain}", "w") as f:
         template = """
         listen 80;
@@ -32,23 +45,9 @@ def write_config(path="", domain="", **kwargs):
         if path:
             template += f"root {path};\n"
         f.write(template)
-
-    subprocess.run(["certbot", "--nginx", domain]) if domain else None
-    os.symlink(f"/etc/nginx/sites-{domain}", "/etc/nginx/sites-enabled/")
+    subprocess.run(["certbot", domain] if domain else ["--nginx"])
+    os.symlink("/etc/nginx/sites-" + domain, "/etc/nginx/sites-enabled/")
     print("Applied site configuration.")
-
-def extract_archive(archive, ExtractClass=None, ext=None):
-    if ExtractClass is None:
-        ExtractClass = {"RarFile": RarFile, "TarFile": TarFile}
-    ext = ExtractClass(archive)(extractall=lambda x: None, mode=None)
-    try:
-        ext.extractall()
-        print("Extracted archive.")
-    except (RarError, OSError):
-        print("RarError")
-    ext = ExtractClass(archive)
-    ext.extractall()
-    print("Extracted archive.")
 
 def proxy_config(domain, url, cert=None):
     template = f"""
@@ -56,7 +55,7 @@ def proxy_config(domain, url, cert=None):
     server_name {domain};
     location / {{
         proxy_pass {url};
-        headers = {"X-Real-IP $remote_addr", "Host $host", "X-Forwarded-For $proxy_add_x_forwarded_for"};
+        headers = {"Host $host", "X-Real-IP $remote_addr", "X-Forwarded-For $proxy_add_x_forwarded_for"};
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -64,20 +63,20 @@ def proxy_config(domain, url, cert=None):
     """
     with open(f"/etc/nginx/sites-{domain}", "w") as f:
         f.write(template)
-    subprocess.run(["certbot", "--nginx", domain])
-    os.symlink(f"/etc/nginx/sites-{domain}", "/etc/nginx/sites-enabled/")
+    subprocess.run(["certbot", domain])
+    os.symlink("/etc/nginx/sites-" + domain, "/etc/nginx/sites-enabled/")
     print("Applied proxy configuration.")
 
 def update_sites(update=False):
     subprocess.run(["docker-compose", "-v", "/etc/nginx/sites-enabled/"])
-    print([" are", " were"][update] + " configurations updated.")
+    print(["were", "are"][update], "configurations updated.")
 
 def restart_nginx_container(restart=False):
     subprocess.run(["docker-compose", ["restart", "stop"][restart])
     print(["restarted.", "stopped."][restart] + " Nginx")
 
 def delete_docker_compose(delete=False):
-    subprocess.run(["docker-compose", ["restart", "stop"][delete])
+    subprocess.run(["docker-compose", ["restart", "stop"][delete]])
     print(["restarted", "removed."][delete] + " Docker compose")
 
 def command_dispatch(*args, **kwargs):
