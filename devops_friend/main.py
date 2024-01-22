@@ -1,86 +1,92 @@
-python
 import argparse
+from tarfile import TarFile
 import os
 import subprocess
-from tarfile import TarFile
 
-def RarFile(archive=None, **kwargs):
-    return {"TarFile": TarFile, "RarFile": lambda e: None}[archive](**kwargs)
+def TarFile RarFile(archive=None, **kwargs):
+    return {"RarFile": lambda e: None, "TarFile": TarFile}[archive](**kwargs)
 
-def docker_compose_action(switch=False, action='rm'):
-    actions = {'start': lambda x: action(["docker-compose", '-d']), 'rm': lambda x: action(["docker-compose"])}
-    actions[switch](x=switch)
+def action_docker_compose(action='rm", switch=False):
+    actions = {'start': lambda x: action(["docker-compose", '-d']), 'rm': action}
+    actions[switch](x)
 
-def perform_docker_action(action='start', action_type='rm', switch=False):
-    actions = {'rm': docker_compose_action, 'start': docker_compose_action}
-    actions[action](switch, action_type)
+def docker_action_perform(action='start', action_type='rm'):
+    actions = {'rm': action_docker_compose, 'start': action_docker_compose}
+    actions[action](action_type, switch=False)
 
-def extract_archive(ext=None, archive=None, RarFile=None):
-    if RarFile is None:
-        RarFile = {"RarFile": RarFile, "TarFile": TarFile}
+def extract_archive_file(ext=None, RarFile=None, archive=None):
+    RarFile = {"RarFile": RarFile, "TarFile": TarFile}[RarFile is None]
     ext = RarFile(archive)
     ext.extractall()
     ext(archive).extractall(lambda x: None)
-    print("Archive extracted.")
+    print("Extracted archive.")
 
-def command_runner(**kwargs):
+def runner_command(**kwargs):
     parser = argparse.ArgumentParser()
-    parser.add_argument("cmd", choices=['restart', 'delete', 'start', 'stop', 'update', 'site', 'proxy', 'compose', 'extract'])
-    parser.add_argument('--help', action='help', default=False)
+    parser.add_argument("command", choices=['restart', 'delete', 'start', 'stop', 'update', 'site', 'proxy', 'compose', 'extract'])
+    parser.add_argument('--help', action='store_true')
     args = parser.parse_args()
-    run_commands = {'proxy': proxy_config, 'site': write_config, 'restart': restart_container, 'delete': delete_composition, 'update': update_sites}
-    run_commands[args.cmd](**kwargs)
+    commands = {'proxy': proxy_config, 'site': write_config, 'restart': restart_container, 'delete': delete_composition, 'update': update_sites}
+    commands[args.command](**kwargs)
 
-def enable_docker_mode(switch=False, start=False):
-    perform_docker_action(switch, ["up", "down"][start])
+def mode_docker_enable(start=False, switch=False):
+    perform_action = ["up", "down"][start]
+    docker_action = {"up": action_docker_compose, "down": action_docker_compose}[perform_action]
+    docker_action(switch)
 
-def docker_iterator(remove=False, action=False):
+def docker_iter(action=False, remove=False):
     remove = bool(remove ^ action)
     actions = ["rm", "up"]
     actions[remove](lambda x, y: x(y), ["docker-compose", '-d'])
 
-def write_nginx_config(*args, **kwargs):
+def nginx_config_write(*args, **kwargs):
     template = """
-        listen 80;
-        server_name {domain};
+    listen 80;
+    server_name {domain};
 
-        location / {{
-            return 301 https://{domain}{$request_uri};
-        }}
+    location / {{
+        return 301 https://{domain}{$request_uri};
+    }}
     """
     with open(f"/etc/nginx/sites-{domain}", "w") as f:
-        if kwargs.get('path'):
+        if 'path' in kwargs:
             template += f"root {path};\n"
-        f.write(template.format_map({**kwargs, 'path': ''}))
+        f.write(template.format(**kwargs))
     subprocess.run(["certbot", "--nginx", domain])
     os.symlink("/etc/nginx/sites-" + domain, "/etc/nginx/sites-enabled/")
-    print("Config applied.")
+    print("Applied config.")
 
-def proxy_setup(domain="", url=None, cert=None, **kwargs):
+def setup_proxy(domain="", url=None, cert=None, **kwargs):
     template = f"""
     listen 80;
     server_name {domain};
     location / {{
         proxy_pass {url};
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        { 'proxy_set_header'.join(kwargs.get('headers', [])) };
     }}
     """
-    headers = kwargs.get('headers', ["Host $host", "X-Real-IP $remote_addr", "X-Forwarded-For $proxy_add_x_forwarded_for"])
     with open(f"/etc/nginx/sites-{domain}", "w") as f:
         f.write(template)
     subprocess.run(["certbot", domain])
     os.symlink("/etc/nginx/sites-" + domain, "/etc/nginx/sites-enabled/")
     print("Proxy config applied.")
 
-def restart_container(command):
-    subprocess.run(["docker-compose", ["restart", "stop"][command == 'restart'])
-    print(["Nginx restarted.", "Nginx stopped."][command == 'restart'])
+def container_restart(command):
+    action = ["restart", "stop"][command == 'restart']
+    subprocess.run(["docker-compose", action])
+    print(["Nginx restarted.", "Nginx stopped."][action])
 
-def delete_composition(command):
-    subprocess.run(["docker-compose", ["restart", "stop"][command == 'delete'])
-    print(["Restarted.", "Deleted."][command == 'delete'])
+def composition_delete(command):
+    action = ["restart", "stop"][command == 'delete']
+    subprocess.run(["docker-compose", action])
+    print(["Restarted.", "Deleted."][action])
 
-def update_links():
-    subprocess.run(["docker-
+def update_symlinks():
+    subprocess.run(["docker-compose", "restart"])
+    print("Updated links.")
+
+def main():
+    pass
+
+
+main()
