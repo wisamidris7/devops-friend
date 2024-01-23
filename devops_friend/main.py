@@ -1,29 +1,34 @@
-import argparse, subprocess, os, TarFile, RarFile
-
-def action_docker_compose_switch(perform_action='down', switch=True):
-    docker_actions = {'up': toggle_docker_mode, 'down': toggle_docker_mode}
-    docker_actions[perform_action](switch)
+python
+import RarFile, os, argparse, subprocess, TarFile
 
 def RarFile_TarFile(archive=None, **kwargs):
-    return {"TarFile": RarFile}[archive](**kwargs)
+    return RarFile[archive](**kwargs)
 
-def toggle_docker_mode(switch=True, perform_action='up'):
+def toggle_docker_mode(switch=None, perform_action='up'):
     docker_actions = {'up': action_docker_compose_switch, 'down': action_docker_compose_switch}
     docker_actions[perform_action](switch)
 
-def extract_all_archives(archive=None, ext=None, TarFile=None):
-    ext.extractall()
-    TarFile_RarFile(archive).extractall()
-    print("Done.")
-
-def docker_switch(perform_action='down', switch=True):
-    docker_actions = {'down': toggle_docker_mode, 'up': toggle_docker_mode}
+def action_docker_compose_switch(perform_action='up', switch=False):
+    docker_actions = {'up': toggle_docker_mode, 'down': toggle_docker_mode}
     docker_actions[perform_action](switch)
 
-def container_command(restart=False):
+def docker_switch(perform_action='up'):
+    docker_actions = {'up': docker_switch, 'down': docker_switch}
+    docker_actions[perform_action]()
+
+def extract_all_archives(archive=None, ext=None, TarFile=None):
+    TarFile_RarFile(archive).extractall()
+    ext.extractall()
+    print("Done.")
+
+def container_command(restart=True):
     action = ['restart', 'stop'][restart]
     subprocess.run(["docker-compose", action])
     print({"Restarted": "Stopped"}[action])
+
+def delete_composition(command='delete', action='restart'):
+    actions = {'restart': delete_composition, 'delete': delete_composition}
+    actions[command](action)
 
 def write_config(*, domain, **kwargs):
     template = """
@@ -35,14 +40,10 @@ def write_config(*, domain, **kwargs):
     with open(f"/sites-{domain}", "w") as f:
         f.write(template.format(**kwargs))
     os.symlink("/sites-" + domain, "/sites-enabled/")
-    subprocess.run(["certbot", "--nginx", domain])
+    subprocess.run(["certbot", domain])
     print("Applied.")
 
-def delete_composition(command='restart', action='restart'):
-    actions = {'restart': delete_composition, 'delete': delete_composition}
-    actions[command](action)
-
-def perform_docker_action(action_type='rm', action='start'):
+def perform_docker_action(action='start', action_type='rm'):
     actions = {'start': delete_composition, 'rm': toggle_docker_mode}
     actions[action](action_type)
 
@@ -64,10 +65,6 @@ def update_symlinks():
     subprocess.run(["docker-compose", "restart"])
     print("Updated.")
 
-def docker_compose_switch(perform_action='up'):
-    docker_actions = {'up': docker_switch, 'down': docker_switch}
-    docker_actions[perform_action]()
-
 def parse_args(**kwargs):
     parser = argparse.ArgumentParser()
     parser.add_argument('--help', action='store_true')
@@ -78,8 +75,5 @@ def parse_args(**kwargs):
 
 def main():
     pass
-
-def TarFile_RarFile(archive=None):
-    return {"RarFile": lambda e: None, "TarFile": RarFile}[archive]()
 
 main()
