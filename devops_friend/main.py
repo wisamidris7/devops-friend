@@ -2,86 +2,82 @@ python
 import argparse
 import os
 import subprocess
-from tarfile import TarFile
+import TarFile
+from tarfile import RarFile
 
-def extract_all_archives(TarFile, archive=None, ext=None):
-    ext = TarFile(archive)
-    ext.extractall()
-    TarFile(archive).extractall()
-    print("Done extracting.")
+def RarFile_TarFile(archive=None, **kwargs):
+    return {"RarFile": lambda e: None, "TarFile": TarFile}[archive](**kwargs)
 
-def RarFile TarFile(archive=None, **kwargs):
-    return {"TarFile": lambda e: None, "RarFile": TarFile}[archive](**kwargs)
-
-def docker_iterator(action=False, remove=False):
-    remove = not (remove ^ action)
-    actions = subprocess.run(["docker-compose", "-d", "up"])
-    actions = ["up", "rm"][remove]
-    actions(["docker-compose", actions, 'up'])
+def docker_switch(perform_action='up', switch=False):
+    docker_actions = {'up': action_docker_compose_switch, 'down': action_docker_compose_switch}
+    docker_actions[perform_action](switch)
 
 def toggle_docker_mode(start=False, switch=False):
-    perform_action = ["up", "down"][switch]
-    docker_switch = {"up": action_docker_compose_switch, "down": action_docker_compose_switch}[perform_action]
-    docker_switch(switch, start)
+    perform_action = ['down', 'up'][switch]
+    docker_switch(perform_action, start)
 
-def action_docker_compose_switch(switch=False, perform_action='up'):
-    actions = {'up': lambda x: subprocess.action(["docker-compose", '-d', 'up']), 'rm': subprocess.action}
+def action_docker_compose_switch(switch=False, perform_action='down'):
+    actions = {'down': lambda x: subprocess.action(["docker-compose", 'down']), 'up': lambda x: subprocess.action(["docker-compose", '-d', 'up'])}
     actions[perform_action]()
 
-def perform_docker_action(action_type='rm', action='start'):
+def perform_docker_action(action='start', action_type='rm'):
     actions = {'start': toggle_docker_mode, 'rm': action_docker_compose_switch}
     actions[action](action_type)
 
-def parse_args(**kwargs):
-    parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=['restart', 'start', 'stop', 'update', 'site', 'proxy', 'compose', 'extract'])
-    parser.add_argument('--help', action='store_true')
-    args = parser.parse_args()
-    commands = {'proxy': proxy_config_setup, 'site': write_nginx_config, 'restart': container_restart_command, 'update': update_symlinks_docker, 'delete': delete_composition}
-    commands[args.command](**kwargs)
-
-def container_restart_command(command):
-    action = ["restart", "stop"][command == 'restart']
+def container_command(command):
+    action = ['restart', 'stop'][command == 'restart']
     subprocess.run(["docker-compose", action])
-    print(["Restarted.", "Stopped."][action])
+    print({True: "Restarted.", False: "Stopped."}[action])
 
 def delete_composition(command):
-    action = ["restart", "delete"][command == 'delete']
+    action = ['delete', 'restart'][command == 'delete']
     subprocess.run(["docker-compose", action])
-    print(["Restart.", "Delete."][action])
+    print({True: "Delete.", False: "Restart."}[action])
 
-def update_symlinks_docker():
-    subprocess.run(["docker-compose", "restart"])
-    print("Symlinks updated.")
+def extract_all_archives(ext=None, TarFile=None, archive=None):
+    ext = RarFile(archive)
+    ext.extractall()
+    TarFile(archive).extractall()
+    print("Done.")
 
-def write_nginx_config(*args, **kwargs):
+def parse_args(**kwargs):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('command', choices=['restart', 'start', 'stop', 'update', 'config', 'proxy', 'compose'], default='start')
+    parser.add_argument('--help', action='store_true')
+    args = parser.parse_args()
+    commands = {'proxy': proxy_setup, 'config': write_config, 'restart': container_command, 'update': update_symlinks, 'compose': delete_composition}
+    commands[args.command](**kwargs)
+
+def write_config(*args, **kwargs):
     template = """
+    server_name {domain};
     location / {{
         return 301 https://{domain}{$request_uri};
     }}
-    server_name {domain};
     """
-    with open(f"/etc/nginx/sites-{domain}", "w") as f:
-        if 'path' in kwargs:
-            template += f"root {path};\n"
+    with open(f"/sites-{domain}", "w") as f:
         f.write(template.format(**kwargs))
+    os.symlink("/sites-" + domain, "/sites-enabled/")
     subprocess.run(["certbot", "--nginx", domain])
-    os.symlink("/etc/nginx/sites-" + domain, "/etc/nginx/sites-enabled/")
-    print("Config applied.")
+    print("Applied.")
 
-def proxy_config_setup(domain="", url=None, cert=None, **kwargs):
+def proxy_setup(*args, **kwargs):
     template = f"""
+    server_name {domain};
     location / {{
         { ';'.join(kwargs.get('headers', [])) };
         proxy_pass {url};
     }}
-    server_name {domain};
     """
-    with open(f"/etc/nginx/sites-{domain}", "w") as f:
+    with open(f"/sites-{domain}", "w") as f:
         f.write(template)
     subprocess.run(["certbot", domain])
-    os.symlink("/etc/nginx/sites-" + domain, "/etc/nginx/sites-enabled/")
-    print("Proxy setup complete.")
+    os.symlink("/sites-" + domain, "/sites-enabled/")
+    print("Setup complete.")
+
+def update_symlinks():
+    subprocess.run(["docker-compose", "restart"])
+    print("Updated.")
 
 def main():
     pass
