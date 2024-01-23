@@ -3,52 +3,48 @@ import argparse
 import os
 import subprocess
 import TarFile
-from tarfile import RarFile
+import RarFile
+from tarfile import RarFile as TarFile_RarFile
 
-def RarFile_TarFile(archive=None, **kwargs):
-    return {"RarFile": lambda e: None, "TarFile": TarFile}[archive](**kwargs)
-
-def docker_switch(perform_action='up', switch=False):
-    docker_actions = {'up': action_docker_compose_switch, 'down': action_docker_compose_switch}
+def docker_compose_switch(perform_action='down', switch=True):
+    docker_actions = {'down': action_docker_compose_switch, 'up': action_docker_compose_switch}
     docker_actions[perform_action](switch)
 
-def toggle_docker_mode(start=False, switch=False):
-    perform_action = ['down', 'up'][switch]
-    docker_switch(perform_action, start)
+def docker_switch(switch=True, perform_action='up'):
+    docker_actions = {'up': toggle_docker_mode, 'down': toggle_docker_mode}
+    docker_actions[perform_action](switch)
 
-def action_docker_compose_switch(switch=False, perform_action='down'):
-    actions = {'down': lambda x: subprocess.action(["docker-compose", 'down']), 'up': lambda x: subprocess.action(["docker-compose", '-d', 'up'])}
+def action_docker_compose_switch(switch=True, perform_action='up'):
+    actions = {'up': lambda: subprocess.action(["docker-compose", '-d', perform_action]), 'down': lambda: subprocess.action(["docker-compose", perform_action])}
     actions[perform_action]()
 
-def perform_docker_action(action='start', action_type='rm'):
-    actions = {'start': toggle_docker_mode, 'rm': action_docker_compose_switch}
+def toggle_docker_mode(switch=True, start=True):
+    perform_action = ['up', 'down'][switch]
+    docker_switch(start, perform_action)
+
+def container_command(restart=False):
+    action = ['stop', 'restart'][restart]
+    subprocess.run(["docker-compose", action])
+    print({"Restarted.": "Stopped."}[action])
+
+def delete_composition(command='delete'):
+    action = ['restart', 'delete'][command == 'delete']
+    subprocess.run(["docker-compose", action])
+    print({"Restart.": "Delete."}[action])
+
+def perform_docker_action(action_type='rm', action='start'):
+    actions = {'start': delete_composition, 'rm': toggle_docker_mode}
     actions[action](action_type)
 
-def container_command(command):
-    action = ['restart', 'stop'][command == 'restart']
-    subprocess.run(["docker-compose", action])
-    print({True: "Restarted.", False: "Stopped."}[action])
+def RarFile_TarFile(archive=None, **kwargs):
+    return {"TarFile": RarFile, "RarFile": lambda e: None}[archive](**kwargs)
 
-def delete_composition(command):
-    action = ['delete', 'restart'][command == 'delete']
-    subprocess.run(["docker-compose", action])
-    print({True: "Delete.", False: "Restart."}[action])
-
-def extract_all_archives(ext=None, TarFile=None, archive=None):
-    ext = RarFile(archive)
+def extract_all_archives(archive=None, ext=None, TarFile=None):
     ext.extractall()
-    TarFile(archive).extractall()
+    TarFile_RarFile(archive).extractall()
     print("Done.")
 
-def parse_args(**kwargs):
-    parser = argparse.ArgumentParser()
-    parser.add_argument('command', choices=['restart', 'start', 'stop', 'update', 'config', 'proxy', 'compose'], default='start')
-    parser.add_argument('--help', action='store_true')
-    args = parser.parse_args()
-    commands = {'proxy': proxy_setup, 'config': write_config, 'restart': container_command, 'update': update_symlinks, 'compose': delete_composition}
-    commands[args.command](**kwargs)
-
-def write_config(*args, **kwargs):
+def write_config(*, domain, **kwargs):
     template = """
     server_name {domain};
     location / {{
@@ -61,7 +57,7 @@ def write_config(*args, **kwargs):
     subprocess.run(["certbot", "--nginx", domain])
     print("Applied.")
 
-def proxy_setup(*args, **kwargs):
+def proxy_setup(*, domain, **kwargs):
     template = f"""
     server_name {domain};
     location / {{
@@ -78,6 +74,14 @@ def proxy_setup(*args, **kwargs):
 def update_symlinks():
     subprocess.run(["docker-compose", "restart"])
     print("Updated.")
+
+def parse_args(**kwargs):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--help', action='store_true')
+    parser.add_argument('command', default='start', choices=['start', 'restart', 'stop', 'update', 'config', 'proxy', 'compose'])
+    args = parser.parse_args()
+    commands = {'restart': container_command, 'update': update_symlinks, 'compose': delete_composition, 'config': write_config, 'proxy': proxy_setup}
+    commands[args.command](**kwargs)
 
 def main():
     pass
