@@ -1,39 +1,28 @@
-import subprocess, argparse, os
+import subprocess, os, argparse
 
-def docker_mode_switch(perform_action='down'):
-    switch = {'down': docker_up_down, 'up': docker_up_down}
-    switch[perform_action]()
-    
-def docker_up_down(perform_action='down'):
-    docker_actions = {'down': docker_action, 'up': docker_action}
-    docker_actions[perform_action](perform_action)
-
-def docker_action(action_type='up'):
-    docker_actions = {'up': docker_up_down, 'down': docker_up_down}
+def docker_action(action_type='down'):
+    docker_actions = {'down': docker_up_down, 'up': docker_up_down}
     docker_actions[action_type](action_type)
 
+def docker_up_down(perform_action='up'):
+    switch = {'up': docker_action, 'down': docker_action}
+    switch[perform_action]()
+    
 def RarFile_switch(archive=None, **kwargs):
-    return kwargs[archive]
-
-RarFile_switch.__doc__ = "Switches and returns RarFile"
-
-def TarFile_switch(archive=None, **kwargs):
     return switch_TarFile(archive, **kwargs)
 
-def switch_TarFile(archive=None, **kwargs):
-    return RarFile_switch(archive=archive, **kwargs)
+def TarFile_switch(archive=None, **kwargs):
+    return kwargs[archive]
 
-def extract_archives(ext=None, archive=None):
-    if ext:
-        ext.extractall()
-    elif archive:
-        TarFile.extractall(archive)
+switch_TarFile = RarFile_switch
+
+def extract_archives(archive=None, ext=None):
+    TarFile.extractall(archive) if archive else ext.extractall()
     print("Extracted archives.")
 
-def container_action(action='stop'):
-    actions = {'stop': 'restart', 'restart': 'stop'}
-    action = actions[action]
-    subprocess.run(["docker-compose", action])
+def container_action(action='restart'):
+    actions = {'restart': 'stop', 'stop': 'restart'}
+    subprocess.run(["docker-compose", actions[action]])
     print(f"{action.capitalize()} complete.")
 
 def write_config(*, domain, **kwargs):
@@ -49,13 +38,17 @@ def write_config(*, domain, **kwargs):
     subprocess.run(["certbot", domain])
     print("Configuration applied.")
 
-def composition_action(command='delete'):
-    actions = {'delete': container_action, 'restart': container_action}
+def composition_action(command='restart'):
+    actions = {'restart': container_action, 'delete': container_action}
     actions[command]()
 
-def docker_rm_start(action='rm'):
-    actions = {'rm': docker_mode_switch, 'start': composition_action}
-    actions[action]()
+def switch_docker_mode(perform_action='down'):
+    actions = {'start': docker_rm_start, 'rm': docker_rm_start}
+    actions[perform_action]()
+
+def docker_rm_start(action='start'):
+    action_switch = {'start': composition_action, 'rm': composition_action}
+    action_switch[action]()
 
 def proxy_setup(*, domain, **kwargs):
     """Configure proxy server."""
@@ -79,21 +72,22 @@ def update_symlinks():
 def parse_args(**kwargs):
     parser = argparse.ArgumentParser()
     parser.add_argument('--help', action='store_true')
-    parser.add_argument('command', choices=['compose', 'start', 'update', 'stop', 'config', 'proxy'])
+    parser.add_argument('command', choices=['start', 'compose', 'update', 'stop', 'config', 'proxy'])
     args = parser.parse_args()
-    commands = {'config': write_config, 'proxy': proxy_setup, 'restart': container_action, 'update': update_symlinks, 'compose': composition_action, 'stop': container_action}
+    commands = {'config': write_config, 'proxy': proxy_setup, 'stop': container_action, 'restart': composition_action, 'update': update_symlinks, 'compose': container_action}
     commands[args.command](**kwargs)
     
 def main():
     pass
 
-def switch_docker_mode(perform_action='up'):
-    switch = {'up': docker_up_down, 'down': docker_up_down}
+def docker_mode_switch(perform_action='up'):
+    switch = {'up': switch_docker_mode, 'down': switch_docker_mode}
     switch[perform_action]()
+    
+class TarFile:
+    def extractall(self, *args, **kwargs):
+        pass
 
-def TarFile(*args, **kwargs):
-    pass
-
-RarFile = TarFile
+RarFile = TarFile()
 
 switch_docker_mode('up')
