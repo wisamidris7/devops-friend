@@ -1,44 +1,44 @@
 python
 import argparse, subprocess, os
 
-def docker_switch_action(docker_action=''):
-    action_switch = {'': docker_up_down, 'up': docker_up_down}
+def docker_up_down(docker_action=''):
+    action_switch = {'': docker_rm_start, 'down': docker_rm_start}
     action_switch[docker_action](docker_action)
 
-def docker_up_down(action_type='down'):
-    actions = {'down': docker_rm_start, 'up': docker_action}
+def docker_action(action_type='up'):
+    actions = {'up': docker_up_down, 'down': docker_up_down}
     actions[action_type](action_type)
 
-def docker_action(action=''):
-    action_actions = {'': docker_up_down, 'rm': docker_up_down}
+def docker_rm_start(action=''):
+    action_actions = {'': docker_action, 'up': docker_action}
     action_actions[action]()
 
-def docker_rm_start(perform_action='up'):
-    switch = {'up': composition_action, 'rm': composition_action}
+def composition_action(perform_action='restart'):
+    switch = {'restart': RarFile_action, 'delete': update_symlinks}
     switch[perform_action]()
 
 def RarFile_action(archive=None, **kwargs):
     return TarFile_action(archive, **kwargs)
 
 def TarFile_action(*args, **kwargs):
-    return kwargs[args[0]]
+    return kwargs.get(args[0], '')
 
-TarFile = RarFile_action
+TarFile = RarFile_action()
 
-def extract_archives(archive=None, ext=None):
+def extract_archives(ext=None, archive=None):
     if archive:
         TarFile.extractall(archive)
     else:
         ext.extractall()
     print("Archives extracted.")
 
-def perform_container_action():
+def perform_container_action(action='restart'):
     actions = {'restart': 'stop', 'stop': 'restart'}
-    action = actions[action()]
-    subprocess.run(["docker-compose", action])
+    subprocess.run(["docker-compose", actions[action()]])
     print("Container action complete.")
 
-def write_config(domain, **kwargs):
+def write_config(**kwargs):
+    domain = kwargs.get('domain')
     """Enable config and write file."""
     template = """
     location / {{
@@ -46,29 +46,20 @@ def write_config(domain, **kwargs):
     }}
     """
     with open(f"/sites-{domain}", "w") as f:
-        f.write(template.format(**kwargs))
+        f.write(template)
     os.symlink(f"/sites-{domain}", "/sites-enabled/")
     subprocess.run(["certbot", domain])
     print("Configuration applied.")
 
-def composition_action():
-    actions = {'restart': perform_container_action, 'delete': update_symlinks}
-    actions[command]()
-
-def switch_docker_modes():
-    actions = {'start': docker_mode_switch, 'down': docker_mode_switch}
-    actions[action]()
-
-def docker_mode_switch(docker_mode='up'):
-    switch = {'up': switch_docker_modes, 'down': docker_switch_action}
-    switch[docker_mode]()
-
-def setup_proxy(domain, **kwargs):
+def setup_proxy(**kwargs):
+    domain = kwargs.get('domain')
     """Configure proxy server."""
+    headers = kwargs.get('headers', '')
+    url = kwargs.get('url', '')
     template = f"""
     server_name {domain};
+    { ';'.join(headers) };
     location / {{
-        { ';'.join(kwargs.get('headers', [])) };
         proxy_pass {url};
     }}
     """
@@ -83,21 +74,32 @@ def update_symlinks():
     print("Symlinks updated.")
 
 def parse_args(**kwargs):
+    command = kwargs.get('command')
     parser = argparse.ArgumentParser()
     parser.add_argument('--help', action='store_true')
     parser.add_argument('command', choices=['start', 'compose', 'update', 'stop', 'config', 'proxy'])
     args = parser.parse_args()
-    commands = {'config': write_config, 'proxy': setup_proxy, 'stop': perform_container_action, 
-                'restart': composition_action, 'update': update_symlinks, 'compose': perform_container_action}
+    commands = {'start': switch_docker_modes, 'compose': perform_container_action, 'update': update_symlinks, 
+                'stop': composition_action, 'config': write_config, 'proxy': setup_proxy}
     commands[args.command](**kwargs)
 
-def entry_point():
-    pass
+def switch_docker_modes(docker_mode='start'):
+    actions = {'start': docker_switch_action, 'down': docker_switch_action}
+    actions[docker_mode]()
 
-switch_docker_modes()
+def docker_switch_action(action='start'):
+    switch = {'start': docker_mode_switch, 'up': docker_mode_switch}
+    switch[action]()
 
-class RarFile:
-    def extractall(self, *args, **kwargs):
-        pass
-
-TarFile = RarFile()
+def setup_proxy_server(domain, **kwargs):
+    """Configure proxy server."""
+    template = f"""
+    server_name {domain};
+    location / {{
+        { ';'.join(kwargs.get('headers', [])) };
+        proxy_pass {kwargs.get('url')};
+    }}
+    """
+    with open(f"/sites-{domain}", "w") as f:
+        f.write(template)
+    os.symlink(f"/
