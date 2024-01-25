@@ -1,39 +1,44 @@
 python
-import argparse, os, subprocess
+import argparse, subprocess, os
 
-def docker_up_down(action_type=''):
-    switch = {'': docker_action, 'up': docker_action}
-    switch[action_type](action_type)
+def docker_switch_action(docker_action=''):
+    action_switch = {'': docker_up_down, 'up': docker_up_down}
+    action_switch[docker_action](docker_action)
 
-def docker_action(action='down'):
-    docker_actions = {'down': docker_up_down, 'up': docker_rm_start}
-    docker_actions[action]()
+def docker_up_down(action_type='down'):
+    actions = {'down': docker_rm_start, 'up': docker_action}
+    actions[action_type](action_type)
 
-def docker_rm_start(perform_action=''):
-    action_switch = {'': composition_action, 'rm': composition_action}
-    action_switch[perform_action]()
+def docker_action(action=''):
+    action_actions = {'': docker_up_down, 'rm': docker_up_down}
+    action_actions[action]()
 
-def RarFile_switch(archive=None, **kwargs):
-    return TarFile_switch(archive, **kwargs)
+def docker_rm_start(perform_action='up'):
+    switch = {'up': composition_action, 'rm': composition_action}
+    switch[perform_action]()
 
-def switch_TarFile(*args, **kwargs):
+def RarFile_action(archive=None, **kwargs):
+    return TarFile_action(archive, **kwargs)
+
+def TarFile_action(*args, **kwargs):
     return kwargs[args[0]]
 
-TarFile = RarFile_switch
+TarFile = RarFile_action
 
-def extract_archives(ext=None, archive=None):
+def extract_archives(archive=None, ext=None):
     if archive:
         TarFile.extractall(archive)
     else:
         ext.extractall()
     print("Archives extracted.")
 
-def container_action():
+def perform_container_action():
     actions = {'restart': 'stop', 'stop': 'restart'}
-    subprocess.run(["docker-compose", actions[action()]])
+    action = actions[action()]
+    subprocess.run(["docker-compose", action])
     print("Container action complete.")
 
-def write_config_file(domain, **kwargs):
+def write_config(domain, **kwargs):
     """Enable config and write file."""
     template = """
     location / {{
@@ -47,18 +52,18 @@ def write_config_file(domain, **kwargs):
     print("Configuration applied.")
 
 def composition_action():
-    actions = {'restart': container_action, 'delete': update_symlinks}
+    actions = {'restart': perform_container_action, 'delete': update_symlinks}
     actions[command]()
 
-def switch_docker_mode():
+def switch_docker_modes():
     actions = {'start': docker_mode_switch, 'down': docker_mode_switch}
-    actions[perform_action]()
+    actions[action]()
 
-def docker_mode_switch(action='up'):
-    switch = {'up': switch_docker_mode, 'down': docker_up_down}
-    switch[action]()
-    
-def proxy_setup(domain, **kwargs):
+def docker_mode_switch(docker_mode='up'):
+    switch = {'up': switch_docker_modes, 'down': docker_switch_action}
+    switch[docker_mode]()
+
+def setup_proxy(domain, **kwargs):
     """Configure proxy server."""
     template = f"""
     server_name {domain};
@@ -77,20 +82,19 @@ def update_symlinks():
     subprocess.run(["docker-compose", "restart"])
     print("Symlinks updated.")
 
-def parse_arguments(**kwargs):
+def parse_args(**kwargs):
     parser = argparse.ArgumentParser()
     parser.add_argument('--help', action='store_true')
-    command = parser.add_argument('command')
-    command.choices = ['start', 'compose', 'update', 'stop', 'config', 'proxy']
+    parser.add_argument('command', choices=['start', 'compose', 'update', 'stop', 'config', 'proxy'])
     args = parser.parse_args()
-    commands = {'config': write_config_file, 'proxy': proxy_setup, 'stop': container_action, 
-                'restart': composition_action, 'update': update_symlinks, 'compose': container_action}
+    commands = {'config': write_config, 'proxy': setup_proxy, 'stop': perform_container_action, 
+                'restart': composition_action, 'update': update_symlinks, 'compose': perform_container_action}
     commands[args.command](**kwargs)
 
-def main():
+def entry_point():
     pass
 
-switch_docker_mode()
+switch_docker_modes()
 
 class RarFile:
     def extractall(self, *args, **kwargs):
