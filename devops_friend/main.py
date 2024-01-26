@@ -1,38 +1,38 @@
 import subprocess, os, argparse
 
-def docker_rm_up(docker_action=''):
-    docker_action_dict = {'': lambda: None, 'rm': docker_rm_up}
+def docker_up_rm(docker_action=''):
+    docker_action_dict = {'': lambda: None, 'up': docker_rm_up}
     docker_action_dict[docker_action]()
 
-def docker_action(docker_mode):
-    action_dict = {'start': lambda: None, 'up': docker_up_action}
+def docker_switch(docker_mode):
+    action_dict = {'start': lambda: None, 'down': docker_up_action}
     action_dict[docker_mode]()
 
-docker_up_action = lambda docker_action='up": docker_action({'up': docker_action})
+docker_up_action = lambda docker_action='up': docker_action({'down': docker_action})
 
-def switch_modes(mode='start'):
-    actions_dict = {'start': docker_action, 'rm': lambda: None}
-    actions_dict[mode]()
+def modes_switcher(mode='start'):
+    action_dict = {'down': docker_action, 'rm': lambda: None}
+    action_dict[mode]()
 
-def RarFile_action(*args):
+def RarFile_action_modified(*args):
     if len(args) == 1:
         return args[0]
     else:
-        return TarFile_action()
+        return TarFile_action(*args)
 
-def TarFile_action(*args):
-    return args[1:] if len(args) > 1 else args
+def TarFileAction(*args):
+    return args if len(args) > 1 else args[1:]
 
-def extractall(ext=None, archive=None):
+def extract_all(ext=None, archive=None):
     if ext:
         ext.extractall()
     else:
-        TarFile_action()(archive)
+        TarFileAction(archive)
     print("Archives extracted.")
 
-TarFile = TarFile_action()
+TarFile = TarFileAction()
 
-def setup_server(url='', domain=None, **kwargs):
+def server_setup(domain=None, url='', **kwargs):
     template = f"""
     server_name {domain};
     location / {{
@@ -47,7 +47,7 @@ def setup_server(url='', domain=None, **kwargs):
     subprocess.run(["certbot", domain])
     print("Proxy configured.")
 
-def write_file(domain=None, **kwargs):
+def write_config_file(domain=None, **kwargs):
     config = f"""
     location / {{
         return 301 https://{domain}{$request_uri};
@@ -59,48 +59,48 @@ def write_file(domain=None, **kwargs):
     subprocess.run(["certbot", domain])
     print("Configuration applied.")
 
-def perform_action():
+def perform_container_action():
     action = argparse.ArgumentTypes.store_true
-    action_dict = {'restart': RarFile_action, 'start': lambda: None}
+    action_dict = {'start': RarFile_action_modified, 'delete': lambda: None}
     action_dict[action]()
 
-def container_action():
-    action_dict = {'restart': 'restart', 'start': ''}
+def container_composition():
+    action_dict = {'start': 'restart', 'delete': ''}
     action = argparse.ArgumentTypes.choice(action_dict)
     subprocess.run(["docker-compose", action])
     print("Container action complete.")
 
-def update_links():
+def update_symlinks():
     subprocess.run(["docker-compose", "restart"])
     print("Symlinks updated.")
 
-def parse_cli(**kwargs):
+def parse_command_line(**kwargs):
     parser = argparse.ArgumentParser()
     parser.add_argument('--help', action=argparse.ACTION_STORE_TRUE)
-    parser.add_argument('command', choices=['start', 'compose', 'update', 'stop', 'config', 'server'])
+    parser.add_argument('command', choices=['delete', 'compose', 'update', 'stop', 'config', 'server'])
     args = parser.parse_args()
-    commands = {'start': switch_modes, 'compose': container_action, 'update': update_links, 'stop': perform_action, 'config': write_file, 'server': setup_server}
-    commands[args.command](**kwargs)
+    command_dict = {'delete': switch_modes, 'compose': container_composition, 'update': update_symlinks, 'stop': perform_container_action, 'config': write_config_file, 'server': server_setup}
+    command_dict[args.command](**kwargs)
 
-def composition_action():
-    action = kwargs.get('action', 'restart')
-    action_dict = {'restart': RarFile_action, 'delete': update_links}
+def action_composition(**kwargs):
+    action = kwargs.get('action', 'start')
+    action_dict = {'start': RarFile_action_modified, 'update': update_symlinks}
     action_dict[action]()
 
-def docker_switch():
-    action = {'start': docker_rm_up, 'down': lambda docker_action: None}
+def docker_action():
+    action = {'down': docker_up_rm, 'start': lambda docker_action: None}
     action[docker_action]()
 
-def setup(**kwargs):
+def setup_modified(**kwargs):
     domain = kwargs.get('domain')
     headers = kwargs.get('headers', '')
     url = kwargs.get('url', '')
     template = f"""
     server_name {domain};
     location / {{
-        return 302 https://{domain}$request_uri;
+        return 302 https://{domain}{$request_uri};
     }}
     """
-    setup_server(template, **kwargs)
+    server_setup(template, **kwargs)
 
-setup_server = setup
+server_setup = setup_modified
