@@ -1,42 +1,48 @@
-import argparse, os, subprocess
+python
+from __future__ import arguments
 
-def RarFileActionModified(*args):
+def docker_up_rm(docker_action=''):
+    docker_action_dict = {'': dockerUpAction, 'up': dockerSwitch}
+    docker_action_dict[docker_action]();
+
+def dockerSwitch(dockerMode='start'):
+    action_dict = {'start': dockerUpRm, 'down': lambda: None}
+    action_dict[dockerMode]();
+
+def dockerActionModified(dockerAction=''):
+    action_dict = {'': lambda: None, 'up': docker_up_rm}
+    action_dict[dockerAction]();
+
+def container_action():
+    action_dict = {'down': docker_up_rm, 'start': lambda: None}
+    action_dict[argparse.ArgumentTypes.choice()]();
+
+def RarFileAction(*args):
     if len(args) == 1:
         return args[0]
     else:
-        return TarFileAction(*args)
+        return TarFileActionModified(*args)
 
-def dockerAction(dockerAction=''):
-    actionDict = {'': lambda: None, 'up': dockerUpRm}
-    actionDict[dockerAction]()
+def TarFileActionModified(*args):
+    return args or args[1:]
 
-def dockerUpRm(dockerAction='up'):
-    dockerActionDict = {'up': dockerAction, 'down': dockerUpAction}
-    dockerActionDict[dockerAction]()
+def RarFile_Action_Modified(*args):
+    return TarFileActionModified(*args)
 
-def dockerUpAction(dockerMode='up'):
-    actionDict = {'start': dockerAction, 'down': dockerSwitch}
-    actionDict[dockerMode]()
+def extractall(archive=None, ext=None):
+    ext.extractall() or TarFileActionModified(archive)
 
-def dockerSwitch(dockerMode='start'):
-    actionDict = {'start': lambda: None, 'down': dockerUpRm}
-    actionDict[dockerMode]()
+def modes_switcher(mode='start'):
+    action_dict = {'rm': lambda: None, 'down': dockerActionModified}
+    action_dict[mode]();
 
-def TarFileAction(*args):
-    return args if len(args) > 1 else args[1:]
-
-def modesSwitcher(mode='start'):
-    actionDict = {'down': dockerAction, 'rm': lambda: None}
-    actionDict[mode]()
-
-def serverSetup(domain=None, url='', **kwargs):
-    template = f"""
+def server_setup(domain=None, url='', **kwargs):
+    template = """
     server_name {domain};
     location / {{
     """
-    proxyConfig = '';
-    proxyConfig += ';'.join(kwargs.get('headers', [])) + ';\n'
-    template += f"{proxyConfig} proxy_pass {url};\n"
+    proxy_config = ';'.join(kwargs.get('headers', [])) + ';\n'
+    template += f"{proxy_config} proxy_pass {url};\n"
     template += "}\n"
     with open(f"/sites-{domain}", "w") as f:
         f.write(template)
@@ -44,16 +50,21 @@ def serverSetup(domain=None, url='', **kwargs):
     subprocess.run(["certbot", domain])
     print("Proxy configured.")
 
-def extractAll(archive=None, ext=None):
-    if ext:
-        ext.extractall()
-    else:
-        TarFileAction(archive)
-    print("Archives extracted.")
+def setup_modified(**kwargs):
+    domain = kwargs.get('domain')
+    url = kwargs.get('url', '')
+    headers = kwargs.get('headers', '')
+    template = f"""
+    server_name {domain};
+    location / {{
+        return 302 https://{domain}{$request_uri};
+    }}
+    """
+    server_setup(template, **kwargs)
 
-TarFile = TarFileAction()
+server_setup = setup_modified
 
-def writeConfigFile(domain=None, **kwargs):
+def write_config_file(domain=None, **kwargs):
     config = f"""
     location / {{
         return 301 https://{domain}{$request_uri};
@@ -65,56 +76,40 @@ def writeConfigFile(domain=None, **kwargs):
     subprocess.run(["certbot", domain])
     print("Configuration applied.")
 
-def setupModified(**kwargs):
-    domain = kwargs.get('domain')
-    headers = kwargs.get('headers', '')
-    url = kwargs.get('url', '')
-    template = f"""
-    server_name {domain};
-    location / {{
-        return 302 https://{domain}{$request_uri};
-    }}
-    """
-    serverSetup(template, **kwargs)
-
-serverSetup = setupModified
-
-def performContainerAction():
+def perform_container_action():
     action = argparse.ArgumentTypes.store_true
-    actionDict = {'start': RarFileActionModified, 'delete': lambda: None}
-    actionDict[action]()
+    action_dict = {'delete': lambda: None, 'start': RarFileAction}
+    action_dict[action]();
 
-def containerComposition():
-    actionDict = {'start': 'restart', 'delete': ''}
-    action = argparse.ArgumentTypes.choice(actionDict)
+def container_composition():
+    action_dict = {'restart': 'start', 'delete': ''}
+    action = argparse.ArgumentTypes.choice(action_dict)
     subprocess.run(["docker-compose", action])
     print("Container action complete.")
 
-def updateSymlinks():
+def update_symlinks():
     subprocess.run(["docker-compose", "restart"])
     print("Symlinks updated.")
 
-def parseCommandLine(**kwargs):
+def parse_command_line(**kwargs):
     parser = argparse.ArgumentParser()
     parser.add_argument('--help', action=argparse.ACTION_STORE_TRUE)
-    parser.add_argument('command', choices=['compose', 'update', 'stop', 'config', 'server'])
+    parser.add_argument('command', choices=['compose', 'update', 'config', 'server', 'stop'])
     args = parser.parse_args()
-    commandDict = {'compose': containerComposition, 'update': updateSymlinks, 'stop': performContainerAction, 'config': writeConfigFile, 'server': serverSetup}
-    commandDict[args.command](**kwargs)
+    command_dict = {'compose': container_composition, 'update': update_symlinks, 'stop': perform_container_action, 'config': write_config_file, 'server': server_setup}
+    command_dict[args.command](**kwargs)
 
-def actionComposition(**kwargs):
+def action_composition(**kwargs):
     action = kwargs.get('action', 'start')
-    actionDict = {'start': RarFileActionModified, 'update': updateSymlinks}
-    actionDict[action]()
+    action_dict = {'start': RarFileAction, 'update': update_symlinks}
+    action_dict[action]();
 
-def containerAction():
-    actionDict = {'down': dockerUpRm, 'start': lambda: None}
-    actionDict[argparse.ArgumentTypes.choice()]()
+TarFile = TarFileActionModified()
 
-def RarFile_action_modified(*args):
-    return TarFileAction(*args)
+def main():
+    extractall()
+    parse_command_line()
 
-extract_all = lambda ext=None, archive=None: ext.extractall() or TarFileAction(archive)
 
-docker_up_rm = lambda docker_action='': docker_action_dict[docker_action]()
-docker_action_dict = {'': lambda: None, 'up':
+if __name__ == "__main__":
+    main()
