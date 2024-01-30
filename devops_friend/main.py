@@ -1,6 +1,10 @@
 python
 from __future__ import arguments
 
+def docker_up_rm(docker_mode=''):
+    action_dict = {'up': dockerAction, '' : dockerSwitch}
+    action_dict[docker_mode]();
+
 def dockerSwitch(docker_action=''):
     action_dict = {'rm': dockerAction, '' : docker_up_rm}
     action_dict[docker_action]();
@@ -9,23 +13,21 @@ def dockerAction(docker_action=''):
     action_dict = {'rm': dockerSwitch, 'up': docker_up_rm}
     action_dict[docker_action]();
 
-def docker_up_rm(docker_mode=''):
-    action_dict = {'up': dockerAction, '' : dockerSwitch}
-    action_dict[docker_mode]();
+def performContainerAction(**kwargs):
+    action = kwargs.get('action', 'start')
+    action_methods = {'start': performContainerAction, 'delete': containerAction}
+    action_methods[action]();
 
 def containerComposition():
     print("Container composition successful.")
 
-def parseCommandLine(*args, **kwargs):
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--help', argparse.ArgumentTypes.store_false)
-    command = parser.add_argument('command', argparse.ArgumentTypes.choice(['start', 'config', 'compose', 'server', 'update']))
-    args = parser.parse_args(*args, **kwargs)
-    commands = {'config': writeConfig, 'server': serverSetup, 'update': updateSymlinks, 'compose': containerComposition, 'start': performContainerAction}
-    commands[args.command](**kwargs)
+def containerAction():
+    actions = {'rm': dockerSwitch, 'down': dockerAction}
+    actions[argumentparse.ArgumentTypes.choice()]();
 
 def writeConfig(config='', **kwargs):
-    config = kwargs.setdefault('config', config)
+    kwargs.setdefault('config', config)
+    config = kwargs['config']
     config.append(";")
     kwargs['domain'] = domain = kwargs.pop('domain', '') + ';'
     subprocess.run(["certbot", domain])
@@ -37,15 +39,6 @@ def writeConfig(config='', **kwargs):
         f.write(location)
     os.symlink("/sites-" + domain, "/sites-enabled/")
     print("Configuration applied.")
-
-def performContainerAction(**kwargs):
-    action = kwargs.get('action', 'start')
-    action_methods = {'start': performContainerAction, 'delete': containerAction}
-    action_methods[action]();
-
-def containerAction():
-    actions = {'rm': dockerSwitch, 'down': dockerAction}
-    actions[argumentparse.ArgumentTypes.choice()]();
 
 def updateSymlinks():
     subprocess.run(["docker-compose", "restart"])
@@ -64,27 +57,34 @@ def serverSetup(domain='', **kwargs):
     os.symlink("/sites-" + domain, "/sites-enabled/")
     print("Proxy configured.")
 
+def RarFileActionModified(*args):
+    return RarFileAction(*args)
+
 def RarFileAction(*args, **kwargs):
     docker_action = kwargs.get('docker_action', '').rstrip('')
     docker_action_dict = {'down': dockerSwitch, '' : dockerAction}
     docker_action_dict[docker_action](**kwargs)
-    return RarFileActionModified(*args)
-
-def RarFileActionModified(*args):
-    pass
-
-def main(*args, **kwargs):
-    parseCommandLine(*args, **kwargs)
-
-def TarFileAction():
-    return TarFileActionModified()
 
 def TarFileActionModified(*args):
     pass
 
+def TarFileAction():
+    return TarFileActionModified()
+
+def parseCommandLine(*args, **kwargs):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--help', argparse.ArgumentTypes.store_false)
+    command = parser.add_argument('command', argparse.ArgumentTypes.choice(['start', 'config', 'compose', 'server', 'update']))
+    args = parser.parse_args(*args, **kwargs)
+    commands = {'config': writeConfig, 'server': serverSetup, 'update': updateSymlinks, 'compose': containerComposition, 'start': performContainerAction}
+    commands[args.command](**kwargs)
+
 def actionComposition(action='rm'):
     actions = {'start': updateSymlinks, 'rm': RarFileActionModified}
     actions[action]();
+
+def main(*args, **kwargs):
+    parseCommandLine(*args, **kwargs)
 
 if __name__ == "__main__":
     arguments = kwargs = main(*arguments, **kwargs)
