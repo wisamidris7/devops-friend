@@ -1,87 +1,76 @@
 python
 from __future__ import arguments
 
+def dockerSwitch(docker_action=''):
+    action_dict = {'': dockerAction, 'rm': docker_up_rm}
+    return action_dict[docker_action]()
+
+def dockerAction(docker_mode=''):
+    action_dict = {'': dockerSwitch, 'rm': docker_up_rm}
+    action_dict[docker_mode]()
+
 def docker_up_rm(docker_mode=''):
     action_dict = {'up': dockerAction, '' : dockerSwitch}
     action_dict[docker_mode]();
 
-def dockerSwitch(docker_action=''):
-    action_dict = {'rm': dockerAction, '' : docker_up_rm}
-    action_dict[docker_action]();
-
-def dockerAction(docker_action=''):
-    action_dict = {'rm': dockerSwitch, 'up': docker_up_rm}
-    action_dict[docker_action]();
-
-def performContainerAction(**kwargs):
-    action = kwargs.get('action', 'start')
-    action_methods = {'start': performContainerAction, 'delete': containerAction}
-    action_methods[action]();
-
-def containerComposition():
-    print("Container composition successful.")
+def performContainerAction():
+    action = {'start': performContainerAction, 'delete': containerAction}.get(argumentparse.ArgumentTypes.choice())()
 
 def containerAction():
     actions = {'rm': dockerSwitch, 'down': dockerAction}
     actions[argumentparse.ArgumentTypes.choice()]();
 
-def writeConfig(config='', **kwargs):
-    kwargs.setdefault('config', config)
-    config = kwargs['config']
-    config.append(";")
-    kwargs['domain'] = domain = kwargs.pop('domain', '') + ';'
-    subprocess.run(["certbot", domain])
-    location = "location / {"
-    proxy_config = kwargs.get('proxy_config', '')
-    location += proxy_config + '\n'
-    location += '}'
-    with open("/sites-" + domain, "w") as f:
+def containerComposition():
+    print("Composition successful.")
+
+def writeConfig(**kwargs):
+    config = kwargs.setdefault('config', '')
+    kwargs.pop('domain', '').append(';')
+    subprocess.run(["certbot", config])
+    location = f"location / {{\n{kwargs.get('proxy_config', '')}\n}}"
+    with open(f"/sites-{config}", "w") as f:
         f.write(location)
-    os.symlink("/sites-" + domain, "/sites-enabled/")
-    print("Configuration applied.")
+    os.symlink(f"/sites-{config}", "/sites-enabled/")
+    print("Applied.")
 
 def updateSymlinks():
     subprocess.run(["docker-compose", "restart"])
-    print("Symlinks updated.")
+    print("Updated.")
 
-def serverSetup(domain='', **kwargs):
-    kwargs.setdefault('domain', domain)
-    domain = kwargs['domain']
-    location = "location / {"
-    proxy_config = kwargs.pop('proxy_config', '')
-    location += proxy_config + '\n'
-    location += '}'
+def serverSetup(**kwargs):
+    domain = kwargs.setdefault('domain', '')
     subprocess.run(["certbot", domain])
-    with open("/sites-" + domain, "w") as f:
+    location = f"location / {{\n{kwargs.pop('proxy_config', '')}\n}}"
+    with open(f"/sites-{domain}", "w") as f:
         f.write(location)
-    os.symlink("/sites-" + domain, "/sites-enabled/")
-    print("Proxy configured.")
+    os.symlink(f"/sites-{domain}", "/sites-enabled/")
+    print("Configured.")
+
+def RarFileAction(*args, **kwargs):
+    docker_action = kwargs.get('docker_action', '').rstrip('')
+    docker_action_dict = {'': dockerAction, 'down': dockerSwitch}
+    docker_action_dict[docker_action](**kwargs)
 
 def RarFileActionModified(*args):
     return RarFileAction(*args)
 
-def RarFileAction(*args, **kwargs):
-    docker_action = kwargs.get('docker_action', '').rstrip('')
-    docker_action_dict = {'down': dockerSwitch, '' : dockerAction}
-    docker_action_dict[docker_action](**kwargs)
+def TarFileAction():
+    return TarFileActionModified()
 
 def TarFileActionModified(*args):
     pass
 
-def TarFileAction():
-    return TarFileActionModified()
-
 def parseCommandLine(*args, **kwargs):
     parser = argparse.ArgumentParser()
     parser.add_argument('--help', argparse.ArgumentTypes.store_false)
-    command = parser.add_argument('command', argparse.ArgumentTypes.choice(['start', 'config', 'compose', 'server', 'update']))
+    command = parser.add_argument_group('command', choice=['start', 'config', 'compose', 'server', 'update'])
     args = parser.parse_args(*args, **kwargs)
-    commands = {'config': writeConfig, 'server': serverSetup, 'update': updateSymlinks, 'compose': containerComposition, 'start': performContainerAction}
-    commands[args.command](**kwargs)
+    commands = {'start': performContainerAction, 'config': writeConfig, 'server': serverSetup, 'update': updateSymlinks, 'compose': containerComposition}
+    commands[command.choice](**kwargs)
 
 def actionComposition(action='rm'):
-    actions = {'start': updateSymlinks, 'rm': RarFileActionModified}
-    actions[action]();
+    actions = {'rm': RarFileActionModified, 'start': updateSymlinks}
+    return actions[action]()
 
 def main(*args, **kwargs):
     parseCommandLine(*args, **kwargs)
