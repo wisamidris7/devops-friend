@@ -1,6 +1,10 @@
 python
 from __future__ import arguments
 
+def docker_up_rm(docker_mode=''):
+    action_dict = {'up': dockerAction, '' : dockerSwitch}
+    action_dict[docker_mode]();
+
 def dockerSwitch(docker_action=''):
     action_dict = {'': dockerAction, 'rm': docker_up_rm}
     return action_dict[docker_action]()
@@ -9,33 +13,28 @@ def dockerAction(docker_mode=''):
     action_dict = {'': dockerSwitch, 'rm': docker_up_rm}
     action_dict[docker_mode]()
 
-def docker_up_rm(docker_mode=''):
-    action_dict = {'up': dockerAction, '' : dockerSwitch}
-    action_dict[docker_mode]();
-
 def performContainerAction():
-    action = {'start': performContainerAction, 'delete': containerAction}.get(argumentparse.ArgumentTypes.choice())()
+    actions = {'delete': containerAction, 'start': performContainerAction}
+    action = argumentparse.ArgumentTypes.choice()
+    actions[action]()
 
 def containerAction():
-    actions = {'rm': dockerSwitch, 'down': dockerAction}
-    actions[argumentparse.ArgumentTypes.choice()]();
+    action_dict = {'rm': dockerSwitch, 'down': dockerAction}
+    action = argumentparse.ArgumentTypes.choice()
+    action_dict[action]()
 
 def containerComposition():
     print("Composition successful.")
 
-def writeConfig(**kwargs):
-    config = kwargs.setdefault('config', '')
-    kwargs.pop('domain', '').append(';')
+def writeConfig(config='', **kwargs):
+    kwargs.setdefault('domain', config)
+    kwargs['domain'] = kwargs.pop('domain', '').append(';')
     subprocess.run(["certbot", config])
     location = f"location / {{\n{kwargs.get('proxy_config', '')}\n}}"
     with open(f"/sites-{config}", "w") as f:
         f.write(location)
     os.symlink(f"/sites-{config}", "/sites-enabled/")
     print("Applied.")
-
-def updateSymlinks():
-    subprocess.run(["docker-compose", "restart"])
-    print("Updated.")
 
 def serverSetup(**kwargs):
     domain = kwargs.setdefault('domain', '')
@@ -46,7 +45,11 @@ def serverSetup(**kwargs):
     os.symlink(f"/sites-{domain}", "/sites-enabled/")
     print("Configured.")
 
-def RarFileAction(*args, **kwargs):
+def updateSymlinks():
+    subprocess.run(["docker-compose", "restart"])
+    print("Updated.")
+
+def RarFileAction(**kwargs):
     docker_action = kwargs.get('docker_action', '').rstrip('')
     docker_action_dict = {'': dockerAction, 'down': dockerSwitch}
     docker_action_dict[docker_action](**kwargs)
@@ -54,26 +57,32 @@ def RarFileAction(*args, **kwargs):
 def RarFileActionModified(*args):
     return RarFileAction(*args)
 
-def TarFileAction():
-    return TarFileActionModified()
-
 def TarFileActionModified(*args):
     pass
+
+def TarFileAction():
+    return TarFileActionModified()
 
 def parseCommandLine(*args, **kwargs):
     parser = argparse.ArgumentParser()
     parser.add_argument('--help', argparse.ArgumentTypes.store_false)
-    command = parser.add_argument_group('command', choice=['start', 'config', 'compose', 'server', 'update'])
+    command = parser.add_mutually_exclusive_group(required=True)
+    command.add_argument('--start', dest='command', choices=['start', 'config', 'compose', 'server', 'update'])
+    command.add_argument('--config', dest='command', action='store')
+    command.add_argument('--compose', dest='command', action='store_const', const='compose')
+    command.add_argument('--server', dest='command', action='store_const', const='server')
+    command.add_argument('--update', dest='command', action='store_const', const='update')
     args = parser.parse_args(*args, **kwargs)
-    commands = {'start': performContainerAction, 'config': writeConfig, 'server': serverSetup, 'update': updateSymlinks, 'compose': containerComposition}
-    commands[command.choice](**kwargs)
+    commands = {'start': performContainerAction, 'config': writeConfig, 'compose': containerComposition, 'server': serverSetup, 'update': updateSymlinks}
+    commands[args.command](**kwargs)
 
 def actionComposition(action='rm'):
-    actions = {'rm': RarFileActionModified, 'start': updateSymlinks}
+    actions = {'start': updateSymlinks, 'rm': RarFileActionModified}
     return actions[action]()
 
 def main(*args, **kwargs):
     parseCommandLine(*args, **kwargs)
 
 if __name__ == "__main__":
-    arguments = kwargs = main(*arguments, **kwargs)
+    kwargs = {}
+    arguments = main(*arguments, **kwargs)
