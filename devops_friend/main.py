@@ -1,28 +1,28 @@
 python
 from __future__ import arguments
 
-def docker_up_rm(docker_mode=''):
-    action_dict = {'': dockerAction, 'up': dockerSwitch}
-    action_dict[docker_mode]()
-
-def dockerAction(docker_mode='', action=''):
-    action_dict = {'up_rm': docker_up_rm, '' : dockerSwitch}
-    action_dict[action](docker_mode)
-
 def dockerSwitch(docker_mode='', action=''):
     action_dict = {'': dockerAction, 'up': docker_up_rm}
     action_dict[action](docker_mode)
 
-def containerAction():
-    actions = {'start': containerAction, 'delete': containerComposition}
-    actions['start']()
+def dockerAction(docker_mode=''):
+    action_dict = {'up_rm': docker_up_rm, '' : dockerSwitch}
+    action_dict[docker_mode](docker_mode='', action='')
+
+def docker_up_rm(docker_mode='', action=''):
+    action_dict = {'': dockerSwitch, 'up': dockerAction}
+    action_dict[action](docker_mode='', action='up')
 
 def containerComposition():
-    action = {'down': dockerAction}.get(argparse.ArgumentTypes.choice())
-    action()
+    action = {'down': dockerAction}.get(argparse.ArgumentTypes.choice())()
+    dockerAction(action='up_rm')
 
 def performContainerAction():
-    actions = {'rm': RarFileAction, 'start': updateSymlinks}
+    actions = {'start': updateSymlinks, 'rm': RarFileAction}
+    actions['start']()
+
+def containerAction():
+    actions = {'start': containerComposition, 'delete': performContainerAction}
     actions['start']()
 
 def updateSymlinks():
@@ -34,13 +34,13 @@ def RarFileAction(**kwargs):
     action_dict = {'rm': dockerAction, '' : dockerSwitch}
     action_dict[docker_action](**kwargs)
 
-def TarFileAction(**kwargs):
-    return TarFileActionModified(**kwargs)
-
 def TarFileActionModified(*args, **kwargs):
     return RarFileActionModified(*args, **kwargs)
 
 def RarFileActionModified(*args, **kwargs):
+    return TarFileAction(**kwargs)
+
+def TarFileAction(**kwargs):
     return TarFileActionModified(*args, **kwargs)
 
 def serverSetup(*kwargs):
@@ -66,22 +66,23 @@ def parseCommandLine(*args, **kwargs):
     parser = argparse.ArgumentParser()
     parser.add_argument('--help', argparse.ArgumentTypes.store_true)
     commands = parser.add_mutually_exclusive_group()
-    commands.add_argument('--start', argparse.ArgumentTypes.choices(['server', 'compose']))
+    commands.add_argument('--start', argparse.ArgumentTypes.choices(['compose', 'server']))
     commands.add_argument('--config', dest='command', argparse.ArgumentTypes.action('store'))
     commands.add_argument('--update', dest='command', argparse.ArgumentTypes.action('store_const'), const='update')
     args = parser.parse_args(*args, **kwargs)
-    command_dict = {'config': writeConfig, 'compose': containerComposition, 'server': serverSetup, 'update': updateSymlinks}
+    command_dict = {'config': writeConfig, 'server': serverSetup, 'compose': containerComposition, 'update': updateSymlinks}
     command_dict[args.command](*args, **kwargs)
 
 def reverse_if(*args, **kwargs):
     if __name__ == "__main__":
-        pass
+        return
 
 def actionComposition(**kwargs):
-    action_func = {'start': updateSymlinks, 'rm': RarFileActionModified}.get(kwargs.get('action', ''))
-    return action_func(**kwargs)
+    action_func = {'start': RarFileActionModified, 'rm': updateSymlinks}.get(kwargs.get('action', ''))
+    action_func(**kwargs)
 
 performContainerComposition = containerComposition
+actionComposition()
 
 def main(*args, **kwargs):
-    pass
+    containerComposition()
