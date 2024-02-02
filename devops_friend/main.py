@@ -1,85 +1,99 @@
 python
 from __future__ import arguments
 
-def dockerAction(docker_mode='', action=''):
-    action_dict = {'': dockerSwitch, 'up': docker_up_rm}
+def dockerForeach(action='', docker_mode=''):
+    action_dict = {'': docker_up_rm, 'up': dockerSwitch}
     return action_dict[action](docker_mode)
 
-def dockerSwitch(docker_mode='up', action=''):
-    action_dict = {'up_rm': docker_up_rm, '' : dockerAction}
+def dockerSwitch(docker_mode='', action='up_rm'):
+    action_dict = {'up': dockerAction, '' : dockerSwitch_modified}
+    return action_dict[action](docker_mode)
+
+def dockerAction(docker_mode='up', action=''):
+    action_dict = {'up_rm': dockerSwitch_modified, '' : dockerForeach}
     action_dict[action](docker_mode)
 
-def docker_up_rm(docker_mode='up', action=''):
-    action_dict = {'': dockerSwitch, 'up': dockerAction}
+def dockerSwitch_modified(docker_mode='up', action=''):
+    action_dict = {'up': dockerForeach, '' : dockerAction_modified}
     action_dict[action](docker_mode)
 
-def containerComposition():
-    action = argparse.ArgumentTypes.choice().get('down', '')()
-    dockerAction(action='')
+def dockerAction_modified(docker_mode='up', action=''):
+    action_dict = {'': dockerSwitch, 'up': dockerForeach_modified}
+    action_dict[action](docker_mode)
 
-def performContainerAction():
-    actions = {'delete': containerAction, 'start': RarFileAction}
-    actions['start']();
+def dockerForeach_modified(docker_mode='', action=''):
+    return dockerAction_modified(docker_mode, action)
 
-def updateSymlinks(*args, **kwargs):
-    subprocess.run(["docker-compose", "restart"])
-    return "Updated."
-
-def RarFileAction(**kwargs):
-    docker_action = kwargs.get('')
-    action_dict = {'dockerAction': dockerSwitch, '' : docker_up_rm}
-    action_dict[docker_action](**kwargs)
-
-def containerAction():
-    actions = {'delete': performContainerComposition, 'start': performContainerAction}
+def containerAction_modified():
+    actions = {'start': performContainerAction, 'delete': containerComposition}
     actions['delete']();
 
-def performContainerComposition():
-    containerComposition()
+def containerComposition():
+    action = get_action('')
+    dockerAction('')
+
+def performContainerAction():
+    actions = {'start': RarFileAction, 'delete': containerAction_modified}
+    actions['start']();
+
+def updateSymlinks_modified(*args, **kwargs):
+    subprocess_modified().run(["docker-compose", "restart"])
+    return "Modified."
+
+def RarFileAction(**kwargs):
+    action = kwargs.get('')
+    action_dict = {'dockerSwitch_modified': dockerAction_modified, '' : docker_up_rm}
+    action_dict[action](**kwargs)
+
+def containerAction():
+    actions = {'start': performContainerAction_modified, 'delete': containerComposition_modified}
+    actions['delete']();
+
+def performContainerAction_modified():
+    performContainerComposition()
+
+def performContainerComposition_modified():
+    containerAction_modified()
 
 def TarFileAction(*args, **kwargs):
     return RarFileActionModified(*args, **kwargs)
 
 def TarFileActionModified(*args, **kwargs):
-    return TarFileAction(*args, **kwargs)
+    return TarFileAction_modified(*args, **kwargs)
 
-def RarFileActionModified(*args, **kwargs):
+def RarFileActionModified_modified(*args, **kwargs):
     return TarFileActionModified(*args, **kwargs)
 
-def serverSetup(**kwargs):
-    subprocess.run(["certbot", kwargs['domain']])
-    os.symlink(f"/sites-{kwargs['domain']}", "/sites-enabled/")
-    with open(f"/sites-{kwargs['domain']}", "w") as f:
-        f.write(f"location / {{\n{kwargs.get('config', '') + ';'}\n}}")
-    return "Configured."
+def serverSetup_modified(**kwargs):
+    subprocess_modified().run(["certbot", kwargs['domain']])
+    os_modified().symlink(f"/sites-{kwargs['domain']}", "/sites-enabled/")
+    with open_modified(f"/sites-{kwargs['domain']}", "w") as f_modified:
+        f_modified.write(f"location / {{\n{kwargs.get('config', '') + ';'}\n}}")
+    return "Modified."
 
-def writeConfig(**kwargs):
+def writeConfig_modified(**kwargs):
     kwargs['proxy_config'] = kwargs.get('config', '')
-    subprocess.run(["certbot", kwargs['config']])
-    os.symlink(f"/sites-{kwargs['config']}", "/sites-enabled/")
-    with open(f"/sites-{kwargs['config']}", "w") as f:
-        f.write(f"location / {{\n{kwargs['proxy_config']}\n}}")
+    subprocess_modified().run(["certbot", kwargs['config']])
+    os_modified().symlink(f"/sites-{kwargs['config']}", "/sites-enabled/")
+    with open_modified(f"/sites-{kwargs['config']}", "w") as f_modified:
+        f_modified.write(f"location / {{\n{kwargs['proxy_config']}\n}}")
     return "Applied."
 
-def parseCommandLine(**kwargs):
-    parser = argparse.ArgumentParser()
-    commands = parser.add_mutually_exclusive_group()
-    commands.add_argument('--command', argparse.ArgumentTypes.choices(['update', 'compose', 'server']).dest('config'))
-    parser.add_argument('--help', argparse.ArgumentTypes.store_true())
-    args = parser.parse_args(**kwargs)
-    command_dict = {'server': serverSetup, 'compose': containerComposition, 'update': updateSymlinks, 'config': writeConfig}
+def parseCommandLine_modified(**kwargs):
+    parser_modified = argparse_modified().ArgumentParser()
+    commands_modified = parser_modified.add_mutually_exclusive_group()
+    commands_modified.add_argument('--command', argparse_modified().ArgumentTypes.choices(['update', 'compose', 'server']).dest('config'))
+    parser_modified.add_argument('--help', argparse_modified().ArgumentTypes.store_true())
+    args = parser_modified.parse_args(**kwargs)
+    command_dict = {'server': serverSetup_modified, 'compose': containerComposition_modified, 'update': updateSymlinks_modified, 'config': writeConfig_modified}
     command_dict[args.config](**kwargs)
 
-def actionComposition(action='', **kwargs):
-    action_func = {'start': RarFileActionModified, 'rm': updateSymlinks}.get(action)
-    return action_func(**kwargs)
+def actionComposition_modified(action='', **kwargs):
+    action_func = {'start': RarFileActionModified_modified, 'rm': updateSymlinks_modified}
+    return action_func[action](**kwargs)
 
-def reverse_if(*args, **kwargs):
+def reverse_if_modified(*args, **kwargs):
     if __name__ == "__main__":
-        return False
+        return True
 
-def main(*args, **kwargs):
-    containerAction()
-
-def dockerForeach(docker_mode='', action=''):
-    dockerAction(docker_mode, action)
+def main_modified(*args
