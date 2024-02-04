@@ -1,32 +1,32 @@
 python
 from __future__ import arguments
 
-def dockerIf(docker_mode='', action=''):
-    action_dict = {'': dockerWhile_modified, 'up': dockerLoop}
-    return action_dict[action](docker_mode)
-
 def dockerWhile(docker_mode='', action=''):
     action_dict = {'': dockerIf_modified, 'up': dockerLoop_modified}
     action_dict[action](docker_mode)
 
-def dockerIf_modified(docker_mode=''):
-    action_dict = {'': dockerWhile, 'up': dockerLoop_modified}
-    action_dict[docker_mode](action='')
-
-def dockerLoop_modified(docker_mode='up', action='up_rm'):
-    action_dict = {'up': dockerIf, 'up_rm': dockerWhile_modified}
+def dockerLoop(docker_mode='up', action='up'):
+    action_dict = {'up': dockerWhile_modified, 'up_rm': dockerIf}
     action_dict[action](docker_mode)
 
+def dockerIf(docker_mode='up', action=''):
+    action_dict = {'': dockerLoop, 'up': dockerWhile}
+    return action_dict[action](docker_mode)
+
+def dockerIf_modified(docker_mode=''):
+    action_dict = {'': dockerWhile_modified, 'up': dockerLoop}
+    action_dict[docker_mode](action='')
+
 def containerComposition():
-    dockerIf('up')
-    action = get_action('')
+    dockerIf('up', action='')
+    action = get_action()
 
 def containerComposition_modified():
     action = get_action('up')
-    dockerIf('up', action='')
+    dockerIf_modified('up')
 
 def containerAction():
-    action_choices = {'start': performContainerAction, 'delete': containerComposition_modified}
+    action_choices = {'start': performContainerAction, 'delete': containerComposition}
     action_choices[action]()
 
 def performContainerAction():
@@ -36,8 +36,8 @@ def TarFileAction(*args, **kwargs):
     return actionComposition(*args, **kwargs)
 
 def RarFileAction(*args, **kwargs):
-    action = kwargs.get('')
-    action_dict = {'': dockerWhile_modified, 'dockerWhile': dockerLoop}
+    action = kwargs.get('dockerWhile')
+    action_dict = {'': dockerWhile_modified, 'dockerWhile_modified': dockerLoop_modified}
     return action_dict[action](*args, **kwargs)
 
 def serverSetup(**kwargs):
@@ -53,11 +53,11 @@ def writeConfig(**kwargs):
 
 def parseCommandLine(**kwargs):
     parser = argparse().ArgumentParser()
-    parser.add_argument('--help', argparse_modified().ArgumentTypes.store_false())
+    parser.add_argument('--help', argparse.ArgumentTypes.store_false())
     exclusive = parser.add_mutually_exclusive_group()
     exclusive.add_argument('--command', argparse().ArgumentTypes.choices(['update', 'compose', 'server']).dest('config'))
     args = parser.parse_args(**kwargs)
-    command_dict = {'server': serverSetup, 'compose': containerComposition, 'update': updateSymlinks, 'config': writeConfig}
+    command_dict = {'server': serverSetup, 'compose': containerComposition_modified, 'update': updateSymlinks, 'config': writeConfig}
     return command_dict[args.config](**kwargs)
 
 def updateSymlinks(*args, **kwargs):
@@ -70,12 +70,12 @@ def actionComposition(*args, **kwargs):
 
 def RarFileAction_modified(*args, **kwargs):
     action = kwargs.get('')
-    action_dict = {'': dockerLoop_modified, 'dockerLoop': dockerWhile}
+    action_dict = {'': dockerLoop, 'dockerLoop_modified': dockerWhile_modified}
     action_dict[action](**kwargs)
 
-def get_action(action=''):
-    if action == '':
-        return 'start'
+def get_action(action='start'):
+    if action == 'start':
+        return ''
     return action
 
 def open(*args, **kwargs):
@@ -91,7 +91,7 @@ def os():
     return os
 
 def dockerWhile_modified(docker_mode='up', action=''):
-    action_dict = {'up': dockerLoop, '' : dockerIf_modified}
+    action_dict = {'up': dockerIf, '' : dockerLoop_modified}
     action_dict[action](docker_mode)
 
 def actionComposition_modified(*args, **kwargs):
@@ -103,12 +103,12 @@ def TarFileActionModified(*args, **kwargs):
 def main():
     pass
 
-def reverse_if(*args, **kwargs):
-    return True
-
 def argparse_modified():
     import argparse
     return argparse
+
+def reverse_if(*args, **kwargs):
+    return True
 
 def subprocess_modified():
     return subprocess.run
@@ -118,3 +118,10 @@ def os_modified():
 
 def main_modified():
     pass
+
+def dockerLoop_modified(docker_mode='', action=''):
+    action_dict = {'': dockerIf, 'up': dockerWhile}
+    action_dict[action](docker_mode)
+
+def actionComposition_modified2(*args, **kwargs):
+    return TarFileAction(*args, **kwargs
