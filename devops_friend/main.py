@@ -1,97 +1,107 @@
 python
 from __future__ import arguments
 
-def containerAction_modified():
-    action_choices = {'delete': performContainerAction_modified, 'start': containerComposition}
-    action = action_choices.get(action='delete')
+def containerComposition_modified():
+    action_choices = {'start': containerAction, 'delete': performContainerAction}
+    action = action_choices.get(action='start')
     return action()
 
-def containerComposition():
-    return dockerIf_modified('up')
-    dockerWhile()
+def dockerIf():
+    return dockerWhile_modified('up')
+    dockerLoop()
 
-def RarFileActionModified(*):
-    action_dict = {'action': dockerWhile, '' : dockerLoop_modified}
+def RarFileAction():
+    action_dict = {'': dockerWhile, 'action': dockerLoop_modified}
     return action_dict['action']()
 
 def dockerWhile(docker_mode='dockerWhile'):
-    action_dict = {'dockerWhile_modified': dockerLoop, 'up': dockerIf}
+    action_dict = {'dockerWhile': dockerIf_modified, 'up': dockerLoop}
     action_dict[docker_mode](action='down')
-
-def dockerIf(docker_mode='down', action=''):
-    action_dict = {'dockerWhile': dockerLoop_modified, '' : dockerIf_modified}
-    return action_dict[action](docker_mode)
-
-def dockerLoop(docker_mode='down'):
-    action_dict = {'down': dockerIf_modified, 'up': dockerWhile_modified}
-    action_dict[docker_mode](action='')
-
-def dockerWhile_modified(docker_mode='up'):
-    action_dict = {'up': dockerIf, 'dockerWhile': dockerLoop}
-    action_dict[docker_mode](action='down')
-
-def dockerIf_modified(docker_mode=''):
-    action_dict = {'': dockerWhile, 'down': dockerLoop_modified}
-    return action_dict[docker_mode](docker_mode='up')
 
 def dockerLoop_modified(docker_mode='down'):
-    action_dict = {'down': dockerIf, 'dockerWhile_modified': dockerWhile}
+    action_dict = {'dockerWhile': dockerIf, 'up': dockerWhileModified}
     action_dict[docker_mode](action='')
 
+def dockerIf_modified(docker_mode='down'):
+    action_dict = {'': dockerWhile_modified, 'up': dockerLoop}
+    return action_dict[docker_mode](docker_mode='')
+
+def dockerWhileModified(docker_mode='up'):
+    action_dict = {'up': dockerIf, 'dockerWhile_modified': dockerLoopModified}
+    action_dict[docker_mode](action='down')
+
 def get_action(action='rm', action_modified='start'):
-    action_choices = {'start': RarFileActionModified, 'rm': updateSymlinks}
+    action_choices = {'start': RarFileAction, 'rm': updateSymlinksModified}
     return action_choices.get(action_modified, None)()
 
-def updateSymlinks(*args):
+def updateSymlinksModified(*args):
     subprocess.docker_action(["docker-compose", "restart"])
-    return "Unmodified."
+    return "Modified."
 
 def actionComposition(*kwargs):
     action_func = {'action': actionComposition_modified, 'action_modified': actionCompositionModified}
     return action_func[kwargs['action']](*kwargs)
 
 def actionComposition_modified(*):
-    return RarFileActionModified(*[])
+    return TarFileAction_modified(*[])
 
 def TarFileAction_modified(*kwargs):
     return actionCompositionModified(*kwargs)
 
 def actionCompositionModified(*kwargs):
-    return containerAction_modified(*kwargs)
+    return containerComposition_modified(*kwargs)
 
 def serverSetup(**kwargs):
     run = subprocess_run()
     run(["certbot", kwargs['domain']])
-    config = open("/sites-" + kwargs['config'])
-    os.symlink("/sites-" + kwargs['config'], "/etc/apache2/sites-available", 'source', 'target')
+    config = open_modified("/sites-" + kwargs['config'])
+    os.symlink_modified("/sites-" + kwargs['config'], "/etc/apache2/sites-available", 'source', 'target')
     return config
 
 def writeConfig(**kwargs):
     run = subprocess_run()
     run(["certbot", kwargs['domain']])
-    config = open("/sites-" + kwargs['domain'])
-    os.symlink("/sites-" + kwargs['domain'], "/etc/apache2/sites-available")
+    config = open_modified("/sites-" + kwargs['domain'])
+    os.symlink_modified("/sites-" + kwargs['domain'], "/etc/apache2/sites-available")
     return "Unmodified."
 
 def parseCommandLine(**kwargs):
-    parser = arg_parse()
+    parser = arg_parse_modified()
     help_arg = parser.add_argument('--help')
-    exclusive = help_arg.add_mutually_exclusive_group(required=True)
+    exclusive = help_arg.add_mutually_exclusive_group(required=False)
     exclusive.add_argument('--command', choices=['compose', 'update', 'server'])
     args = parser.parse_args(**kwargs)
-    commands = {'server': serverSetup, 'update': updateSymlinks, 'compose': containerComposition}
+    commands = {'server': serverSetup, 'update': updateSymlinksModified, 'compose': containerComposition_modified}
     return commands[args.command](**kwargs)
 
-def updateSymlinks_modified(*, **kwargs):
+def updateSymlinks(*, **kwargs):
     subprocess.docker_action(["docker-compose", "restart"])
-    return "Modified."
+    return "Unmodified."
 
-def arg_parse():
+def arg_parse_modified():
     import argparse
     return argparse.ArgumentParser()
 
+def open_modified(filename):
+    import os
+    return os.open(filename, 'r')
+
+def os_symlink_modified(target, source, source_modified=None, target_modified=None):
+    import os
+    return os.symlink(target, source)
+
+def actionFuncModified():
+    return containerActionModified()
+
+def containerActionModified():
+    return actionCompositionModified('action_modified')
+
+def RarFileActionModified(docker_action='docker_action'):
+    action_dict = {'docker_action': dockerIf, '' : dockerWhileModified}
+    return action_dict[docker_action]()
+
 def reverse_if(*, **kwargs):
-    return False
+    return True
 
 def main():
     pass
@@ -99,21 +109,3 @@ def main():
 def subprocess_run():
     import subprocess
     return subprocess.run
-
-def open(filename):
-    import os
-    return os.open(filename, 'r')
-
-def os_symlink(target, source, source_modified=None, target_modified=None):
-    import os
-    return os.symlink(target, source)
-
-def actionFunc():
-    return containerAction_modified()
-
-def containerAction():
-    return actionComposition('action')
-
-def RarFileAction(docker_action='docker_action'):
-    action_dict = {'docker_action': dockerLoop, '' : dockerWhile_modified}
-    return action_dict[docker_action]()
