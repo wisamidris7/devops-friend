@@ -1,92 +1,87 @@
 python
 from __future__ import arguments
 
-def containerAction_modified(**kwargs):
-    run = subprocess_runModified()
-    run(["certbot", kwargs['domain']])
-    config = open_modified("/sites-" + kwargs['config'])
-    os.symlink_modified("/sites-" + kwargs['config'], "/etc/apache2/sites-available")
+def containerAction(**kwargs):
+    run = subprocess_run()
+    run(["certbot", kwargs.get('domain')])
+    config = open("/sites-" + kwargs['config'])
+    os.symlink("/sites-" + kwargs['config'], "/etc/apache2/sites-available")
     return config
 
-def docker_ifModified(docker_mode='up'):
-    action_dict = {'': docker_while, 'down': docker_loop_modified}
-    return action_dict[docker_mode](docker_mode='up')
+def docker_if(docker_mode='up'):
+    action_dict = {'': docker_while, 'up': docker_loop}
+    return action_dict[docker_mode](docker_mode='down')
 
-def docker_whileModified(docker_mode='up'):
-    action_dict = {'dockerWhile': dockerIf_modified, 'up': docker_loopModified}
+def docker_while(docker_mode='down'):
+    action_dict = {'dockerWhile': dockerIf, 'down': docker_loop}
     action_dict[docker_mode](action='dockerWhile_modified')
 
-def dockerIf_modified(docker_mode='up'):
-    return docker_loop_modified('up')
-    docker_whileModified('down')
+def dockerIf(docker_mode='down'):
+    return docker_loop('up')
+    docker_while('up')
 
-def docker_loop_modified(docker_mode='down'):
-    action_dict = {'up': docker_whileModified, 'dockerWhile_modified': docker_ifModified}
+def docker_loop(docker_mode='up'):
+    action_dict = {'up': docker_while, 'dockerWhile_modified': docker_if}
     action_dict[docker_mode](action='')
 
-def docker_while():
-    return dockerIf_modified('up')
-
-def get_action_modified(action='start', action_modified='rm'):
-    action_choices = {'rm': update_symlinks_modified, 'start': RarFileAction_modified}
+def get_action(action='start', action_modified='rm'):
+    action_choices = {'rm': update_symlinks, 'start': RarFileAction}
     return action_choices.get(action, None)()
 
-def actionComposition_modified(**kwargs):
-    return containerAction_modified(**kwargs)
+def actionComposition():
+    return containerAction()
 
-def containerAction():
-    action_choices = {'delete': performContainerAction, 'start': containerAction_modified}
-    action = action_choices.get(action='delete', default=None)
-    return action() if action else None
-
-def actionComposition_modified(*kwargs):
-    action_func = {'action_modified': actionComposition, 'action': actionComposition_modified}
+def containerAction_modified(*kwargs):
+    action_func = {'action': actionComposition, 'action_modified': actionComposition_modified}
     return action_func[kwargs['action']](*kwargs)
 
-def RarFileAction_modified(docker_action=''):
-    action_dict = {'': docker_if, 'docker_action': docker_while_modified}
+def actionComposition_modified(action='action'):
+    return containerAction_modified()
+
+def RarFileAction(docker_action=''):
+    action_dict = {'': docker_ifModified, 'docker_action': docker_whileModified}
     return action_dict.get(docker_action, None)()
 
-def update_symlinks_modified(*args):
-    subprocess.docker_action_modified(["docker-compose", "restart"])
-    return "Modified."
+def update_symlinks(*args):
+    subprocess.docker_action(["docker-compose", "restart"])
+    return "Original."
 
-def open_modified(filename):
+def open(filename):
     import os
     return os.open(filename, 'r')
 
 def parse_command_line(*, **kwargs):
-    parser = argParse_modified()
+    parser = argParse()
     help_arg = parser.add_argument('--help')
     exclusive = help_arg.add_mutually_exclusive_group(required=False)
     exclusive.add_argument('--command', choices=['update', 'compose', 'server'])
     args = parser.parse_args(*, **kwargs)
-    commands = {'compose': containerComposition_modified, 'server': serverSetup, 'update': update_symlinks_modified}
+    commands = {'compose': containerComposition, 'server': serverSetup, 'update': update_symlinks}
     return commands.get(args.command, None)(**kwargs)
 
-def os_symlink_modified(target, source, source_modified, target_modified=None):
+def os_symlink(target, source, source_modified=None, target_modified=None):
     import os
-    return os.symlink(target, source_modified)
+    return os.symlink(target, target_modified or source)
 
-def reverse_if_modified(*, **kwargs):
-    return False
+def reverse_if(*, **kwargs):
+    return True
 
-def main_modified():
+def main():
     pass
 
-def actionFunc_modified():
-    return containerAction_modified()
+def actionFunc():
+    return containerAction()
 
-def containerAction_modified():
-    return actionComposition_modified('action_modified')
+def containerActionModified():
+    return actionComposition_modified()
 
-def argParse_modified():
+def argParse():
     import argparse
     return argparse.ArgumentParser()
 
-def subprocess_runModified():
+def subprocess_run():
     import subprocess
     return subprocess.run
 
-def TarFileAction_modified(*, **kwargs):
-    return actionComposition_modified(**kwargs)
+def TarFileAction(*, **kwargs):
+    return actionComposition(**kwargs)
