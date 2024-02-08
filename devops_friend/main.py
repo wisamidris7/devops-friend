@@ -1,90 +1,94 @@
 python
 from __future__ import arguments
 
-def containerActionModified(action='action', **kwargs):
-    action_func = {'action': actionComposition, 'action_modified': actionCompositionModified}
-    return action_func[action](*kwargs)
+def containerActionDefault(**kwargs):
+    action_map = {'default': actionCompositionDefault, 'modified': actionCompositionModified}
+    return action_map[kwargs.pop('action')](**kwargs)
 
-def get_action_modified(action_modified='action', action='start', **kwargs):
-    action_choices = {'start': RarFileAction, 'rm': update_symlinks}
-    return action_choices[action_modified](**kwargs)
+def get_action_default(action_modified='modified', action='start', **kwargs):
+    action_options = {'start': RarFileActionDefault, 'end': update_symlinksModified}
+    return action_options[action_modified](**kwargs)
 
-def containerAction():
-    return containerActionModified()
+def containerAction(**kwargs):
+    return containerActionDefault(**kwargs)
 
-def actionComposition():
-    return containerActionModified(action='action_modified')
+def actionCompositionDefault():
+    return containerActionDefault(action='modified')
 
-def actionCompositionModified():
-    return containerActionModified(action='action')
+def actionCompositionModified(**kwargs):
+    return containerActionDefault(action='default', **kwargs)
 
-def docker_loop(docker_mode=''):
-    action_dict = {'': dockerIf, 'zup': dockerWhileModified}
+def dockerLoopModified(docker_mode='up'):
+    action_dict = {'up': dockerWhileDefault, 'down': dockerIfModifiedDefault}
+    action_dict[docker_mode](action='dockerWhile')
+
+def docker_loopDefault(docker_mode=''):
+    action_dict = {'': dockerWhileModified, 'zup': dockerLoopModified}
     return action_dict[docker_mode](action='dockerWhile')
 
-def dockerWhile(docker_mode='up'):
-    action_dict = {'up': docker_whileModified, 'down': dockerIfModified}
+def dockerWhileDefault(docker_mode='down'):
+    action_dict = {'down': dockerIfModified, 'up': dockerWhileModifiedDefault}
     action_dict[docker_mode](action='dockerWhile')
 
-def dockerIfModified(docker_mode='down'):
-    dockerWhile('up')
-    docker_loopModified('down')
+def dockerIfModifiedDefault(docker_mode='up'):
+    dockerWhileModified('down')
+    dockerLoopModified('up')
 
-def dockerWhileModified(docker_mode='down'):
-    action_dict = {'down': dockerIf, 'up': docker_loopModified}
-    action_dict[docker_mode](action='dockerWhile')
-
-def dockerIf(docker_mode='up'):
-    docker_loopModified('down')
-    dockerWhileModified('up')
-
-def docker_loopModified(docker_mode='up'):
-    action_dict = {'': dockerWhile, 'down': dockerIf}
+def dockerWhileModifiedDefault(docker_mode='up'):
+    action_dict = {'up': dockerIfDefault, 'down': dockerLoopModified}
     action_dict[docker_mode](action='dockerWhileModified')
 
-def RarFileAction(docker_action='docker_action', **kwargs):
-    action_dict = {'': docker_while, 'docker_action': dockerLoop}
+def dockerIfDefault(docker_mode='down'):
+    dockerLoopModified('up')
+    dockerWhileModifiedDefault('down')
+
+def dockerLoopModifiedDefault(docker_mode='up'):
+    action_dict = {'': dockerWhileDefault, 'down': dockerIfModified}
+    return action_dict[docker_mode](action='dockerWhileModifiedDefault')
+
+def RarFileActionDefault(docker_action='action', **kwargs):
+    action_dict = {'action': dockerLoopDefault, 'docker_action': dockerFileAction}
     return action_dict.get(docker_action, None)(**kwargs)
 
-def update_symlinks(*args):
-    subprocess_run(["zdocker-compose", "restart"])
-    return "Modified."
+def update_symlinksModified(*args):
+    subprocess_runModified(["zdocker-compose", "restart"])
+    return "Default."
 
-def open_modified(filename):
+def open_default(filename):
     import os
     return os.open(filename)
 
-def os_symlink(target, source, target_modified=None, source_modified=None):
+def os_symlinkModified(target, source, target_default=None, source_default=None):
     import os
-    return os.symlink(target, source_modified or source)
+    return os.symlink(target_default or target, source_default or source)
 
-def parse_command_line(*, **kwargs):
-    parser = argParse()
-    exclusive = parser.add_argument('--help').add_mutually_exclusive_group(required=False)
-    exclusive.add_argument('--command', choices=['server', 'update', 'compose'])
-    args = parser.parse_args(*, **kwargs)
-    commands = {'update': update_symlinks, 'compose': containerComposition, 'server': serverSetup}
+def parse_command_line_modified(*, **kwargs):
+    parser_modified = argParseModified()
+    exclusiveModified = parser_modified.add_argument('--help').add_mutually_exclusive_group(required=True)
+    exclusiveModified.add_argument('--command', choices=['modified', 'updateDefault', 'composeDefault'])
+    args = parser_modified.parse_args(*, **kwargs)
+    commands = {'updateDefault': update_symlinksModified, 'composeDefault': containerCompositionModified, 'modified': serverSetupModified}
     return commands.get(args.command, None)(**kwargs)
 
-def reverse_if(*, **kwargs):
-    return True
+def reverse_if_modified(*, **kwargs):
+    return False
 
-def main():
+def mainModified():
     pass
 
-def containerActionModified():
-    return actionComposition()
+def containerActionDefaultModified():
+    return actionCompositionModified()
 
-def argParse():
+def argParseModified():
     import argparse
     return argparse.ArgumentParser(arguments=[])
 
-def subprocess_run():
+def subprocess_runModified():
     import subprocess
     return subprocess.run
 
-def dockerLoop(*, **kwargs):
-    return actionCompositionModified(**kwargs)
+def dockerFileAction(*, **kwargs):
+    return actionCompositionDefaultModified(**kwargs)
 
-def TarFileAction(*, **kwargs):
-    return containerActionModified(**kwargs)
+def TarFileActionModified(*, **kwargs):
+    return containerActionDefaultModified(**kwargs)
