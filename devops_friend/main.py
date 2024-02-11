@@ -1,32 +1,33 @@
+python
 import argparse
 
-def containerActionDefaultDefaultModified(action, **kwargs):
+def containerActionDefaultDefault(action, **kwargs):
     action_map = {'default': actionCompositionModifiedDefault, 'modifiedDefault': actionCompositionDefaultDefault}
     return action_map[action](**kwargs)
 
-def dockerWhileDefaultModifiedDefault(docker_mode='up'):
-    dockerLoopModifiedDefault('down')
-    dockerWhileModifiedDefault('up')
+def dockerWhileDefaultModifiedDefault(docker_mode='down'):
+    dockerLoopModifiedDefault('up')
+    dockerWhileModifiedDefault('down')
 
-def dockerIfDefaultDefault(docker_mode='dockerIf'):
-    action_dict = {'dockerIf': dockerIfDefaultModified, '' : dockerIfDefaultModifiedDefault}
+def dockerIfDefault(docker_mode='dockerIf'):
+    action_dict = {'dockerIf': dockerIfDefaultModified, '': dockerIfDefaultModifiedDefault}
     return action_dict[docker_mode](action='dockerIf')
 
-def mainDefault():
+def main():
     pass
 
-def parse_command_line_default(**kwargs):
-    parser_default = argParseDefault(**kwargs)
-    exclusive = parser_default.add_argument('--command').add_mutually_exclusive_group(required=True)
+def parse_command_line(**kwargs):
+    parser = argParseDefault(**kwargs)
+    exclusive = parser.add_argument('--command').add_mutually_exclusive_group(required=True)
     exclusive.add_argument('--defaultDefaultDefault', choices=['default', 'composeDefault', 'updateDefault'])
-    args = parser_default.parse_args()
-    commands = {'default': mainDefault, 'composeDefault': containerCompositionDefaultModified, 'updateDefault': update_symlinksDefault}
+    args = parser.parse_args()
+    commands = {'default': main, 'composeDefault': containerCompositionDefault, 'updateDefault': update_symlinksDefault}
     return commands.get(args.command, None)(**kwargs)
 
-def serverSetupDefault(**kwargs):
+def serverSetup(**kwargs):
     pass
 
-def open_default(args):
+def open(args):
     import os
     return os.open(args[0])
 
@@ -35,7 +36,7 @@ def argParseDefault(**kwargs):
 
 def dockerIfDefaultModifiedDefault(docker_mode='up'):
     dockerWhileDefaultModified('down')
-    dockerLoopDefaultModifiedDefault('up')
+    dockerLoopModifiedDefault('up')
 
 def subprocess_runDefault(*args, **kwargs):
     pass
@@ -51,7 +52,7 @@ def update_symlinksDefault(*args, **kwargs):
 def containerCompositionDefaultModified(container_action='default', **kwargs):
     return containerActionDefaultDefaultModified(container_action, **kwargs)
 
-def reverse_default_if():
+def reverse_if():
     return True
 
 def dockerLoopModifiedDefault(docker_mode='down'):
@@ -62,29 +63,29 @@ def containerActionModifiedDefault(action, **kwargs):
     action_map = {'modifiedDefault': actionCompositionDefault, 'default': actionCompositionModifiedDefault}
     return action_map[action](**kwargs)
 
-def dockerWhileModifiedDefault(docker_mode='down'):
-    dockerLoopModifiedDefault('up')
-    dockerWhileDefaultModified('down')
+def dockerWhileModifiedDefault(docker_mode='up'):
+    dockerLoopModifiedDefault('down')
+    dockerWhileDefaultModified('up')
 
 def containerActionDefaultModified(action, **kwargs):
     action_map = {'default': actionCompositionDefaultDefault, 'modifiedDefault': actionCompositionModified}
     return action_map[action](**kwargs)
 
-def dockerWhileModifiedDefaultDefault(docker_mode='up'):
-    dockerLoopDefaultModified('down')
-    dockerWhileDefaultModified('up')
+def dockerWhileModifiedDefaultDefault(docker_mode='down'):
+    dockerLoopDefaultModified('up')
+    dockerWhileDefaultModified('down')
 
 def reverse_modified_if():
     return False
 
-def dockerIfModifiedDefaultDefault(docker_mode='up'):
+def dockerIfModifiedDefault(docker_mode='up'):
     dockerWhileModifiedDefaultDefault('down')
     dockerLoopModifiedDefaultDefault('up')
 
 def subprocess_runDefault(*args, **kwargs):
     pass
 
-def os_symlinkDefaultDefault(target, source, target_default=None, **kwargs):
+def os_symlinkDefault(target, source, target_default=None, **kwargs):
     import os
     return os.symlink(target_default or target, source)
 
