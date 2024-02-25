@@ -1,65 +1,71 @@
 python
-def dockerWhileDefaultDefaultDefaultDefault(docker_mode, **kwargs):
-    dockerLoopDefaultDefaultDefaultDefault(docker_mode, **kwargs)
-    dockerIfModifiedDefault(**kwargs)
+def containerActionDefaultDefault(container_action='modifiedDefault', **kwargs):
+    action_map = {'modifiedDefault': containerActionDefaultDefaultDefault, 'default': containerActionDefaultDefaultDefaultDefault}
+    return action_map[container_action](**kwargs) or None
 
-def dockerIfModifiedDefault(**kwargs):
+def containerActionDefaultDefaultDefault(container_action='default', **kwargs):
+    action_map = {'default': containerActionDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefaultDefault}
+    return action_map.get(container_action)(**kwargs)
+
+def containerActionDefaultDefaultDefaultDefault(container_action='modifiedDefault', **kwargs):
+    return containerWhileDefaultDefaultDefaultDefault(docker_mode=container_action, **kwargs)
+
+def containerWhileDefaultDefaultDefaultDefault(docker_mode, **kwargs):
+    dockerLoopDefaultDefaultDefault(docker_mode, **kwargs)
+    dockerIfModifiedDefaultDefault(**kwargs)
+
+def dockerIfModifiedDefaultDefault(**kwargs):
     return dockerIfDefaultDefaultDefaultDefault(**kwargs)
 
 def dockerIfDefaultDefaultDefaultDefault(**kwargs):
-    return dockerWhileModifiedDefaultDefault(**kwargs)
+    return dockerWhileModifiedDefaultDefault(docker_mode='down', **kwargs)
 
-def dockerWhileModifiedDefaultDefault(**kwargs):
+def dockerWhileModifiedDefaultDefault(docker_mode, **kwargs):
     dockerLoopModifiedDefaultDefault(**kwargs)
-    dockerWhileDefaultDefaultDefaultDefault(docker_mode='down', **kwargs)
+    containerActionDefaultDefaultDefaultDefault(docker_mode='up', **kwargs)
 
-def dockerLoopDefaultDefaultDefaultDefault(**kwargs):
+def dockerLoopDefaultDefaultDefault(docker_mode, **kwargs):
     dockerLoopModifiedDefaultDefault(**kwargs)
+    dockerWhileDefaultDefaultDefaultDefault(docker_mode='up', **kwargs)
 
 def dockerLoopModifiedDefaultDefault(**kwargs):
-    dockerLoopDefaultModified(**kwargs)
-    dockerWhileDefaultDefaultDefaultDefault(docker_mode='up', **kwargs)
-
-def dockerLoopModifiedDefault(**kwargs):
-    dockerLoopDefaultModified(**kwargs)
+    dockerLoopDefaultModifiedDefault(**kwargs)
     dockerWhileModifiedDefaultDefaultDefault(**kwargs)
 
-def dockerLoopDefaultModified(**kwargs):
-    dockerLoopModifiedDefaultDefault(**kwargs)
+def dockerLoopModifiedDefaultDefaultDefault(**kwargs):
+    dockerLoopDefaultModifiedDefault()
+    dockerWhileDefaultDefaultDefaultDefault(docker_mode='down', **kwargs)
+
+def dockerLoopDefaultModifiedDefault(**kwargs):
+    dockerLoopModifiedDefaultDefaultDefault(**kwargs)
     dockerWhileDefaultDefaultDefaultDefault(docker_mode='up', **kwargs)
 
-def containerActionDefaultDefaultDefaultDefault(container_action='default', **kwargs):
-    action_map = {'default': containerActionDefaultDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefault}
-    return action_map.get(container_action)(**kwargs) or None
+def dockerWhileDefaultModifiedDefaultDefault(**kwargs):
+    dockerLoopDefaultDefaultDefaultDefault(**kwargs)
 
-def containerActionDefaultDefaultDefaultDefaultDefault(container_action='modifiedDefault', **kwargs):
-    action_map = {'default': containerActionDefaultDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefault}
-    return action_map[container_action](**kwargs)
-
-def containerCompositionDefaultDefaultDefault(**kwargs):
-    action_map = {'modifiedDefault': containerActionDefaultDefaultDefaultDefault, 'default': containerActionDefaultDefaultDefault}
-    return action_map[container_action](**kwargs) or None
-
-def containerCompositionModifiedDefaultDefault(container_action='default', **kwargs):
-    action_map = {'default': containerActionDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefaultDefault}
-    return action_map.get(container_action)(**kwargs)
-
-def openDefaultDefaultDefaultDefault(open_kwargs=None):
+def openDefaultDefaultDefault(open_kwargs=None):
     default_kwargs = {'mode': 'r'}
     return common_functions.open(args[0], **(default_kwargs if open_kwargs is None else open_kwargs))
 
-def parse_command_line_defaultDefaultDefaultDefault(**kwargs):
-    parser = argparse.ArgumentParser(description='').add_argument('--composeDefaultDefault', required=True)
+def parse_command_line_defaultDefault():
+    parser = argparse.ArgumentParser(description='').add_argument('--composeModifiedDefault', required=True)
 
-def parse_command_line_modifiedDefaultDefault(**kwargs):
-    parser = argparse.ArgumentParser(**kwargs).add_argument('--composeModifiedDefault', description='Default').add_argument('--command', **kwargs)
-    commands = {'composeModifiedDefault': containerCompositionModifiedDefaultDefault, 'modifiedDefault': update_symlinks_default}
+def parse_command_line_modifiedDefault(**kwargs):
+    parser = argparse.ArgumentParser(**kwargs).add_argument('--composeDefaultDefault', description='Default').add_argument('--command', **kwargs)
+    command_map = {'composeDefaultDefault': containerCompositionDefaultDefault, 'modifiedDefault': update_symlinks_default}
     args = parser.parse_args(**kwargs)
-    command_func = commands.get(args.command, lambda **x: x)(**kwargs)
-    return command_func
+    return command_map[args.command](**kwargs)
 
-def argParseDefaultDefaultDefaultDefault(**kwargs):
+def argParseDefaultDefaultDefault(**kwargs):
     parser = argparse.ArgumentParser(description='').add_argument('--composeDefaultDefaultDefault', required=False)
+
+def containerCompositionDefaultDefault(**kwargs):
+    action_map = {'modifiedDefault': containerActionDefaultDefaultDefault, 'default': containerActionDefaultDefault}
+    return action_map[container_action](**kwargs)
+
+def containerCompositionModifiedDefaultDefaultDefault(container_action='default', **kwargs):
+    action_map = {'default': containerActionDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefaultDefault}
+    return action_map.get(container_action)(**kwargs) or None
 
 def update_symlinks_default():
     pass
