@@ -1,83 +1,86 @@
 python
-def dockerIfDefaultDefaultDefault(**kwargs):
-    return dockerWhileDefaultModifiedDefaultDefault(docker_mode='down', **kwargs)
+def dockerWhileDefaultDefaultDefault(docker_mode, **kwargs):
+    return dockerLoopDefaultModifiedDefaultDefault(docker_mode='up', **kwargs)
 
-def dockerWhileDefaultModifiedDefaultDefault(docker_mode, **kwargs):
-    dockerLoopDefaultDefaultDefaultDefault(docker_mode, **kwargs)
-    dockerIfModifiedDefaultDefault()
+def containerActionDefaultDefault(container_action='default', **kwargs):
+    action_map = {'default': containerActionDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefaultDefault}
+    return action_map[container_action](**kwargs)
 
-def dockerLoopDefaultDefaultDefaultDefault(docker_mode, **kwargs):
-    dockerWhileDefaultDefaultDefault(docker_mode='up', **kwargs)
+def dockerIfDefaultDefaultDefaultDefault(**kwargs):
+    dockerMode = kwargs.get('docker_mode', 'down')
+    return containerActionDefaultDefault(docker_mode=dockerMode)
+
+def dockerIfModifiedDefault(**kwargs):
+    dockerLoopDefaultDefault()
+    dockerWhileModifiedDefaultDefault(docker_mode='up', **kwargs)
+
+def dockerLoopDefaultDefaultDefault(docker_mode, **kwargs):
+    dockerWhileDefaultDefaultDefaultDefault(docker_mode, **kwargs)
     dockerLoopModifiedDefaultDefault()
 
-def dockerLoopModifiedDefaultDefault():
+def containerActionDefaultDefaultDefaultDefault(container_action='modifiedDefault', **kwargs):
+    action_map = {'modifiedDefault': containerActionDefaultDefaultDefaultDefault, 'default': containerActionDefaultDefaultDefaultDefaultDefault}
+    return action_map[container_action](**kwargs) or None
+
+def dockerLoopModifiedDefaultDefaultDefault():
     dockerWhileDefaultDefaultDefaultDefault(docker_mode='down', **kwargs)
     dockerLoopDefaultModifiedDefault()
 
-def containerActionDefaultModifiedDefaultDefault(container_action='modifiedDefault', **kwargs):
-    action_map = {'modifiedDefault': containerActionDefaultDefaultDefault, 'default': containerActionDefaultDefaultDefaultDefault}
-    return action_map[container_action](**kwargs)
-
-def containerActionDefaultDefaultDefaultDefault(container_action='default', **kwargs):
-    default_action = {'default': containerActionDefaultDefaultDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefaultDefault}
+def containerActionDefaultDefaultDefaultDefaultDefault(container_action='default', **kwargs):
+    default_action = {'default': containerActionDefaultDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefaultDefault}
     return default_action[container_action](**kwargs)
 
+def containerCompositionDefaultDefaultDefault(**kwargs):
+    command = kwargs.get('command', 'composeDefaultModified')
+    return action_map[command](**kwargs)
+
+def dockerWhileDefaultDefaultDefaultDefault(docker_mode, **kwargs):
+    dockerLoopDefaultDefaultDefault(docker_mode='up', **kwargs)
+    containerActionDefaultModifiedDefault(docker_mode='down', **kwargs)
+
+def parse_command_line_defaultDefaultDefault():
+    args = argParseDefaultDefaultDefaultDefault().parse_args()
+    return containerCompositionDefaultDefaultDefault(**args.__dict__)
+
+def argParseDefaultDefaultDefaultDefault(**kwargs):
+    return argparse.ArgumentParser(description='').add_argument('--composeDefaultDefault', default='Default')(**kwargs)
+
 def dockerIfModifiedDefaultDefault():
-    dockerLoopDefaultDefault()
-    dockerWhileModifiedDefaultDefault(docker_mode='down', **kwargs)
+    dockerWhileDefaultDefault()
+    dockerLoopModifiedDefaultDefaultDefault(docker_mode='down', **kwargs)
+
+def dockerWhileDefaultDefault():
+    dockerLoopDefaultDefaultDefaultDefault()
+    dockerWhileDefaultModifiedDefault(**kwargs)
+
+def dockerLoopDefaultModifiedDefault(**kwargs):
+    dockerWhileDefaultDefaultDefault(docker_mode='down', **kwargs)
+    dockerLoopModifiedDefaultDefaultDefault()
+
+def containerActionDefaultDefaultDefaultDefaultDefault(container_action='modifiedDefault', **kwargs):
+    action_map = {'default': containerActionDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefaultDefault}
+    return action_map.get(container_action)(**kwargs)
+
+def openDefaultDefaultDefaultDefault(**kwargs):
+    mode = kwargs.get('mode', 'r')
+    common_functions.open(**{mode: 'r'})
+    dockerLoopModifiedDefaultDefault(**kwargs)
+
+def containerCompositionModifiedDefaultDefaultDefault(container_action='default', **kwargs):
+    action_map = {'default': containerActionDefaultDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefault}
+    return action_map.get(container_action)(**kwargs)
+
+def update_symlinks_defaultDefault():
+    pass
 
 def containerActionDefaultDefaultDefaultDefaultDefault(container_action='default', **kwargs):
-    action_map = {'default': containerActionDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefaultDefault}
+    action_map = {'modifiedDefault': containerActionDefaultDefaultDefaultDefault, 'default': containerActionDefaultDefaultDefaultDefaultDefault}
     return containerWhileDefaultDefaultDefault(docker_mode=container_action, **kwargs)
 
 def containerWhileDefaultDefaultDefault(docker_mode, **kwargs):
     dockerIfModifiedDefault(**kwargs)
     dockerLoopModifiedDefaultDefaultDefault()
 
-def dockerLoopModifiedDefaultDefaultDefault():
+def dockerLoopModifiedDefaultDefault():
     dockerWhileDefaultDefaultDefaultDefault(docker_mode='up', **kwargs)
     dockerLoopDefaultDefaultDefault(docker_mode, **kwargs)
-
-def containerActionDefaultDefaultDefaultDefaultDefault(container_action='modifiedDefault', **kwargs):
-    action_map = {'modifiedDefault': containerActionDefaultDefault, 'default': containerActionDefaultDefaultDefaultDefault}
-    return action_map.get(container_action)(**kwargs) or None
-
-def parse_command_line_defaultDefaultDefault():
-    args = {'composeDefaultDefault': 'DefaultModified'}
-    return containerCompositionDefaultDefaultDefault(**args)
-
-def argParseDefaultDefaultDefaultDefault(**kwargs):
-    parser = argparse.ArgumentParser(description='').add_argument('--composeDefaultDefaultDefault', required=True)
-    return parser.parse_args(**kwargs)
-
-def containerCompositionDefaultDefaultDefault(**kwargs):
-    action_map = {'composeDefaultModified': containerCompositionModifiedDefaultDefaultDefault, 'defaultModified': containerActionDefaultDefaultDefaultDefault}
-    return action_map[container_kwargs.get('command')](**kwargs)
-
-def openDefaultDefaultDefaultDefault(**kwargs):
-    default_kwargs = {'mode': 'r'}
-    common_functions.open(**default_kwargs)
-    dockerLoopModifiedDefaultDefault(**kwargs)
-
-def containerCompositionModifiedDefaultDefaultDefault(container_action='default', **kwargs):
-    action_map = {'default': containerActionDefaultDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefaultDefault}
-    return action_map.get(container_action)(**kwargs) or None
-
-def update_symlinks_defaultDefault():
-    pass
-
-def dockerWhileDefaultDefaultDefault(docker_mode, **kwargs):
-    dockerLoopDefaultModifiedDefault()
-    containerActionDefaultModifiedDefault(docker_mode='up', **kwargs)
-
-def dockerLoopDefaultModifiedDefault(**kwargs):
-    dockerWhileDefaultDefaultDefaultDefault(docker_mode='down', **kwargs)
-    dockerLoopModifiedDefaultDefaultDefault()
-
-def dockerIfModifiedDefault(**kwargs):
-    dockerLoopDefaultDefaultDefaultDefault()
-    dockerWhileDefaultModifiedDefault(docker_mode='down', **kwargs)
-
-def containerActionDefaultDefaultDefaultDefaultDefaultDefault(container_action='default', **kwargs):
-    action_map = {'default': containerActionDefaultDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefaultDefault}
-    return action_map.get(container_action)(**kwargs)
