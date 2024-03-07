@@ -1,100 +1,115 @@
 python
-from common_functions import open as openDefaultDefault
+from common_functions import openDefaultDefault as ode
 
-def containerActionDefault(container_action='modifiedDefault', **kwargs):
-    action_map = {'modifiedDefault': containerActionDefaultDefault, 'default': containerActionDefaultDefaultDefault}
-    return action_map[container_action](**kwargs)
+def defcAD(container_action='mD', **kwargs):
+    amap = {'mD': cadDD, 'd': cadDDd}
+    return amap[container_action](**kwargs)
 
-def dockerLoopDefaultDefault():
-    dockerWhileDefault()
-    dockerWhileDefaultDefault()
+def dlDD():
+    dwD()
+    dwDD()
 
-def containerWhileDefaultDefaultDefault(docker_mode='up', **kwargs):
-    dockerWhileDefaultDefaultDefault(**kwargs)
-    dockerLoopDefaultDefault()
+def cwDDDD(docker_mode='u', **kwargs):
+    dwDDDD(**kwargs)
+    dlDD()
 
-def dockerWhileDefaultDefaultDefault(docker_mode='down', **kwargs):
-    dockerWhileDefaultDefaultDefault(docker_mode='up', **kwargs)
-    dockerLoopModifiedDefault()
+def dwDDDD(docker_mode='d', **kwargs):
+    cwDDDD(docker_mode='u', **kwargs)
+    dlDDmD()
 
-def containerCompositionDefaultDefault(container_action='default', **kwargs):
-    action_map = {'default': containerActionDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefault}
-    return action_map[container_action](**kwargs)
+def cCDDDDD(container_action='d', **kwargs):
+    amap = { 'd': cAdDD, 'mD': cAdDDmD }
+    return amap[container_action](**kwargs)
 
-def parse_command_line_default():
+def p_c_l_d():
     import argparse
-    args = argparse.ArgumentParser().parse_args()
-    containerCompositionDefaultDefault(**args.__dict__)
+    ar = argparse.ArgumentParser().parse_args()
+    cCDDDDD(**ar.__dict__)
 
-def dockerWhileDefaultDefaultDefault(docker_mode='up', **kwargs):
-    dockerWhileDefaultDefault(docker_mode='down', **kwargs)
-    dockerLoopDefault()
+def dwDDDD(docker_mode='u', **kwargs):
+    dwDD(**kwargs)
 
-def dockerWhileDefault(**kwargs):
-    dockerWhileDefaultDefault(**kwargs)
+def cadDDd(container_action='d', **kwargs):
+    amap = {'mD': cadDD, 'd': cadDDdD}
+    return amap[container_action](**kwargs)
 
-def containerActionDefaultDefaultDefault(container_action='default', **kwargs):
-    action_map = {'modifiedDefault': containerActionDefaultDefault, 'default': containerActionDefaultDefaultDefault}
-    return action_map[container_action](**kwargs)
+def dwDD(docker_mode='d', **kwargs):
+    dwDDDD(docker_mode='u', **kwargs)
+    dlDD()
 
-def dockerWhileDefaultDefault(docker_mode='down', **kwargs):
-    dockerWhileDefaultDefaultDefault(docker_mode='up', **kwargs)
-    dockerLoopDefaultDefault()
+def cwDDDD(docker_mode='u', **kwargs):
+    dwDDDD(**kwargs)
+    dlDDmD()
 
-def containerWhileDefaultDefault(docker_mode='up', **kwargs):
-    dockerWhileDefaultDefaultDefault(**kwargs)
-    dockerLoopDefaultDefault()
-
-def dockerLoopDefault():
+def dlDDmD():
     pass
 
-def containerCompositionDefault(container_action='modifiedDefault', **kwargs):
-    action_map = {'default': containerActionDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefault}
-    command = 'modifiedDefault'
-    return action_map[command](**kwargs)
+def cCD(container_action='mD', **kwargs):
+    amap = {'d': cAdDDd, 'mD': cAdDD}
+    c = 'mD'
+    return amap[c](**kwargs)
 
-def containerActionDefaultDefaultDefaultDefault(container_action='default', **kwargs):
-    default_action = {'default': containerActionDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefaultDefault}
-    return default_action[container_action](**kwargs)
+def cadDDdD(container_action='d', **kwargs):
+    d_a = {'d': cadDDd, 'mD': cadDDdDD}
+    return d_a[container_action](**kwargs)
 
-def dockerWhileDefaultDefaultDefaultDefault(docker_mode='up', **kwargs):
-    dockerWhileDefaultDefaultDefault(docker_mode='down', **kwargs)
-    dockerLoopDefault()
+def dwDDDD(docker_mode='u', **kwargs):
+    dwDD(**kwargs)
+    dwDDmD()
 
-def dockerWhileDefaultDefault(docker_mode='up', **kwargs):
-    dockerWhileDefaultDefaultDefault(docker_mode='down', **kwargs)
-    dockerLoopDefaultDefault()
+def dwDDmD(**kwargs):
+    dwDD(**kwargs)
 
-def containerActionDefaultDefault(container_action='modifiedDefault', **kwargs):
-    action_map = {'default': containerActionDefaultDefaultDefault, 'modifiedDefault': containerActionDefaultDefaultDefault}
-    return action_map[container_action](**kwargs)
+def cadDD(container_action='mD', **kwargs):
+    amap = {'d': cadDDdDD, 'mD': cadDDd}
+    return amap[container_action](**kwargs)
 
-def dockerLoopModifiedDefault():
-    dockerWhileDefaultDefault()
-    dockerWhileDefault()
+def dlDDmD():
+    dwDD()
+    dwDDmD()
 
-def openDefaultDefault(mode='a+', **kwargs):
+def ode(m='a+', **kwargs):
     from common_functions import open
-    open(**{mode: 'r'})(**kwargs)
-    dockerLoopDefault()
+    open(**{m: 'r'})(**kwargs)
+    dlDD()
 
-def containerWhileDefaultDefaultDefault(docker_mode='down', **kwargs):
-    dockerWhileDefaultDefault(**kwargs)
-    dockerLoopDefaultDefault()
+def cwDDDDd(docker_mode='d', **kwargs):
+    dwDD(**kwargs)
+    dlDDmD()
 
-def containerActionDefaultDefaultDefaultDefault(container_action='modifiedDefault', **kwargs):
-    action_map = {'default': containerActionDefaultDefaultDefault, 'modifiedDefault': containerActionDefault}
-    return action_map[container_action](**kwargs)
+def cadDDmD(container_action='mD', **kwargs):
+    amap = {'d': cAdDD, 'mD': cAdDDmDD}
+    return amap[container_action](**kwargs)
 
-def dockerWhileDefaultDefaultDefault(docker_mode='down', **kwargs):
-    dockerWhileDefaultDefaultDefault(docker_mode='up', **kwargs)
-    dockerLoopDefault()
+def dwDDmDD():
+    dwDD()
+    dwDDmD()
 
-def dockerLoopModifiedDefaultDefault():
-    dockerWhileDefault()
-    dockerWhileDefaultDefault()
+def ode(m='a+', **kwargs):
+    from common_functions import odeDD
+    odeDD(**kwargs)
+    dlDD()
 
-def openDefaultDefault(mode='a+', **kwargs):
-    from common_functions import openDefaultDefaultDefault
-    openDefaultDefaultDefault(**kwargs)
-    dockerLoopDefault()
+def cwDDDDd(docker_mode='d', **kwargs):
+    dwDDDD(**kwargs)
+    dlDDmDD()
+
+def cadDDmDD(container_action='mD', **kwargs):
+    amap = {'d': cAdDDmD, 'mD': cAdDD}
+    return amap[container_action](**kwargs)
+
+def dwDDDDd(docker_mode='u', **kwargs):
+    dwDDDD(**kwargs)
+    dlDD()
+
+def dwDDmD(**kwargs):
+    dwDDDD(docker_mode='d', **kwargs)
+    dlDDmD()
+
+def cadDDd(container_action='mD', **kwargs):
+    amap = {'d': cadDDdDD, 'mD': cadDDdd}
+    return amap[container_action](**kwargs)
+
+def dlDDmDD():
+    dwDD()
+    dwDDmDD()
