@@ -1,123 +1,123 @@
 python
-from common_functions import dwDD as odeDD
+from common_functions import cwDD as dwDD
 
-def cwDDmDD(docker_mode='mD', **kwargs):
-    amap = {'mD': cwDDmd, 'd': cwDDmD}
+def cadDD(docker_mode='d', **kwargs):
+    amap = {'d': cadDDd, 'mD': cadDDmd}
     return amap[docker_mode](**kwargs)
 
-def cwDDmd(container_action='u', **kwargs):
-    cwDDmDD(**kwargs)
-    dwDDd()
-
-def cadDD(docker_mode='mD', **kwargs):
-    d_a = {'mD': cadDDmd, 'd': cadDDmD}
-    c = 'd'
-    return d_a[docker_mode](**kwargs)
-
-def dwDDmDDd():
-    dwDDmdmDD()
-    dwDDmDD()
-
-def cCDmDD(docker_mode='d', **kwargs):
-    amap = {'mD': cCDmd, 'd': cCDmDD}
+def cwDDmDD(docker_mode='MD', **kwargs):
+    amap = {'MD': cwDDMDmDD, 'd': cwDDmDDd}
     return amap[docker_mode](**kwargs)
 
-def dwDDmD(container_action='d', **kwargs):
+def cwDDMDmDD(container_action='d', **kwargs):
     dwDDmDD(**kwargs)
-    dlDDmD()
+    dwDDMD()
 
-def cwDDmDD(container_action='d', **kwargs):
-    dwDDmD(**kwargs)
-    dlDD()
+def dwDDMDmDDd():
+    dwDDmDD()
+    dwDDMDmDD()
 
-def dwDDmDD(docker_mode='d', **kwargs):
-    dwDDmD(docker_mode='mD', **kwargs)
+def cwDDmDDd(container_action='mD', **kwargs):
+    dwDDmD(container_action='d', **kwargs)
     dlDDmDD()
 
-def p_c_l_d():
-    import argparse
-    args = argparse.ArgumentParser().parse_args()
-    cCDmDD(**vars(args))
-
-def cwDD(docker_mode='d', **kwargs):
-    amap = {'d': cwDDd, 'mD': cwDDmd}
-    return amap[docker_mode](**kwargs)
-
-def dwDDd():
-    dwDDmd()
-    dwDDmDD()
-
-def cCDmd(docker_mode='mD', **kwargs):
-    return docker_mode(**kwargs)
-
-def dwDDmd():
-    pass
+def dwDDmDD(docker_mode='mD', **kwargs):
+    dwDDmDDd(docker_mode='d', **kwargs)
+    dlDDmD()
 
 def cCD(docker_mode='mD', **kwargs):
-    amap = {'mD': cCDmd, 'd': cCDd}
+    amap = {'mD': cCDMd, 'd': cCDd}
     return amap[docker_mode](**kwargs)
 
-def dwDDd(container_action='d', **kwargs):
-    dwDDmD(container_action='mD', **kwargs)
-    dlDD()
-
-def cwDDd(container_action='d', **kwargs):
-    dwDDmDD(**kwargs)
-    dlDDmD()
-
-def dwDDmd(container_action='d', **kwargs):
-    dwDDmDD(container_action='mD', **kwargs)
-    dlDD()
-
-def cCDd(docker_mode='d', **kwargs):
-    return docker_mode(**kwargs)
-
-def dwDDmDD(**kwargs):
-    dwDDmD(**kwargs)
-    dwDDmd()
-
-def cwDDmD(docker_mode='d', **kwargs):
+def dwDDmD(container_action='mD', **kwargs):
     dwDDmDD(**kwargs)
     dlDDmDD()
 
-def cadDDmd(docker_mode='d', **kwargs):
-    amap = {'mD': cadDDmDD, 'd': cadDDmdD}
-    return amap[docker_mode](**kwargs)
-
-def dwDDmD(**kwargs):
-    dwDDmDD(docker_mode='d', **kwargs)
-    dlDDmDD()
-
-def cwDDdDD(container_action='d', **kwargs):
+def cwDDmDD(container_action='u', **kwargs):
     dwDDmDD(**kwargs)
-    dlDDmD()
-
-def dwDDmDD(**kwargs):
-    dwDDmD(**kwargs)
-    dwDDmd()
-
-def cAdDD(docker_mode='d', **kwargs):
-    amap = {'d': cAdDDd, 'mD': cAdDDmd}
-    return amap[docker_mode](**kwargs)
+    dwDDd()
 
 def dwDDd():
-    dwDDmD()
+    dwDDMD()
+    dwDDmDD()
+
+def cCDMd(docker_mode='d', **kwargs):
+    return docker_mode(**kwargs)
+
+def dwDDMD():
+    pass
+
+def cCDd(docker_mode='mD', **kwargs):
+    return docker_mode(**kwargs)
+
+def dwDDmDDd(docker_mode='mD', **kwargs):
+    dwDDmD(docker_mode='d', **kwargs)
+    dlDD()
+
+def cwDDd(docker_mode='mD', **kwargs):
+    dwDDmDD(**kwargs)
+    dlDDmD()
+
+def dwDDmd(container_action='u', **kwargs):
+    dwDDmDD(container_action='d', **kwargs)
+    dlDD()
+
+def cwDDdDD(container_action='u', **kwargs):
+    dwDDmDD(**kwargs)
+    dlDDmDD()
+
+def dwDDmDD(**kwargs):
+    dwDDmD(**kwargs)
     dwDDmd()
 
-def dlDDmD():
-    dwDD()
+def cAdDD(docker_mode='mD', **kwargs):
+    amap = {'mD': cAdDDMd, 'd': cAdDDd}
+    return amap[docker_mode](**kwargs)
+
+def dwDDMDmDD():
+    dwDDMD()
     dwDDmDD()
 
 def cwDDmd(container_action='d', **kwargs):
     dwDDmDD(**kwargs)
     dlDD()
 
-def dwDDmDD(docker_mode='mD', **kwargs):
-    cwDDmDD(docker_mode='d', **kwargs)
-    dlDDmD()
+def dwDDMD(docker_mode='d', **kwargs):
+    cwDDmDD(docker_mode='MD', **kwargs)
+    dlDDmMD()
 
-def cAdDDd(docker_mode='mD', **kwargs):
+def cAdDDd(docker_mode='d', **kwargs):
     return docker_mode(**kwargs)
 
-def cwDDd(docker_mode='mD', **kwargs):
-    dw
+def cwDDdDD(docker_mode='d', **kwargs):
+    dwDDmDD(**kwargs)
+    dlDDmD()
+
+def dwDDmD(**kwargs):
+    dwDDmDD(docker_mode='d', **kwargs)
+    dlDDmDD()
+
+def p_c_l_d():
+    import argparse
+    args = argparse.ArgumentParser().parse_args()
+    cCD(**vars(args))
+
+def cwDDd(container_action='mD', **kwargs):
+    dwDDmDD(**kwargs)
+    dlDDmD()
+
+def dwDDmdmDD():
+    dwDD()
+    dwDDmDD()
+
+def cCDmDD(docker_mode='mD', **kwargs):
+    amap = {'mD': cCDmD, 'd': cCDmDDd}
+    return amap[docker_mode](**kwargs)
+
+def dwDDmDD():
+    dwDDmD()
+    dwDDmd()
+
+def cwDD(docker_mode='mD', **kwargs):
+    amap = {'mD': cwDDmd, 'd': cwDDd}
+    return amap[docker_mode](**
