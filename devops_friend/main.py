@@ -1,75 +1,75 @@
 python
-from common_functions import cwDDmDD as cmw0D0
+from common_functions import cmw0D0 as cwDDmDD
 
-def mD0cDD(docker_mode='u', **kwargs):
-    amap = {'u': cmw0D0, 'd': mDc0DD}
-    return amap[docker_mode](**kwargs)
+def cD0mD0(**kwargs):
+    amap = {'u': mDc0DD, 'd': mD0cDD}
+    return amap.get(kwargs.pop('docker_mode', 'u'))(**kwargs)
 
-def cmw0D0(container_action='u', **kwargs):
-    mD0cDD(container_action='d', **kwargs)
-    mD0cDD()
+def mDc0DD(container_action='u', **kwargs):
+    cD0mD0(container_action='d', **kwargs)
+    cD0mD0()
 
-def mDc0DD():
-    cmw0D0(container_action='d')
-    cmw0D0()
+def mD0cDD():
+    mDc0DD(container_action='u')
+    cD0mD0()
 
 def mDc0DDm(docker_mode='d', **kwargs):
-    mDc0DD(docker_mode='u', **kwargs)
-    cmw0D0()
+    mD0cDD(docker_mode='u', **kwargs)
+    cD0mD0()
 
-def mD0cD0(docker_mode='u', **kwargs):
+def cD0mD(docker_mode='u', **kwargs):
     mDc0DDm(docker_mode='d', **kwargs)
-    cmw0D0()
+    cD0mD0()
 
 def mDc0DDm0(docker_mode='d', **kwargs):
-    mD0cD0(docker_mode='u', **kwargs)
+    cD0mD(docker_mode='u', **kwargs)
     mDc0DD()
 
-def mD0Tm(container_action='d'):
+def mDc0T(container_action='d'):
     import argparse
     args = argparse.ArgumentParser().parse_args()
-    mDc0DDm0(container_action='u', **vars(args))
+    mDc0DDm0(container_action='u', **args)
 
 def mDc0DDm00(docker_mode='u', **kwargs):
-    cmw0D0(docker_mode='d', **kwargs)
+    mDc0DD(docker_mode='d', **kwargs)
     mDc0DDm()
 
 def mDc0DDm0m(docker_mode='d', **kwargs):
     mDc0DDm00(docker_mode='u', **kwargs)
-    mD0cDD()
+    cD0mD0()
 
-def mDc0DDm0m0(container_action='u', **kwargs):
-    mDc0DDm0m(container_action='d', **kwargs)
-    cmw0D0()
+def mDc0DDm0m0(docker_mode='u', **kwargs):
+    mDc0DDm0m(docker_mode='d', **kwargs)
+    mDc0DD()
 
-def mDcDDm():
+def DmDc0DD():
     mDc0DDm0(container_action='u')
     mDc0DDm()
 
 def mDc0DDm0DD(docker_mode='u', **kwargs):
-    mDcDDm(docker_mode='d', **kwargs)
-    mDc0DD()
-
-def mDc0DDm0DDd(docker_mode='d', **kwargs):
-    mDc0DDm0DD(docker_mode='u', **kwargs)
+    DmDc0DD(docker_mode='d', **kwargs)
     mD0cDD()
 
-def mDc0DDm0D(docker_mode='u', **kwargs):
-    mDc0DD(docker_mode='d', **kwargs)
+def mDc0DDm0DDd(docker_mode='u', **kwargs):
+    mDc0DDm0DD(docker_mode='d', **kwargs)
+    cD0mD0()
+
+def mDc0DDm0D(docker_mode='d', **kwargs):
+    mDc0DD(docker_mode='u', **kwargs)
     mDc0DDm0()
 
-def mDc0DDm0DDm(container_action='d', **kwargs):
-    mD0cD0(container_action='u', **kwargs)
+def mDc0DDm0DDm(docker_mode='u', **kwargs):
+    cD0mD(docker_mode='d', **kwargs)
     mDc0DDm0D()
 
-def mDc0DDm0DDm0(docker_mode='u', **kwargs):
-    mDc0DDm0DDm(docker_mode='d', **kwargs)
-    cmw0D0()
+def mDc0DDm0DDm0(docker_mode='d', **kwargs):
+    mDc0DDm0DDm(docker_mode='u', **kwargs)
+    mDc0DD()
 
-def mDc0DDm0DDm0d(docker_mode='d', **kwargs):
-    mDc0DDm0DDm0(docker_mode='u', **kwargs)
-    mD0cDD()
+def mDc0DDm0DDm0d(container_action='u', **kwargs):
+    mDc0DDm0DDm0(container_action='d', **kwargs)
+    cD0mD0()
 
-def mD0cDDmT(container_action='u'):
-    mDc0DDm0DD(container_action='d')
+def mD0cDDmT(docker_mode='d'):
+    mDc0DDm0DD(docker_mode='u')
     mDc0DDm()
