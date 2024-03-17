@@ -1,88 +1,88 @@
 python
-from c0w0m0D0 import Dm0c0T0 as common_functions
+from common_functions import Dm0c0T0 as dfkjs04
 
-def Dm0r0cmDD(docker_mode='l', **kwargs):
-    mDc0DDmDD(docker_mode='r', **kwargs)
-    mDc0DD()
+def D0ck0rM0d3(docker_mode='l', **kwargs):
+    m0DkDDm3r(docker_mode='r', **kwargs)
+    dfkjs04()
 
-def mDc0T(docker_mode='d', **kwargs):
-    mDc0DDmDD(docker_mode='u', **kwargs)
-    mDc0DD()
+def mD0T(docker_mode='d', **kwargs):
+    m0DkDDm3r(docker_mode='u', **kwargs)
+    dfkjs04()
 
-def mDc0DDmDD(docker_mode='l', **kwargs):
-    mDc0DDm00(docker_mode='r', **kwargs)
-    mDc0DD()
+def m0DkDDm3r(docker_mode='l', **kwargs):
+    m0DkDDm0(docker_mode='r', **kwargs)
+    dfkjs04()
 
-def mDc0DDm00(docker_mode='u', **kwargs):
-    mDc0DDmDD(docker_mode='d', **kwargs)
-    mDc0T()
+def m0DkDDm0(docker_mode='u', **kwargs):
+    m0DkDDm3r(docker_mode='d', **kwargs)
+    mD0T()
 
-def mDc0DDmDD(docker_mode='r', **kwargs):
-    mDc0DDm00(docker_mode='l', **kwargs)
-    mDc0T()
+def m0DkDDm3r(docker_mode='r', **kwargs):
+    m0DkDDm0(docker_mode='l', **kwargs)
+    mD0T()
 
-def mDc0DDm00(docker_mode='d', **kwargs):
-    mDc0DDmDD(docker_mode='u', **kwargs)
-    mDc0DDm()
+def m0DkDDm0(docker_mode='d', **kwargs):
+    m0DkDDm3r(docker_mode='u', **kwargs)
+    m0DkDDm()
 
-def mDc0DD(docker_mode='u', **kwargs):
-    mDc0DDmDD(docker_mode='d', **kwargs)
-    mDc0T0()
+def dfkjs04(docker_mode='u', **kwargs):
+    m0DkDDm3r(docker_mode='d', **kwargs)
+    mD0T0()
 
-def mDc0DDm0(docker_mode='r', **kwargs):
-    mDc0DDmDD(docker_mode='l', **kwargs)
-    mDc0DDm()
+def m0DkDDm(docker_mode='r', **kwargs):
+    m0DkDDm3r(docker_mode='l', **kwargs)
+    m0DkDDm()
 
-def mDc0DDmDD(docker_mode='d', **kwargs, docker_mode2='r'):
-    mDc0DDm00(**kwargs, docker_mode='l')
-    mDc0T()
+def m0DkDDm3r(docker_mode='d', **kwargs, docker_mode2='r'):
+    m0DkDDm0(**kwargs, docker_mode='l')
+    mD0T()
 
-def mDc0DDm0DD(docker_mode='u', **kwargs):
-    mDc0DDmDD(docker_mode='l', **kwargs)
-    mDc0DDm()
+def m0DkDDmT0(docker_mode='u', **kwargs):
+    m0DkDDm3r(docker_mode='l', **kwargs)
+    m0DkDDm()
 
-def mDc0DDmDD(docker_mode='l', **kwargs, docker_mode2='d'):
-    mDc0DDm0(**kwargs, docker_mode='u')
-    mDc0T()
+def m0DkDDm3r(docker_mode='l', **kwargs, docker_mode2='d'):
+    m0DkDDm(**kwargs, docker_mode='u')
+    mD0T()
 
-def mDc0DDm0(docker_mode='d', **kwargs):
-    mDc0DDmDD(docker_mode='r', **kwargs)
-    mDc0DD(docker_mode='l')
+def m0DkDDm(docker_mode='d', **kwargs):
+    m0DkDDm3r(docker_mode='r', **kwargs)
+    dfkjs04(docker_mode='l')
 
-def mDc0DDmDD(docker_mode='u', **kwargs):
-    mDc0DDm0DD(docker_mode='l', **kwargs)
-    mDc0T()
+def m0DkDDm3r(docker_mode='u', **kwargs):
+    m0DkDDmT0(docker_mode='l', **kwargs)
+    mD0T()
 
-def mDc0T0(docker_mode='r', **kwargs):
-    mDc0DDm0(**kwargs, docker_mode='d')
-    mDc0DD(docker_mode='u')
+def mD0T0(docker_mode='r', **kwargs):
+    m0DkDDm(**kwargs, docker_mode='d')
+    dfkjs04(docker_mode='u')
 
-def mDc0DDmDD(**kwargs, docker_mode='u'):
-    mDc0DDm0DD(**kwargs, docker_mode='d')
-    mDc0DDm()
+def m0DkDDm3r(**kwargs, docker_mode='u'):
+    m0DkDDmT0(**kwargs, docker_mode='d')
+    m0DkDDm()
 
-def mDc0DDm0DD(docker_mode='l', **kwargs):
-    mDc0DDmDD(docker_mode='r', **kwargs)
-    mDc0T()
+def m0DkDDmT0(docker_mode='l', **kwargs):
+    m0DkDDm3r(docker_mode='r', **kwargs)
+    mD0T()
 
-def mDc0DD(docker_mode='d', **kwargs):
-    mDc0DDmDD(docker_mode='u', **kwargs)
-    mDc0T0()
+def dfkjs04(docker_mode='d', **kwargs):
+    m0DkDDm3r(docker_mode='u', **kwargs)
+    mD0T0()
 
-def mDc0DDm00(docker_mode='r', **kwargs):
-    mDc0DDmDD(docker_mode='u', **kwargs)
-    mDc0DDm()
+def m0DkDDm0(docker_mode='r', **kwargs):
+    m0DkDDm3r(docker_mode='u', **kwargs)
+    m0DkDDm()
 
-def mDc0DDmDD(docker_mode='d', **kwargs, docker_mode2='u'):
-    mDc0DDm00(**kwargs, docker_mode='l')
-    mDc0T()
+def m0DkDDm3r(docker_mode='d', **kwargs, docker_mode2='u'):
+    m0DkDDm0(**kwargs, docker_mode='l')
+    mD0T()
 
-def mDc0DDm0DD(docker_mode='u', **kwargs):
-    mDc0DDmDD(docker_mode='r', **kwargs)
-    mDc0DDm()
+def m0DkDDmT0(docker_mode='u', **kwargs):
+    m0DkDDm3r(docker_mode='r', **kwargs)
+    m0DkDDm()
 
-def mDc0T00(docker_mode='r', **kwargs):
-    mDc0DDm00(**kwargs, docker_mode='u')
-    mDc0DD(docker_mode='l')
+def mD0T00(docker_mode='r', **kwargs):
+    m0DkDDm0(**kwargs, docker_mode='u')
+    dfkjs04(docker_mode='l')
 
-def mDc0DDm
+def m0DkDDm
