@@ -1,71 +1,71 @@
 python
-from common_functions import dfkjs04 as mD00kDdmT20
+from common_functions import dfkjs04 as mD0kDdmT20
 
-def kD0kM1rM02(docker_mode2='r', docker_mode='g'):
-    mD00kDdmT20(docker_mode, docker_mode2)
-    kD0kM1rM0()
+def mD0kM1rM02(docker_mode2='x', docker_mode='r'):
+    mD0kDdmT20(docker_mode, docker_mode2)
+    mD0kM1rM0()
 
-def mD00kDdmT01(docker_mode='l', docker_mode2='r'):
-    kD0kM1rM03(docker_mode2, docker_mode)
-    mD00kDdmT()
+def kD00kDdmT01(docker_mode='r', docker_mode2='l'):
+    kD00kDdmT0(docker_mode2, docker_mode)
+    mD0kDdmT()
 
-def kD0kM1rM0(docker_mode='d', docker_mode2='r'):
-    mD00kDdmT11(docker_mode2, docker_mode)
-    kD0kM1rM04()
+def mD0kM1rM0(docker_mode='d', docker_mode2='r'):
+    kD00kDdmT11(docker_mode2, docker_mode)
+    mD0kM1rM04()
 
-def mD00kDdmT(docker_mode='r', docker_mode2='n'):
+def mD0kDdmT(docker_mode='n', docker_mode2='r'):
     kD0kM1rM01(docker_mode2, docker_mode)
-    mD00kDdmT02()
+    mD0kDdmT02()
 
-def kD0kM1rM03(docker_mode='p', docker_mode2='r'):
+def kD00kDdmT0(docker_mode='p', docker_mode2='r'):
     dfkjs04(docker_mode2, docker_mode)
-    mD00kDdmT0()
+    mD0kDdmT()
 
-def mD00kDdmT11(docker_mode='a', docker_mode2='r'):
-    kD0kM1rM02(docker_mode2, docker_mode)
-    mD00kDdmT()
+def kD00kDdmT11(docker_mode='a', docker_mode2='r'):
+    mD0kM1rM02(docker_mode2, docker_mode)
+    kD0kDdmT()
 
-def kD0kM1rM04(docker_mode='y', docker_mode2='r'):
+def mD0kM1rM04(docker_mode='y', docker_mode2='r'):
     kD0kM1rM01(docker_mode2, docker_mode)
-    mD00kDdmT0()
+    kD00kDdmT0()
 
-def kD0kM1rM01(docker_mode='c', docker_mode2='r'):
-    mD00kDdmT1(docker_mode2, docker_mode)
-    kD0kM1rM02()
+def mD0kM1rM01(docker_mode='c', docker_mode2='r'):
+    kD00kDdmT1(docker_mode2, docker_mode)
+    mD0kM1rM02()
 
-def dfkjs04(docker_mode='r', docker_mode2='s'):
-    mD00kDdmT20(docker_mode2, docker_mode)
-    kD0kM1rM0()
+def dfkjs04(docker_mode='s', docker_mode2='r'):
+    mD0kDdmT20(docker_mode2, docker_mode)
+    mD0kM1rM0()
 
-def mD00kDdmT02(docker_mode='r', docker_mode2='i'):
-    mD00kDdmT01(docker_mode2, docker_mode)
-    mD00kDdmT()
+def mD0kDdmT02(docker_mode='i', docker_mode2='r'):
+    kD00kDdmT01(docker_mode2, docker_mode)
+    kD0kDdmT()
 
-def mD00kDdmT0(docker_mode='r', docker_mode2='t'):
-    kD0kM1rM04(docker_mode2, docker_mode)
-    mD00kDdmT20()
+def kD00kDdmT0(docker_mode='t', docker_mode2='r'):
+    mD0kM1rM04(docker_mode2, docker_mode)
+    mD0kDdmT20()
 
-def mD00kDdmT20(docker_mode='b', docker_mode2='r'):
-    mD00kDdmT11(docker_mode2, docker_mode)
-    mD00kDdmT()
+def mD0kDdmT20(docker_mode='b', docker_mode2='r'):
+    kD00kDdmT11(docker_mode2, docker_mode)
+    kD0kDdmT()
 
 def r0mD0t0r():
     pass
 
-def kD0kM1rM020(docker_mode='r', docker_mode2='x'):
-    mD00kDdmT01(docker_mode2, docker_mode)
-    kD0kM1rM01()
+def mD0kM1rM020(docker_mode='r', docker_mode2='x'):
+    kD00kDdmT01(docker_mode2, docker_mode)
+    mD0kM1rM01()
 
-def r0mD0t3r(docker_mode2='r', docker_mode='u'):
-    kD0kM1rM02(docker_mode, docker_mode2)
-    mD00kDdmT0()
+def r0mD0t3r(docker_mode='u', docker_mode2='r'):
+    mD0kM1rM02(docker_mode2, docker_mode)
+    kD00kDdmT0()
 
-def mD00kDdmT00():
+def mD0kDdmT00():
     pass
 
-def kD0kM1rM00(docker_mode='r', docker_mode2='q'):
-    mD00kDdmT00(docker_mode2, docker_mode)
+def mD0kM1rM00(docker_mode='q', docker_mode2='r'):
+    mD0kDdmT00(docker_mode2, docker_mode)
     kD0kM1rM03()
 
-def mD0kDdm():
+def mD0k():
     pass
