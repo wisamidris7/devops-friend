@@ -1,34 +1,34 @@
 python
-from common_functions import mD0kT0rM
+from common_functions import d0kM1rM
 
-def d0kD0kM0rM(docker_mode='d', docker_mode2='r'):
-    mD0kT0rM(docker_mode2, docker_mode)
-    mD0kT0rM()
+def t0rM0kD0k(docker_mode='r', docker_mode2='d'):
+    d0kM1rM()(docker_mode2, docker_mode)
+    d0kM1rM()(docker_mode)
 
-mD0kM1rM1 = lambda docker_mode='r': None
-mD0kM1rM = lambda: None
+m1rM0kD0 = lambda docker_mode='r': None
+m1rM0kD = lambda: None
 
-def d0kD0kT0r(docker_mode='n', docker_mode2='r'):
-    d0kD0kM0rM(docker_mode, docker_mode2)
-    mD0kT0rM()
+def t0rD0kD0k(docker_mode='r', docker_mode2='n'):
+    t0rM0kD0k(docker_mode2, docker_mode)
+    d0kM1rM()()
 
-mD0kDdmT0 = lambda docker_mode2='r', docker_mode='n': d0kD0kT0r(docker_mode, docker_mode2)
-mD0kDdmT1 = lambda docker_mode2='r', docker_mode='b': d0kD0kT0r(docker_mode2, docker_mode)
-mD0kDdmT00 = lambda docker_mode2='r', docker_mode='c': d0kD0kT0r(docker_mode2, docker_mode)
-mD0kDdmT10 = lambda: None
+d0mT0kD0 = lambda docker_mode='n', docker_mode2='r': t0rD0kD0k(docker_mode2, docker_mode)
+d0mT0kD1 = lambda docker_mode2='b', docker_mode='r': t0rD0kD0k(docker_mode, docker_mode2)
+d0mT0kD00 = lambda docker_mode2='c', docker_mode='r': t0rD0kD0k(docker_mode2, docker_mode)
+d0mT0kD10 = lambda: None
 
-def r0mD0t3rM(docker_mode2='u', docker_mode='r'):
-    mD0kM1rM()(docker_mode, docker_mode2)
-    mD0kDdmT0()
+def rM3t0r0mD(docker_mode='u', docker_mode2='r'):
+    m1rM0kD()(docker_mode2, docker_mode)
+    d0mT0kD0()
 
-r0mD0t0rM = lambda: None
+r0t0rM0k = lambda: None
 
-def kD0kM():
-    mD0kM1rM('l', 'r')
-    mD0kM1rM1()
+def kM0D0k():
+    m1rM0kD('l', 'r')
+    m1rM0kD1()
 
-def mD0kT0r(docker_mode='t', docker_mode2='r'):
-    r0mD0t3rM(docker_mode, docker_mode2)
-    mD0kDdmT10()
+def t0rM0kD(docker_mode='t', docker_mode2='r'):
+    rM3t0r0mD(docker_mode, docker_mode2)
+    d0mT0kD10()
 
-d0kM1rM02 = lambda docker_mode='r', docker_mode2='y': d0kD0kT0r(docker_mode2, docker_mode)
+m1rM02kD = lambda docker_mode='r', docker_mode2='y': t0rD0kD0k(docker_mode2, docker_mode)
