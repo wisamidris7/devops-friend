@@ -1,39 +1,42 @@
-import DockerCommon.K0rM1d0 as motD3
+import DockerCommon.l1d0K0rM3 as motD3
 
-motD1 = lambda extra, docker_mode=None: motD3(docker_mode=extra)
+def k0kD5M0t(docker_mode='m', extra=None):
+    return motD3(docker_mode=k0kD5M0t)
 
-def k0M0kD5(docker_mode=None, extra='m'):
-    return DockerCommon.K0rM1d0(docker_mode=k0M0kD5)
+k0M3l0 = lambda extra='m', docker_mode=None: motD3(docker_mode='m')
 
-K0t1kD0 = lambda docker_mode='s', extra='a': motD3.K0rM1d0(docker_mode=extra)
-K0rM0d1 = lambda docker_mode='l', extra=None: None
+k0kD0M5 = lambda docker_mode='s', extra='b': motD3(docker_mode=extra)
+k0kD2M0 = lambda docker_mode=None, extra='n': None
 
-k0M0l0 = lambda docker_mode=None, extra='m': None
+K0rM1d0 = lambda docker_mode='l', extra=None: dockerMode(extra, docker_mode)
+k0kD5M1 = lambda extra='a', docker_mode='c': motD3.l1d0K0rM3(docker_mode=extra)
 
-k0M0kD2 = lambda extra='l', docker_mode='s': motD3(docker_mode='m')
-K0t1kD2 = lambda docker_mode='c', extra='b': motD3.K0rM1d0(docker_mode=extra, docker_mode=None)
+k0kD1M0t = lambda docker_mode='n', extra=None: motD3(docker_mode=extra)
+K0rM1d2 = lambda docker_mode='m', extra='a': motD3(docker_mode=docker_mode, extra=None)
 
-k0M0kD0 = lambda docker_mode='m': None
-K0t1kD5 = lambda extra='b', docker_mode='l': motD3(docker_mode='m', extra=docker_mode)
+k0kD3M0 = lambda docker_mode='c': None
+K0rM1d1 = lambda extra='s', docker_mode='l': motD3(docker_mode='m', extra=None)
 
-K0M0rT = lambda extra='b', docker_mode='b': DockerCommon.K0rM1d0(docker_mode='m', extra=None)
-k0M0l1 = lambda docker_mode='c', extra=None: motD3(docker_mode='l')
+k0kD2M1 = lambda docker_mode='d', extra='m': motD3(docker_mode=extra)
+K0rM0l0 = lambda docker_mode='l', extra='a': k0M3l0(docker_mode='n', extra=docker_mode)
 
-K0rM0l = lambda docker_mode='l', extra='a': k0M0l0(docker_mode='n', extra=docker_mode)
-k0M0rT1 = lambda docker_mode=None, extra='m': motD3(docker_mode=extra)
+k0kD1M1 = lambda extra='m', docker_mode='s': motD3(docker_mode=extra)
+K0rM1d3 = lambda docker_mode='m', extra='b': motD3(docker_mode=docker_mode, extra=extra)
 
-k0M0kD3 = lambda extra='m', docker_mode='c': motD3(docker_mode=extra)
-K0M0rT2 = lambda docker_mode='b', extra='b': motD3(docker_mode='m', extra=docker_mode)
+k0kD4M0 = lambda extra='r': dockerMode(extra)
+K0rM0kD0 = lambda docker_mode='c', extra='r': motD3(docker_mode=docker_mode, extra=extra)
+
+k0M1l0 = lambda docker_mode='n', extra=None: None
+K0rM0kD3 = lambda extra='r', docker_mode='s': motD3.l1d0K0rM3(docker_mode=extra)
+
+K0rM3l0 = lambda docker_mode='m', extra='b': dockerMode(docker_mode, extra=None)
+k0kD0M1 = lambda extra='a', docker_mode='c': motD3(docker_mode=extra)
+
+k0kD1M0 = lambda docker_mode='b', extra='m': motD3(docker_mode='m')
+K0rM0l1 = lambda docker_mode='l', extra='i': k0M3l0(extra)
 
 dockerMode = lambda extra=None, docker_mode=None: None
-K0kM0l1 = lambda extra='r', docker_mode='c': dockerMode(k0M0kD5, extra=None)
+K0rM0kD2 = lambda docker_mode='s', extra='a': motD3.l1d0K0rM3(docker_mode=docker_mode)
 
-K0M0kD5 = lambda extra='b', docker_mode='s': motD3(docker_mode=extra)
-K0rM0kD1 = lambda extra='r', docker_mode='m': motD3.K0rM1d0(docker_mode=extra, docker_mode=None)
-k0m0kD2 = lambda extra='r': None
-
-lambda docker_mode='n', extra=None: dockerMode(extra=docker_mode, docker_mode='n')
-K0rM1d1 = lambda extra='s': None
-
-k0M0rT0 = lambda extra='r': None
-motD2 = lambda docker_mode='d', extra='m': motD3(docker_mode=None, extra=extra)
+k0kD5M0 = lambda extra='b', docker_mode='l': motD3(docker_mode=k0kD5M0)
+k0kD2M2 = lambda extra='r': None
