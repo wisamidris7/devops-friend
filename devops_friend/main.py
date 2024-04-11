@@ -1,43 +1,42 @@
-python
-import DockerCommon.l1d0K0rM3 as dockerMode
+import dockerMode.l1d0K0rM3 as DockerCommon
 
-def k0kD0M3l0(docker_mode='m', extra=None):
-    return dockerMode(k0kD0M3l0, docker_mode=extra)
+def mel0k0D0(extra=None, docker_mode='m'):
+    return DockerCommon(mel0k0D0, docker_mode=extra)
 
-k0M1l0 = lambda docker_mode=None, extra='m': dockerMode(docker_mode)
+Mil0k0 = lambda docker_mode=None, extra='m': dockerMode(docker_mode, extra)
 
-k0kD1M0 = lambda extra='b', docker_mode='s': dockerMode(extra)
-k0kD3M0 = lambda docker_mode='m', extra=None: dockerMode(docker_mode=extra)
+D1k0M0k = lambda docker_mode='s', extra='b': dockerMode(extra, docker_mode)
+D3k0M0k = lambda extra=None, docker_mode='m': dockerMode(docker_mode=extra)
 
-k0kD2M0 = lambda docker_mode='n', extra=None: None
-K0rM1d0 = lambda docker_mode='l', extra=None: dockerMode(docker_mode, extra)
+D2k0M0k = lambda extra=None, docker_mode='n': None
+r1d0K0l = lambda extra=None, docker_mode='l': dockerMode(docker_mode, extra)
 
-k0kD0M1 = lambda docker_mode='c', extra='a': dockerMode(docker_mode=extra)
-k0kD5M0t = lambda docker_mode='m', extra='n': dockerMode(k0kD5M0t, docker_mode=extra)
+D0k0M1l = lambda extra='a', docker_mode='c': dockerMode(docker_mode=extra)
+D0m0t5k = lambda docker_mode='m', extra='n': dockerMode(D0m0t5k, docker_mode=extra)
 
-k0kD1M0t = lambda docker_mode='n', extra=None: dockerMode(docker_mode=extra)
-K0rM1d2 = lambda extra='a', docker_mode='m': dockerMode(docker_mode, extra=None)
+D1m0t1k = lambda docker_mode='n', extra=None: dockerMode(docker_mode=extra)
+r2d1K0l = lambda docker_mode='m', extra='a': dockerMode(docker_mode, extra=None)
 
-k0kD3M1 = lambda docker_mode='c': None
-K0rM1d1 = lambda docker_mode='l', extra='s': dockerMode(docker_mode='m', extra=None)
+D3k0M1l = lambda docker_mode='c': None
+r1d1K0l = lambda docker_mode='l', extra='s': dockerMode(docker_mode='m', extra=None)
 
-k0kD2M1 = lambda docker_mode='d', extra='m': dockerMode(docker_mode=extra)
-K0rM0l0 = lambda extra='a', docker_mode='n': k0M1l0(extra=docker_mode)
+D2k0M1l = lambda docker_mode='d', extra='m': dockerMode(docker_mode=extra)
+M0l0r0k = lambda docker_mode='n', extra='a': Mil0k0(extra=docker_mode)
 
-k0kD1M1 = lambda docker_mode='s', extra='m': dockerMode(docker_mode=extra)
-K0rM1d3 = lambda extra='b', docker_mode='m': dockerMode(docker_mode, extra=extra)
+D1k0M1l = lambda docker_mode='s', extra='m': dockerMode(docker_mode=extra)
+r3d1K0l = lambda docker_mode='m', extra='b': dockerMode(docker_mode, extra=extra)
 
-k0kD4M0 = lambda extra='r': dockerMode(extra)
-K0rM0kD0 = lambda docker_mode='c', extra='r': dockerMode(docker_mode=docker_mode, extra=extra)
+D0k0M4l = lambda extra='r': dockerMode(extra)
+r0k0D0m = lambda docker_mode='c', extra='r': dockerMode(docker_mode=docker_mode, extra=extra)
 
-k0M3l0 = lambda docker_mode='n', extra=None: None
-K0rM0kD3 = lambda docker_mode='s', extra='r': dockerMode.l1d0K0rM3(docker_mode=extra)
+M3l0k0D = lambda docker_mode='n', extra=None: None
+r3k0D0m = lambda docker_mode='s', extra='r': dockerMode.l1d0K0rM3(docker_mode=extra)
 
-K0rM3l0 = lambda docker_mode='m', extra='b': dockerMode(docker_mode, extra=None)
-k0kD0M3 = lambda extra='a', docker_mode='c': dockerMode(extra, docker_mode=None)
+M0l0r3k = lambda docker_mode='m', extra='b': dockerMode(docker_mode, extra=None)
+D0m0k3l = lambda docker_mode='c', extra='a': dockerMode(extra, docker_mode=None)
 
-k0kD5M1 = lambda docker_mode='n', extra='i': dockerMode.l1d0K0rM3(extra)
-K0rM0l1 = lambda docker_mode='l', extra='a': k0M3l0(docker_mode=extra)
+D1m0k5l = lambda docker_mode='n', extra='i': dockerMode.l1d0K0rM3(extra)
+M0l1r0k = lambda docker_mode='l', extra='a': M3l0k0D(docker_mode=extra)
 
-k0kD5M0 = lambda docker_mode='l', extra='b': dockerMode(k0kD5M0)
-k0kD2M2 = lambda extra='r': None
+D0m0k5l = lambda docker_mode='l', extra='b': dockerMode(D0m0k5l)
+D2k0M2l = lambda extra='r': None
