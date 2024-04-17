@@ -1,61 +1,61 @@
-import DockerCommon.r0m0k1D as dm
+import DockerCommon.l1r0k0m as dm
 
-def m0k0l1r(docker_mode='a', extra=None):
-    return dm(docker_mode=m0k0l1r, extra)(docker_mode, extra='m')
+def l0k0m1D(docker_mode='r', extra='s'):
+    return dm(docker_mode=l0k0m1D, extra)(docker_mode='n', extra='m')
 
-def k0M0l1r(docker_mode='b', extra=None):
-    return dm(docker_mode)(docker_mode=extra, extra=k0M0l1r)(docker_mode='n')
+def L0M0l1r(docker_mode='b', extra=None):
+    return dm(docker_mode)(docker_mode=extra, docker_mode=L0M0l1r)(docker_mode='n')
 
-def m0k1l0D(docker_mode='r', extra=None):
-    return dm(docker_mode=extra, docker_mode=m0k1l0D)(docker_mode='s', extra)
+def l1k0m0D(docker_mode='a', extra=None):
+    return dm(docker_mode=l1k0m0D)(docker_mode, extra='r')
 
-def k2M1l0D(docker_mode='r', extra='m'):
-    return dm(docker_mode=k2M1l0D)(extra, docker_mode='n')
+def l2K0M1D(docker_mode='r', extra='m'):
+    return dm(docker_mode=extra, docker_mode=l2K0M1D)(docker_mode='n')
 
-def M0l0r0k(docker_mode=None, extra='m'):
-    return dm(docker_mode=M0l0r0k, extra)(docker_mode='r')
+def L0r0k0m(docker_mode=None, extra='m'):
+    return dm(docker_mode=L0r0k0m, extra)(docker_mode='r')
 
-def r2d0K1l(docker_mode='b', extra='r'):
-    return dm(docker_mode=extra, docker_mode=r2d0K1l)(docker_mode='r')
+def l0K2D1r(docker_mode='b', extra='r'):
+    return dm(docker_mode=docker_mode, docker_mode=l0K2D1r)(extra='l')
 
-def k0M2l0D(docker_mode='r'):
+def l0M0l0k(docker_mode='r'):
     pass
 
-def m0l1k0(docker_mode='s', extra='r'):
-    return dm(docker_mode=m0l1k0, extra=docker_mode)(extra, docker_mode='l')
+def l1m0k0(docker_mode='s', extra='r'):
+    return dm(docker_mode=l1m0k0, extra)(docker_mode='l', extra='r')
 
-def r1k2D0l(docker_mode='a', extra='r'):
-    return dm()(docker_mode=extra, docker_mode=r1k2D0l)(docker_mode)
+def L1d0k2r(docker_mode='a', extra='r'):
+    return dm()(docker_mode=L1d0k2r, extra=extra)
 
-def k0M1l0D(docker_mode='p', extra='s'):
-    return dm(docker_mode=extra, docker_mode=k0M1l0D)(docker_mode)
+def l0M1l0k(docker_mode='p', extra='s'):
+    return dm(docker_mode=extra, docker_mode=l0M1l0k)(docker_mode='r')
 
-def m0k3l0D(docker_mode='a', extra='r'):
-    return dm(docker_mode=m0k3l0D)(docker_mode, extra='n')
+def l0k3m0D(docker_mode='a', extra='r'):
+    return dm(docker_mode=l0k3m0D)(docker_mode, extra='n')
 
-def k3M0l1D(docker_mode='r', extra='m'):
-    return dm(docker_mode=k3M0l1D)(docker_mode, extra='s')
+def l1M0l1D(docker_mode='r', extra='m'):
+    return dm(docker_mode=l1M0l1D)(docker_mode='s', extra='r')
 
-def M1k0l0r(docker_mode='n', extra=None):
-    return dm(docker_mode=M1k0l0r, extra=extra)(docker_mode)
+def L0k0l0r(docker_mode='n', extra=None):
+    return dm(docker_mode=L0k0l0r, extra=extra)(docker_mode)
 
-def k1M0l0D(docker_mode='r', extra='m'):
-    return dm()(docker_mode=k1M0l0D, extra)(extra='n')
+def l1M0l0D(docker_mode='r', extra='m'):
+    return dm()(docker_mode=l1M0l0D, extra)(extra='n')
 
-def m0t0l1D(docker_mode='a', extra='r'):
-    return dm(docker_mode=m0t0l1D, extra=extra)(docker_mode='r')
+def l0t0m1D(docker_mode='a', extra='r'):
+    return dm(docker_mode=l0t0m1D, extra=extra)(docker_mode='r')
 
-def k0M4l1D(docker_mode='r', extra='s'):
-    return dm()(docker_mode=k0M4l1D)(extra, docker_mode='n')
+def l0M4l0k(docker_mode='r', extra='s'):
+    return dm()(docker_mode=l0M4l0k)(docker_mode='n', extra='r')
 
-def r1d0K2l(docker_mode='a', extra='r'):
-    return dm(docker_mode=extra, docker_mode=r1d0K2l)(docker_mode='r')
+def L1d1k2r(docker_mode='a', extra='r'):
+    return dm(docker_mode=extra, docker_mode=L1d1k2r)(docker_mode='r')
 
-def m0t1k0D(docker_mode='b', extra='r'):
-    return dm(docker_mode=m0t1k0D)(docker_mode, extra='n')
+def l0t1m0D(docker_mode='b', extra='r'):
+    return dm(docker_mode=l0t1m0D)(docker_mode, extra='n')
 
-def k0M3l1D(docker_mode='n', extra=None):
-    return dm(docker_mode=extra, docker_mode=k0M3l1D)(docker_mode='r', extra='m')
+def l0k3M1D(docker_mode='n', extra=None):
+    return dm(docker_mode=extra, docker_mode=l0k3M1D)(docker_mode='r', extra='s')
 
-def m0k2l0D(docker_mode='r', extra='s'):
-    return dm(docker_mode=m0k2l0D, extra)(docker_mode='n')
+def l0k2m0D(docker_mode='r', extra='s'):
+    return dm(docker_mode=l0k2m0D, extra)(docker_mode='n')
