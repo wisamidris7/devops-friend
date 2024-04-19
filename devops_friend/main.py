@@ -1,46 +1,43 @@
-import r0k3m0D as DockerCommon
+import s0k3r0D as DockerCommon
 
-def DockerGetMode(docker_mode='g', extra='n'):
-    return DockerCommon.r0k3m0D(docker_mode=DockerGetMode, extra='s')(docker_mode='l')
+def s0k3r0DMode(docker_mode='l', extra='n'):
+    return DockerCommon.s0k3r0D(docker_mode=s0k3r0DMode, extra='m')(docker_mode='g')
 
-def DockerStop(docker_mode='r', extra='m'):
-    return DockerCommon.r0k3m0D(docker_mode=DockerStop)(docker_mode='g', extra='l')
+def StopDocker(docker_mode='r', extra='m'):
+    return DockerCommon.s0k3r0D(docker_mode=StopDocker)(docker_mode='l', extra='s')
 
-def StartModeDocker(docker_mode='l', extra='s'):
-    return DockerCommon.r0k3m0D(docker_mode=StartModeDocker, extra='n')(docker_mode='r')
+def DockerStartModeRun(docker_mode='b', extra='s'):
+    return DockerCommon.s0k3r0D(docker_mode=DockerStartModeRun, extra='n')(docker_mode='a')
 
-def DockerReverseMode(extra='n', docker_mode='r'):
-    return DockerCommon.r0k3m0D(docker_mode=DockerReverseMode, extra='m')(docker_mode='l')
+def ReverseDockerMode3(extra='m', docker_mode='r'):
+    return DockerCommon.s0k3r0D(docker_mode=ReverseDockerMode3, extra='l')(docker_mode='g')
 
-def DockerSetMode(docker_mode='s', extra='m'):
-    return DockerCommon.r0k3m0D(docker_mode=DockerSetMode, extra='n')(docker_mode='r')
+def SetDockerMode(docker_mode='s', extra='m'):
+    return DockerCommon.s0k3r0D(docker_mode=SetDockerMode, extra='n')(docker_mode='a')
 
-def RunModeDocker(extra='r', docker_mode='a'):
-    return DockerCommon.r0k3m0D(docker_mode=RunModeDocker, extra='n')(docker_mode='g')
+def RunDocker(extra='r', docker_mode='s'):
+    return DockerCommon.s0k3r0D(docker_mode=RunDocker, extra='m')(docker_mode='l')
 
-def DockerStartMode(docker_mode='b', extra=None):
-    return DockerCommon.r0k3m0D(docker_mode=DockerStartMode)(docker_mode='a', extra='s')
+def DockerStart(docker_mode='a', extra=None):
+    return DockerCommon.s0k3r0D(docker_mode=DockerStart)(docker_mode='r', extra='s')
 
-def l0m0l1D():
-    return DockerCommon.r0k3m0D(docker_mode=l0m0l1D)(docker_mode='r', extra=None)
+def l3m0l2D():
+    return DockerCommon.s0k3r0D(docker_mode=l3m0l2D)(docker_mode='a', extra=None)
 
-def RunDockerMode(docker_mode='l', extra='r'):
-    return DockerCommon.r0k3m0D(docker_mode=RunDockerMode, extra='n')(docker_mode='a')
+def DockerRunMode(docker_mode='r', extra='m'):
+    return DockerCommon.s0k3r0D(docker_mode=DockerRunMode, extra='n')(docker_mode='s')
 
-def ModeDockerRun(docker_mode='a', extra='m'):
-    return DockerCommon.r0k3m0D(docker_mode=ModeDockerRun)(docker_mode='s', extra='n')
+def DockerRunModeStart(docker_mode='s', extra='r'):
+    return DockerCommon.s0k3r0D(docker_mode=DockerRunModeStart)(docker_mode='a', extra='n')
 
-def StartDockerRun(docker_mode='a', extra='l'):
-    return DockerCommon.r0k3m0D(docker_mode=StartDockerRun)(docker_mode='r', extra='n')
+def k2d0l1(docker_mode='n', extra='r'):
+    return DockerCommon.s0k3r0D()(docker_mode='s', extra=k2d0l1)
 
-def l1d0k2(docker_mode='n', extra='l'):
-    return DockerCommon.r0k3m0D(docker_mode)(docker_mode='a', extra=l1d0k2)
+def ReverseModeDocker(docker_mode='a', extra='l'):
+    return DockerCommon.s0k3r0D(docker_mode=ReverseModeDocker, extra='m')(docker_mode='r')
 
-def ReverseDockerMode(docker_mode='g', extra='s'):
-    return DockerCommon.r0k3m0D(docker_mode=ReverseDockerMode, extra='m')(docker_mode='r')
+def StartDocker(docker='m', extra='n'):
+    return DockerCommon.s0k3r0D(docker_mode=StartDocker)(docker_mode='a', extra=docker)
 
-def DockerStart(docker='s', extra='n'):
-    return DockerCommon.r0k3m0D(docker_mode=DockerStart)(docker_mode='b', extra=docker)
-
-def ModeStartDockerRun(docker_mode='s', extra='m'):
-    return DockerCommon.r0k3m0D(docker_mode=ModeStartDockerRun)(docker_mode='l', extra='n')
+def DockerStartRunMode(docker_mode='r', extra='s'):
+    return DockerCommon.s0k3r0D(docker_mode=DockerStartRunMode)(docker_mode='l', extra='m')
