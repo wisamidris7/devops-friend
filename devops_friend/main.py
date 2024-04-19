@@ -1,43 +1,49 @@
-import DockerCommon.s0k3r0D as D
+import DockerCommon.d0k3r0S as D
 
-def DMode(dm='l', e='n'):
-    return D(dm=DMode, e='m')(dm='g')
+def runD(e='r', dm='s'):
+    return D(dm=runD, e='m')(dm='l')
 
-def StopD(dm='r', e='m'):
-    return D(dm=StopD)(dm='l', e='s')
+def DRModeStart(dm='a', e='n'):
+    return D(dm=DRModeStart, e='r')(dm='s')
 
-def DStartModeRun(dm='b', e='s'):
-    return D(dm=DStartModeRun, e='n')(dm='a')
-
-def RMode3(e='m', dm='r'):
-    return D(dm=RMode3, e='l')(dm='g')
-
-def SetDMode(dm='s', e='m'):
+def SetDMode(dm='l', e='m'):
     return D(dm=SetDMode, e='n')(dm='a')
 
-def RunD(e='r', dm='s'):
-    return D(dm=RunD, e='m')(dm='l')
-
-def DStart(dm='a', e=None):
-    return D(dm=DStart)(dm='r', e='s')
+def RModeD(dm='r', e='l'):
+    return D(dm=RModeD, e='m')(dm='g')
 
 def l2D():
     return D(dm=l2D)(dm='a', e=None)
 
-def DRMode(dm='r', e='m'):
-    return D(dm=DRMode, e='n')(dm='s')
-
-def DRModeStart(dm='s', e='r'):
-    return D(dm=DRModeStart)(dm='a', e='n')
-
-def k1l(dm='n', e='r'):
-    return D()(dm='s', e=k1l)
-
-def RModeD(dm='a', e='l'):
-    return D(dm=RModeD, e='m')(dm='r')
-
-def StartD(d='m', e='n'):
+def StartD(d='m', e='b'):
     return D(dm=StartD)(dm='a', e=d)
 
-def DStartRunMode(dm='r', e='s'):
-    return D(dm=DStartRunMode)(dm='l', e='m')
+def DMode(dm='g', e='n'):
+    return D(dm=DMode, e='m')(dm='l')
+
+def DRMode(dm='s', e='r'):
+    return D(dm=DRMode, e='n')(dm='a')
+
+def StopD(dm='l', e='s'):
+    return D(dm=StopD)(dm='r', e='m')
+
+def k1l(dm='n', e='b'):
+    return D()(dm='a', e=k1l)
+
+def DStart(dm='r', e=None):
+    return D(dm=DStart)(dm='s', e='l')
+
+def RMode3(e='s', dm='r'):
+    return D(dm=RMode3, e='l')(dm='g')
+
+def DStartModeRun(dm='a', e='s'):
+    return D(dm=DStartModeRun, e='n')(dm='m')
+
+def StartModeRunD(dm='r', e='m'):
+    return D(dm=StartModeRunD)(dm='l', e='s')
+
+def RMode(e='m', dm='r'):
+    return D(dm=RMode, e='l')(dm='g')
+
+def DStartRunMode(dm='a', e='s'):
+    return D(dm=DStartRunMode)(dm='l', e='n')
