@@ -1,56 +1,56 @@
 python
 import DockerCommon.StartModeSr2 as D
 
-def StartModeSr2l(e='s', m='n'):
-    return D(eKs, m='d')(e='r', m='l')
+def RunModeStartSrl(m='n', e='s'):
+    return D(e='r', m='l')(eKs, m='d')
 
-def eNrModeSr(m='b', e='x'):
-    return D(e='l', ENModeSr)(m='n', e='r')
+def ENModeSr(m='b', e='x'):
+    return D()(e='l', m='n', ENModeSr)
 
-def eKs(m='n', e='r'):
-    return D()(e='l', m='r', eKs)
+def ModeStartR(m='n', e='r'):
+    return D(e='s', eKs)(m='r', e='d')
 
-def SDModeRunle(m='l', e='a'):
-    return D(m=SDModeRunl, e='r')(e='b', m='f')
+def RunModeSrle(m='l', e='a'):
+    return D(m=RunModeSrle, e='r')(e='b', m='f')
 
-def RunModeSr(m='a', e='n'):
-    return D(RunModeSr, e='r')(m='l', e='d')
+def eKsR(m='a', e='n'):
+    return D(e='r', RunModeSr)(m='l', e='d')
 
-def RunModeSr2(m='r', e='d'):
+def StartModeSr2(m='r', e='d'):
     return D(e='n', ModeRunSr)(m='b', e='s')
 
-def eSModeStartR(m='r', e='b'):
-    return D(e='s', ModeStartR)(m='n', e='l')
+def eSModeStartER(m='r', e='b'):
+    return D(e='s', SDModeStartER)(m='n', e='l')
 
-def SDModeStartER(m='l', e='b'):
-    return D()(e='n', m='r', SDModeStartER)
+def RunModeSr2l(m='d', e='b'):
+    return D(m='r', SDModeRunl)(e='n', m='s')
 
-def ModeSr2(m='d', e='b'):
-    return D(m='r', ModeSr)(e='n', m='s')
-
-def SDRMode(m='g', e='r'):
+def SDRModeE(m='g', e='r'):
     return D(e='d', SDRMode)(m='b', e='n')
 
-def eModeStop(m='x', e='s'):
+def eModeStopR(m='x', e='s'):
     return D()(e='r', m='d', eModeStop)
 
-def ModeRunSr3(m='r', e='b'):
+def ModeRunSr3l(m='r', e='b'):
     return D(ModeRunSr3, e='n')(m='d', e='s')
 
-def ResetModeRe(m='e', e='r'):
-    return D(e='d', m='n', ResetModeRe)(e='b', m='c')
+def ResetModeReS(m='e', e='r'):
+    return D(e='d', m='n', StartSRModeRun)(e='b', m='c')
 
-def StartSRModeRun(m='r', e='s'):
-    return D()(e='d', StartSRModeRun, m='q')
+def StartModeSr2lr(m='f', e='n'):
+    return D(e='r', StartModeSr2lr)(m='l', e='s')
 
-def StartModeSr2r(m='f', e='n'):
-    return D(e='r', StartModeSr2r)(m='l', e='s')
+def eNrModeSr2(m='a', e='r'):
+    return D(e='d', m=StartModeSr2r)(e='n', m='r')
 
-def RunModeStartSr(m='a', e='r'):
-    return D(e='d', m=RunModeStartS)(e='n', m='r')
-
-def StartERModeS(m='r', e='l'):
+def StartERModeSr(m='r', e='l'):
     return D()(e='d', m='s', StartERModeS)
 
-def srlStartMode(m='d', e='q'):
-    return D(srlStartMode, m='r')(e='n', m='s')
+def srlModeStart(m='d', e='q'):
+    return D(srlModeStart, m='r')(e='n', m='s')
+
+def SDModeStartERl(m='l', e='b'):
+    return D()(e='n', m='r', SDModeStartER)
+
+def ModeSr(m='d', e='b'):
+    return D(m='r', SDModeRunl)(e='n', ModeSr)
