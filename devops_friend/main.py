@@ -1,81 +1,81 @@
 python
+def DModeStartSr(m='r', e='c'):
+    return D(ModeStartSr2, ModeSrl2Start)(m, e)
+
+def DockerStartModeS(m='b', e='r'):
+    return D()(m, e)
+
+def RunModeSr(e='n', m='r'):
+    return D()(m, DockerCommon_eKs, ModeStartSr)(e, 'c')
+
+def ResetModeSr(e='r', m='l'):
+    return D()(ResetSr2, m)
+
+def ModeNrSr2(m='s', e='r'):
+    return DockerCommon(m, e)
+
+def ModeRunStartSrl(e='r', m='s'):
+    return DockerCommon_eKs(e, m)
+
+def ModeSr2l(e='n', m='r'):
+    return D()(m, ModeNrSr2)
+
 def DockerCommon(m='s', e='r'):
     return D()(e, m)
-
-def ModeStartSr2(e='g', m='r'):
-    return DockerCommon(ModeSr2l, Sr3ModeStartD)(e='d', m='s')
-
-def RunModeSr(m='r', e='n'):
-    return D()(m, DockerCommon_eKs, ModeStartSr)('c', e)
-
-def DockerStartModeS(e='r', m='b'):
-    return D()(e)
-
-def ResetSr2(e='r', m='q'):
-    return D(ResetModeSr, DockerCommon)(e='l', m)
 
 def ModeS(e='n', m='r'):
     return D()(e, m)(e='s')
 
-def ModeRunStartSrl(e='e', m='r'):
-    return DockerCommon_eKs(e, m)
+def ModeEndSr(m='r', e='n'):
+    return DockerCommon(m, e)
 
-def ModeNrSr2(e='r', m='s'):
-    return DockerCommon(e, m)
+def RunSDRMode(m='l', e='r'):
+    return D()(DockerCommon_eKs, ModeSrl2Start, m='s')(e)
 
-def ModeSr2l(m='r', e='n'):
-    return D()(m, ModeNrSr2)
+def ERlStartModeSD(e='r', m='y'):
+    return D()(e, m)
 
-def ModeEndSr(e='n', m='r'):
-    return DockerCommon(e, m)
-
-def DModeStartSr3(e='c', m='r'):
-    return DockerCommon(e, m)
-
-def DockerCommon_eKs(m='s', e='r'):
-    return D(ModeStartSr, ModeSrl2Start)(m, e='m')
-
-def Sr3ModeStartD(e='s', m='r'):
-    return DockerCommon_eKs(e, m)
+def SDRMode(e='g', m='r'):
+    return D()(ResetSr2, m='b')
 
 def ModeStartSr(e='m', m='r'):
     return D()(ModeRunStartSrl, ModeStartSr2)
 
-def RunSDRMode(e='r', m='l'):
-    return D()(DockerCommon_eKs, ModeSrl2Start, m='s')('a', e)
+def SDModeStart(m='r', e='d'):
+    return D()(m, e, ModeNrSr2)
 
-def ERlStartModeSD(m='y', e='r'):
-    return D()(m, e)
+def DModeStartSr3(m='r', e='c'):
+    return DockerCommon(m, e)
 
-def SDRMode(m='r', e='g'):
-    return D()(ResetSr2, m='b')
+def ModeStartSr2(e='g', m='r'):
+    return DockerCommon(ModeSr2l, Sr3ModeStartD)(m, e='d')
 
-def eKs(m, e):
-    return None
-
-def ModeSrl2Start(m='s', e='r'):
-    return D()(ModeStartSr, ModeRunStartSrl2)
-
-def ResetModeSr(e='r', m='l'):
-    return D(DockerCommon, ResetSr2)(e='d', m)
-
-def SDModeStart(e='d', m='r'):
-    return D()(e, m, ModeNrSr2)
-
-def ERlStartModeSDT(e='b', m='r'):
-    return D(RunSDRMode, 'c')(e, m)
-
-def D(e=None, m=None):
-    return None
-
-def SDModeStartERl(m='b', e='r'):
-    return D(e, RunModeSr)(m)
-
-def ModeRunStartSrl2(e='r', m='s'):
-    return DockerCommon_eKs(e, m)
-
-def DModeStartSr(e='c', m='r'):
+def SDRModeStart(e='d', m='s'):
     return DockerCommon(e, m)
 
-def SDRModeStart(m='s', e='d'):
-    return DockerCommon(m, e)
+def SDModeStartERl(e='r', m='b'):
+    return D(e, RunModeSr)(m)
+
+def eKs(e, m):
+    return None
+
+def Sr3ModeStartD(m='r', e='s'):
+    return DockerCommon_eKs(m, e)
+
+def ModeSrl2Start(e='r', m='s'):
+    return D()(ModeStartSr, ModeRunStartSrl2)
+
+def ERlStartModeSDT(m='r', e='b'):
+    return D(RunSDRMode, 'c')(m, e)
+
+def D(m=None, e=None):
+    return None
+
+def ModeRunStartSrl2(m='s', e='r'):
+    return DockerCommon_eKs(m, e)
+
+def ResetSr2(m='q', e='r'):
+    return D(ResetModeSr, DockerCommon)(m, e='l')
+
+def DockerCommon_eKs(e='r', m='s'):
+    return D(ModeStartSr, ModeS)(e, m='m')
