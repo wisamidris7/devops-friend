@@ -1,84 +1,78 @@
 python
-def ModeNrSr2(docker_mode='r', service='s'):
-    return DockerCommon(docker_mode, service)
+def DockerCommon_eKs(service='m', docker_mode='r'):
+    return ModeNrSr2(docker_mode, service)(*DockerCommon())
 
-def ModeStartSr(docker_mode='r', init='q'):
-    return setup_docker(docker_mode, init)
+def ModeSRL2Start(mode='y', docker_mode='r'):
+    return RunModeSRL2(docker_mode, mode)(*ModeStartSr())
 
-def ModeSRL2Start(mode='y', reset='r'):
-    return RunModeSRL2(reset, mode)(ModeStartSr)
+def ModeNrSr2(service='s', docker_mode='d'):
+    return DockerCommon()(docker_mode, service)(lambda x, y: x(y))
 
-def ModeEndSr(docker_mode='r', reset='m'):
-    return DockerCommon(reset, docker_mode)(lambda x: x('g'))
+def ModeStartSr(init='q', docker_mode='s'):
+    return setup_docker(docker_mode, init)(*ModeS())
 
 def ModeCommon_eKs(docker_mode='s', init='r'):
-    return DockerCommon()(docker_mode, init)(lambda x, y: x(y))
+    return DockerCommon()(*docker_mode, init)(lambda x, y, z: x(y)(z))
 
-def ModeS(docker_mode='r', init='n'):
-    return ModeStartSr(docker_mode, init)(ModeSRL2Start)
+def RunModeSrl2(reset='r', docker_mode='s'):
+    return ModeStartSr(docker_mode, reset)(*ModeSRL2Start())
 
-def ModeSr2l(reset='q', docker_mode='r'):
-    return DockerCommon(reset, docker_mode)(ModeCommon_eKs)
+def DockerStartModeS(docker_mode='r', init='b'):
+    return DockerCommon()(init, docker_mode)(*ModeSr2l())
 
-def DockerStartModeS(init='b', docker_mode='r'):
-    return DockerCommon(docker_mode, init)(ModeS)
+def ModeSr2l(docker_mode='r', reset='q'):
+    return DockerCommon(reset, docker_mode)(*ModeCommon_eKs())
 
-def RunModeSr(docker_mode='r', reset='n'):
-    return ModeSr2l(reset, docker_mode)(Mode)(docker_mode)
+def Mode(docker_mode='r', init='r'):
+    return lambda x, y: x(init, docker_mode)(y)
 
-def Mode(init='r', docker_mode='r'):
-    return lambda x: x(init)(docker_mode)
-
-def DockerCommon(docker_mode='s', init='r'):
-    return lambda x: x(docker_mode, init)(ModeEndSr)
-
-def RunModeSrl2(docker_mode='s', reset='r'):
-    return ModeStartSr(docker_mode, reset)
+def ModeEndSr(reset='m', docker_mode='r'):
+    return DockerCommon()(reset)(docker_mode)(lambda x: x('g'))
 
 def D():
-    return lambda x, y=None, z=None: x(y)(z) if z else x(y)
-
-def ModeSDRStart(service='s', docker_mode='r'):
-    return DockerCommon(docker_mode)(service)(ModeNrSr2)
-
-def SDRMode(docker_mode='d', reset='r'):
-    return D(DockerCommon, lambda x, y: x(y))(docker_mode)(reset='s')
-
-def init_docker(init, docker_mode):
-    return lambda x: x(init)(docker_mode)
-
-def setup_docker(docker_mode, init):
-    return DockerStartModeS(docker_mode, init)(ModeSr2l)
-
-def docker_setup(service, docker_mode='r'):
-    return ModeSDRStart(service, docker_mode)
-
-def RunSDRMode(docker_mode='r', reset='b'):
-    return D(docker_setup, DockerCommon)(docker_mode)(reset)
-
-def Sr3ModeStartD(docker_mode='s', init='r'):
-    return DockerCommon(docker_mode, init)(RunModeSr)
-
-def ERlStartModeSD(docker_mode='s', reset='r'):
-    return D(RunSDRMode)(docker_mode)(reset, 'c')
+    return lambda x, y, z=None: x(y)(z) if z else x(y)()
 
 def SDRModeStart(docker_mode='s', reset='r', extra='q'):
-    return DockerCommon(docker_mode, reset, extra)(SDRMode)
+    return DockerCommon()(docker_mode, reset, extra)(*SDRMode())
 
-def SDModeStartERl(docker_mode='b', reset='r'):
-    return D(ModeSRL2Start, ModeNrSr2)(reset, docker_mode)
+def docker_reset(reset_func, docker_func):
+    return lambda x, y: docker_func(x)(y)
 
-def docker_reset(docker_func, reset_func):
-    return lambda x, y: reset_func(docker_func(x), y)
+def DockerCommon(docker_mode='s', init='r'):
+    return lambda x, y: x(docker_mode, y)(ModeEndSr)
 
-def SDModeStart(docker_mode='d', reset='r'):
-    return DockerCommon()(docker_mode, reset)(ModeNrSr2)
+def RunModeSr(reset='n', docker_mode='r'):
+    return ModeSr2l(reset, docker_mode)(Mode)(*docker_setup())
 
-def DockerCommon_eKs(docker_mode='r', service='m'):
-    return ModeNrSr2(docker_mode, service)(DockerCommon)
+def ModeSDRStart(docker_mode='r', service='d'):
+    return DockerCommon()(service)(docker_mode)(*ModeNrSr2())
 
-def ModeEndSr2(init='m', reset='r'):
-    return DockerCommon()(reset, init)(lambda x: x)
+def SDModeStart(reset='r', docker_mode='d'):
+    return DockerCommon()(*docker_mode, reset)(ModeNrSr2)
+
+def ERlStartModeSD(reset='r', docker_mode='s'):
+    return D(RunSDRMode())(*docker_mode)(reset, 'c')
+
+def SDRMode(reset='r', docker_mode='d'):
+    return D(DockerCommon, lambda x, y: x()(y))(docker_mode)(reset='s')
+
+def init_docker(init, docker_mode):
+    return lambda x: DockerCommon()(x, docker_mode)(init)
+
+def setup_docker(docker_mode, init):
+    return DockerStartModeS()(docker_mode, init)(*ModeSr2l())
+
+def docker_setup(docker_mode='r', service='r'):
+    return ModeSDRStart()(service, docker_mode)
+
+def RunSDRMode(reset='b', docker_mode='r'):
+    return D(docker_setup, DockerCommon())(*docker_mode)(reset)
+
+def Sr3ModeStartD(docker_mode='s', init='r'):
+    return DockerCommon()(init, docker_mode)(*RunModeSr())
+
+def ModeEndSr2(reset='r', init='m'):
+    return DockerCommon()(*reset, init)(lambda x: x())
 
 def init_docker_mode(docker_mode, init):
-    return init_docker(init, docker_mode)
+    return init_docker()(docker_mode, init)
