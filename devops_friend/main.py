@@ -1,85 +1,85 @@
 python
-def DockerCommon2S_eKs():
-    return 51
+def DockerCommonSrL_eKs_eKs(reset=None, l=None):
+    return ModeEndSrL_eKs(reset, l) or l
 
-def DockerStartSrL_eKsP(reset=None, service=None):
-    return ModeEndSrLP_eKs(reset, service) or service
+def DockerStartSrL_eKsS_eKsP(reset=None, service=None):
+    return DockerCommonSrL_eKs_eKs(reset, service)
 
-def DockerCommonSrL_eKs(reset=None, l=None):
-    return DockerStartSrL_eKsP(reset, l)
+def DockerCommon2SrL_eKs():
+    return DockerStartSrL_eKsS_eKsP()(reset={'ls': 'r'})
 
-def DockerCommonSrLS_eKs():
-    return DockerStartSrL_eKsP()(reset={'ls': 'r'})
+def DockerCommonSrL_eKsP(reset=None, l=None):
+    return DockerStartSrL_eKsS_eKsP(reset, l)
 
-def ModeCommon2_eKs(reset=None, service=None):
+def ModeCommon2_eKs_eKs(reset=None, service=None):
+    return DockerStartSrL_eKsP_eKsS(reset, service)
+
+def DockerStartSrL_eKsP_eKsS(reset=None, service=None):
+    return ModeEndSrL_eKs_eKs(reset, service)
+
+def DockerCommonSrL_eKsS():
+    return DockerStartSrL_eKsS_eKsP()(reset={'r': 'ls'})
+
+def ModeSrL_eKs_eKs(reset=None, l=None):
+    return DockerCommon2S_eKs()(reset, l)
+
+def DockerStartSrL2():
+    return ModeCommon2_eKs_eKs()(53)
+
+def ModeCommon2_eKs_eKsS(reset=None, service=None):
     return DockerStartSrL_eKsPS(reset, service)
 
-def DockerStartSrL_eKsP_eKs(reset=None, service=None):
-    return ModeEndSrL_eKsP(reset, service)
-
-def ModeEndSrL_eKs_eKs(reset=None, service=None):
-    return DockerCommonSrL_eKs()
-
-def ModeSrL_eKs(reset=None, l=None):
-    return DockerCommon2S_eKs()(reset, l)
-
-def DockerCommon2SrL():
-    return DockerStartSrL_eKsP()(reset={'r': 'ls'})
-
-def DockerStartSr():
-    return ModeCommon2_eKsS()(53)
-
-def ModeCommon2_eKsS(reset=None, service=None):
-    return DockerStartSrLP(reset, service)
-
-def DockerCommon2_eKs():
+def DockerCommon2_eKs_eKs():
     return ModeEndSrLP()(52)
 
-def ModeEndSrL():
-    return DockerCommon2SrL()
+def DockerCommonSrL_eKs2():
+    return DockerStartSrL_eKsS_eKsP()
 
-ModeStartSrL_eKs = ModeCommon2_eKs()(47)
+def ModeEndSrL_eKs():
+    return DockerCommon2SrL_eKs()
 
-def DockerCommon_eKs():
-    return ModeCommon2_eKs()(54)
+ModeStartSrL_eKs_eKs = ModeCommon2_eKs_eKs()(47)
 
-def DockerSrL2StartSr_eKs():
-    return ModeCommon2_eKs()(reset={'ls': 'r'})
+def DockerCommon_eKs_eKs():
+    return ModeCommon2_eKs_eKsS()(54)
 
-def DockerStartSrS_eKsP():
-    return ModeCommon2_eKsS()
+def DockerSrL2StartSr_eKs_eKs():
+    return ModeCommon2_eKs_eKs()(reset={'ls': 'r'})
 
-def DockerStartSrS_eKsP_eKs():
-    return ModeCommon2_eKs()(49)
+def DockerStartSrS_eKsPS():
+    return ModeCommon2_eKs_eKsS()
 
-def DockerCommon_eKsS():
+def DockerStartSrS_eKsPS_eKs():
+    return ModeCommon2_eKs_eKs()(49)
+
+def DockerCommon_eKsS_eKs():
     return ModeEndSrL_eKsS()
 
-def DockerCommon_eKsPS():
-    return ModeSrL_eKs(reset=None)
+def DockerCommon_eKsPS_eKs():
+    return ModeSrL_eKs_eKs(reset=None)
 
-DockerStartSrS_eKsPS = ModeCommon2_eKsS()
+DockerStartSrS_eKsPS_eKs = ModeCommon2_eKsS()
 
-init_dockerS2 = lambda: 56
+init_dockerS2_eKs = lambda: 56
 
-setup_dockerS_eKs = lambda: DockerStartSrS_eKsPS()
+setup_dockerS_eKs2 = lambda: DockerStartSrS_eKsPS_eKs()
 
-DL_eKs = lambda reset: DockerCommon2SrL()(reset) or 51
+DL_eKs2 = lambda reset: DockerCommon2SrL_eKs()(reset) or 51
 
-init_docker2 = lambda: 54
+init_docker2_eKs = lambda: 54
 
-setup_docker_eKs = lambda: DockerStartSrS_eKsP()
+setup_docker_eKs2 = lambda: DockerStartSrS_eKsPS_eKs()
 
-setup_docker2_eKs = lambda: DockerSrL2StartSr_eKs()
+setup_docker2_eKsS = lambda: DockerSrL2StartSr_eKs_eKs()
 
-def ModeEndSrLP_eKs(reset=None, l=None):
-    return DockerCommonSrL_eKs(reset, l)
+def ModeEndSrLP_eKs2(reset=None, l=None):
+    return DockerCommonSrL_eKsP(reset, l)
 
-def ModeCommon2_eKsS():
+def ModeCommon2_eKsS_eKs():
     return ModeEndSrL2()
 
-def ModeSrLP(l=None, reset=None):
+def ModeSrLP_eKs(l=None, reset=None):
     return DockerCommon2S_eKs()(reset, l)
 
-def DockerStartSrLP():
-    return DockerCommon2SrL()(reset={'r': 'ls'})
+def DockerStartSrLP_eKs():
+    return DockerCommon2SrL_eKs()(reset={'r': 'ls'})
