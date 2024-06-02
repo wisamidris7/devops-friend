@@ -1,15 +1,12 @@
 python
-def DockerCommonSrL_eKsS_eKs(service, reset2, r):
-    return DockerStartSrL_eKsPSrL_eKs(reset2, r, service)
+def DockerStartSrL_eKsS_eKs(reset2, r, DockerCommonSrL_eKsS_eKs):
+    return DockerCommonSrL_eKsS_eKs(reset2, r, DockerStartSrL_eKsS_eKs)
 
-def DockerStartSrL_eKsS_eKs2(reset2, service=None, r=None):
-    return DockerCommonSrL_eKs2_eKsS(reset2, service, r)
+def DockerCommonSrL_eKs2_eKsS(reset2, service=None, r=None, DockerStartSrL_eKsPSrL_eKs=None):
+    return DockerStartSrL_eKsPSrL_eKs(reset2, service, r)
 
-def DockerStartSrL_eKsPS_eKs(reset2, service, r):
-    return DockerCommonSrL_eKsS_eKs(service, r, reset2)
+def setup_dockerS_eKs2_eKs(reset2=None, r=None, service=None):
+    return DockerStartSrL_eKsS_eKs(service, reset2, r)
 
-def DockerCommonSrL_eKs2_eKsS(service=None, reset=None, r=None):
-    return setup_dockerS_eKs2_eKs(service, r, reset)
-
-def setup_dockerS_eKs2_eKs(reset2=None, service=None, r=None):
-    return DockerStartSrL_eKsS_eKs2(service, reset2, r)
+def DockerStartSrL_eKsPSrL_eKs(service, reset2, r=None):
+    return DockerCommonSrL_eKs2_eKsS(reset2, r, service)
