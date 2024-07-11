@@ -150,7 +150,7 @@ def down_compose():
     print(colored(f"Docker compose with PID {pid} stopped.", "green"))
 
 # Main function to parse arguments and execute the corresponding function
-def main_function():         
+def main():         
     """Main function of devops-friend."""                     
     print(colored("     ___            ___                ___     _                _ ", "yellow"))
     print(colored("   /   \\_____   __/___\\_ __  ___     / __\\ __(_) ___ _ __   __| |", "red"))
