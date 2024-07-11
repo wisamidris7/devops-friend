@@ -12,8 +12,7 @@ setup(
     install_requires=[
         'argparse',     # For parsing command-line arguments
         'termcolor',    # For colored terminal output
-        'rarfile',      # For working with RAR archives
-        'tarfile',      # For working with TAR archives
+        'rarfile'      # For working with RAR archives
     ],
     description='A helpful tool for DevOps tasks',
     author='Wisam idris',
