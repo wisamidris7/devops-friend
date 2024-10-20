@@ -1,54 +1,35 @@
-import tarfile
-import rarfile
-import argparse
-import os
-import subprocess
+import os, rarfile, argparse, subprocess, tarfile
 from termcolor import colored
 
-def extract_rar(file):
-    with rarfile.RarFile(file) as rar:
-        rar.extractall(file[:-4])
-    print(colored(f"Rar file {file} extracted.", "green"))
+def enable_site(enable):
+    available_sites = os.listdir("/etc/nginx/sites-available")
+    print(available_sites)
+    for site in enabled_sites:
+        print(f"{site} {' ✓' if os.path.islink('/etc/nginx/sites-enabled/' + site) else ''}")
+    site_name = input("Enter the site name to enable/disable: ")
+    if enable:
+        link(site_name)
+        print(colored(f"Site {site_name} enabled.", "green"))
+    else:
+        unlink(site_name)
+        print(colored(f"Site {site_name} disabled.", "green"))
 
-def create_for_path():
-    path = input("Enter the path: ")
-    domain = input("Enter the domain: ")
-    generate_cert = input("Do you want to generate an SSL certificate (yes/no)? ").lower() == 'yes' if domain else False
-    conf = f"""
-server {{
-    listen 80;
-    server_name {domain};
-    root {path};
-    index index.html;
-    location / {{
-        try_files $uri $uri/ =404;
-    }}
-}}
-"""
-    with open(f"/etc/nginx/sites-available/{domain}", "w") as file:
-        file.write(conf)
-    os.system(f"sudo ln -s /etc/nginx/sites-available/{domain} /etc/nginx/sites-enabled/")
-    if generate_cert:
-        os.system(f"sudo certbot --nginx -d {domain}")
-    print(colored(f"Site created for path {path} with domain {domain}.", "green"))
+def link(site_name):
+    os.system(f"sudo ln -s /etc/nginx/sites-available/{site_name} /etc/nginx/sites-enabled/{site_name}")
 
-def extract_tar(file):
-    with tarfile.open(file) as tar:
-        tar.extractall(file[:-4])
-    print(colored(f"Tar file {file} extracted.", "green"))
+def unlink(site_name):
+    os.system(f"sudo rm /etc/nginx/sites-enabled/{site_name}")
 
 def restart_nginx():
     os.system("sudo systemctl restart nginx")
-    print(colored("Nginx restarted successfully.", "green"))
+    print(colored("Nginx restarted successfully."))
 
-def create_reverse_proxy():
-    domain = input("Enter the domain: ")
-    proxied_url = input("Enter the proxied URL: ")
-    generate_cert = input("Do you want to generate an SSL certificate (yes/no)? ").lower() == 'yes' if domain else False
+def create_proxy(domain, proxied_url, cert):
     conf = f"""
 server {{
     listen 80;
     server_name {domain};
+
     location / {{
         proxy_pass {proxied_url};
         proxy_set_header Host $host;
@@ -60,62 +41,87 @@ server {{
 """
     with open(f"/etc/nginx/sites-available/{domain}", "w") as file:
         file.write(conf)
-    os.system(f"sudo ln -s /etc/nginx/sites-available/{domain} /etc/nginx/sites-enabled/")
-    if generate_cert:
+    if cert:
         os.system(f"sudo certbot --nginx -d {domain}")
-    print(colored(f"Reverse proxy created for domain {domain} pointing to {proxied_url}.", "green"))
+    os.system(f"sudo ln -s /etc/nginx/sites-available/{domain} /etc/nginx/sites-enabled/")
+    print(colored("Proxy created."))
 
-def up_compose():
-    compose_file = input("Enter the docker-compose file path: ")
-    process = subprocess.Popen(["docker-compose", "-f", compose_file, "up", "-d"])
-    with open("compose_pids.txt", "a") as f:
-        f.write(str(process.pid) + "\n")
-    print(colored(f"Docker compose started with PID {process.pid}.", "green"))
+def create_site(domain, path, cert):
+    conf = f"""
+server {{
+    listen 80;
+    server_name {domain};
 
-def enable_site(enable):
-    available_sites = os.listdir("/etc/nginx/sites-available")
-    print("Available Sites:")
-    for site in available_sites:
-        print(f"{site} {' ✓' if os.path.islink('/etc/nginx/sites-enabled/' + site) else ''}")
-    site_name = input("Enter the site name to enable/disable: ")
-    if enable:
-        os.system(f"sudo ln -s /etc/nginx/sites-available/{site_name} /etc/nginx/sites-enabled/")
-        print(colored(f"Site {site_name} enabled.", "green"))
-    else:
-        os.system(f"sudo rm /etc/nginx/sites-enabled/{site_name}")
-        print(colored(f"Site {site_name} disabled.", "green"))
+    root {path};
+    index index.html;
 
-def delete_site():
-    available_sites = os.listdir("/etc/nginx/sites-available")
-    print("Available Sites:")
-    for site in available_sites:
-        print(f"{site} {' ✓' if os.path.islink('/etc/nginx/sites-enabled/' + site) else ''}")
-    site_name = input("Enter the site name to delete: ")
-    os.system(f"sudo rm /etc/nginx/sites-available/{site_name}")
-    os.system(f"sudo rm /etc/nginx/sites-enabled/{site_name}")
-    print(colored(f"Site {site_name} deleted successfully.", "green"))
+    location / {{
+        try_files $uri $uri/ =404;
+    }}
+}}
+"""
+    with open(f"/etc/nginx/sites-available/{domain}", "w") as file:
+        file.write(conf)
+    if cert:
+        os.system(f"sudo certbot --nginx -d {domain}")
+    os.system(f"sudo ln -s /etc/nginx/sites-available/{domain} /etc/nginx/sites-enabled/")
+    print(colored("Site created."))
 
 def update_site():
-    available_sites = os.listdir("/etc/nginx/sites-available")
-    print("Available Sites:")
-    for site in available_sites:
-        print(f"{site} {' ✓' if os.path.islink('/etc/nginx/sites-enabled/' + site) else ''}")
-    site_name = input("Enter the site name to update: ")
-    os.system(f"sudo nano /etc/nginx/sites-available/{site_name}")
-    os.system(f"sudo rm /etc/nginx/sites-enabled/{site_name}")
-    os.system(f"sudo ln -s /etc/nginx/sites-available/{site_name} /etc/nginx/sites-enabled/{site_name}")
-    print(colored(f"Site {site_name} updated successfully.", "green"))
+    sites = os.listdir("/etc/nginx/sites-available")
+    print("Sites:")
+    for site in sites:
+        status = " ✓" if os.path.islink(f"/etc/nginx/sites-enabled/{site}") else ""
+        print(f"{site} {status}")
+    site = input("Enter site to update: ")
+    edit_config(site)
 
-def down_compose():
-    with open("compose_pids.txt", "r") as f:
+def edit_config(site):
+    os.system(f"sudo nano /etc/nginx/sites-available/{site}")
+    unlink(site)
+    link(site)
+    print(colored("Site updated."))
+
+def delete_site():
+    sites = os.listdir("/etc/nginx/sites-available")
+    print("Sites:")
+    for site in sites:
+        status = " ✓" if os.path.islink(f"/etc/nginx/sites-enabled/{site}") else ""
+        print(f"{site} {status}")
+    site = input("Enter site to delete: ")
+    remove_site(site)
+
+def remove_site(site):
+    os.system(f"sudo rm /etc/nginx/sites-available/{site}")
+    os.system(f"sudo rm /etc/nginx/sites-enabled/{site}")
+    print(colored("Site deleted."))
+
+def extract_tar(file):
+    with tarfile.open(file) as tar:
+        tar.extractall(file[:-4])
+    print(colored("Tar extracted."))
+
+def extract_rar(file):
+    with rarfile.RarFile(file) as rar:
+        rar.extractall(file[:-4])
+    print(colored("Rar extracted."))
+
+def run_compose():
+    file = input("Enter docker-compose file: ")
+    process = subprocess.Popen(["docker-compose", "-f", file, "up", "-d"])
+    with open("pids.txt", "a") as f:
+        f.write(str(process.pid) + "\n")
+    print(f"Docker compose started with PID {process.pid}.")
+
+def stop_compose():
+    with open("pids.txt", "r") as f:
         pids = f.readlines()
-    print("Active Docker Compose PIDs:")
+    print("Running composes:")
     for i, pid in enumerate(pids):
         print(f"{i}: {pid.strip()}")
-    pid_index = int(input("Enter the index of the process to stop: "))
-    pid = pids[pid_index].strip()
+    pid = int(input("Enter PID: "))
     os.system(f"kill {pid}")
-    print(colored(f"Docker compose with PID {pid} stopped.", "green"))
+    print(f"Docker compose with PID {pid} stopped.")
 
 def main():
     print(colored("     ___            ___                ___     _                _ ", "yellow"))
@@ -124,44 +130,36 @@ def main():
     print(colored(" / /_//  __/\\ V / \\_//| |_) \\__ \\  / /  | |  | |  __/ | | | (_| |", "red"))
     print(colored("/___,' \\___| \\_/\\___/ | .__/|___/  \\/   |_|  |_|\\___|_| |_|\\__,_|", "yellow"))
     print(colored("                      |_|                                        ", "red"))
-    parser = argparse.ArgumentParser(description=colored("Nginx and Docker Helper Tool", "red"))
-    subparsers = parser.add_subparsers(dest="command")
-    subparsers.add_parser("restart", help="Restart Nginx")
-    subparsers.add_parser("create-reverse-proxy", help="Create a reverse proxy")
-    subparsers.add_parser("create-for-path", help="Create a site for a given path")
-    subparsers.add_parser("update", help="Update a site")
-    subparsers.add_parser("delete", help="Delete a site")
-    enable_parser = subparsers.add_parser("enable", help="Enable or disable a site")
-    enable_parser.add_argument("enable", type=bool, help="True to enable, False to disable")
-    extract_tar_parser = subparsers.add_parser("extract-tar", help="Extract a tar file")
-    extract_tar_parser.add_argument("file", type=str, help="Tar file to extract")
-    extract_rar_parser = subparsers.add_parser("extract-rar", help="Extract a rar file")
-    extract_rar_parser.add_argument("file", type=str, help="Rar file to extract")
-    subparsers.add_parser("up-compose", help="Run docker compose")
-    subparsers.add_parser("down-compose", help="Stop docker compose")
+    parser = argparse.ArgumentParser(description="Nginx and Docker Helper Tool")
+    parser.add_argument("command", choices=["restart", "proxy", "site", "update", "delete", "enable", "disable", "extract-tar", "extract-rar", "compose", "stop"])
     args = parser.parse_args()
+
     if args.command == "restart":
         restart_nginx()
-    elif args.command == "create-reverse-proxy":
-        create_reverse_proxy()
-    elif args.command == "create-for-path":
-        create_for_path()
+    elif args.command == "proxy":
+        domain = input("Domain: ")
+        proxied_url = input("Proxied URL: ")
+        create_proxy(domain, proxied_url, input("Cert? ").lower() == "yes")
+    elif args.command == "site":
+        domain = input("Domain: ")
+        path = input("Path: ")
+        create_site(domain, path, input("Cert? ").lower() == "yes")
     elif args.command == "update":
         update_site()
     elif args.command == "delete":
         delete_site()
     elif args.command == "enable":
-        enable_site(args.enable)
+        enable_site(True)
+    elif args.command == "disable":
+        enable_site(False)
     elif args.command == "extract-tar":
         extract_tar(args.file)
     elif args.command == "extract-rar":
         extract_rar(args.file)
-    elif args.command == "up-compose":
-        up_compose()
-    elif args.command == "down-compose":
-        down_compose()
-    else:
-        parser.print_help()
+    elif args.command == "compose":
+        run_compose()
+    elif args.command == "stop":
+        stop_compose()
 
 if __name__ == "__main__":
     main()
